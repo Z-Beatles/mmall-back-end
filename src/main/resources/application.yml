@@ -1,0 +1,17 @@
+spring:
+  profiles:
+    active: dev
+mybatis:
+    type-aliases-package: cn.waynechu.mmall.entity
+    mapper-locations: classpath:mapper/*.xml
+    configuration:
+          cache-enabled: false
+          map-underscore-to-camel-case: true
+          use-generated-keys: true
+          log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+pagehelper:
+    helperDialect: mysql
+    reasonable: true
+    supportMethodsArguments: true
+    params: count=countSql
