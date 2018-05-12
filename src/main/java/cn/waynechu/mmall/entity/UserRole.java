@@ -1,5 +1,6 @@
 package cn.waynechu.mmall.entity;
 
+
 import lombok.Data;
 
 import java.io.Serializable;
@@ -7,20 +8,16 @@ import java.util.Date;
 
 /**
  * @author waynechu
- * Created 2018-05-12 00:14
+ * Created 2018-05-12 13:52
  */
 @Data
-public class Category implements Serializable {
+public class UserRole implements Serializable {
 
     private Long id;
 
-    private Long parentId;
+    private Long userId;
 
-    private String name;
-
-    private Integer status;
-
-    private Integer sortOrder;
+    private Long roleId;
 
     private Date createTime;
 

@@ -1,7 +1,9 @@
 package cn.waynechu.mmall.entity;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -9,7 +11,7 @@ import java.util.Date;
  * Created 2018-05-12 00:13
  */
 @Data
-public class Cart {
+public class Cart implements Serializable {
 
     private Long id;
 
@@ -21,7 +23,9 @@ public class Cart {
 
     private Integer checked;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createTime;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date updateTime;
 }

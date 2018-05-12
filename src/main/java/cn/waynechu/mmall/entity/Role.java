@@ -7,20 +7,18 @@ import java.util.Date;
 
 /**
  * @author waynechu
- * Created 2018-05-12 00:14
+ * Created 2018-05-12 13:47
  */
 @Data
-public class Category implements Serializable {
+public class Role implements Serializable {
 
-    private Long id;
-
-    private Long parentId;
+    private Integer id;
 
     private String name;
 
-    private Integer status;
+    private String nameZh;
 
-    private Integer sortOrder;
+    private String info;
 
     private Date createTime;
 

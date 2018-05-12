@@ -2,6 +2,7 @@ package cn.waynechu.mmall.entity;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -9,7 +10,7 @@ import java.util.Date;
  * Created 2018-05-12 00:18
  */
 @Data
-public class Shipping {
+public class Shipping implements Serializable {
 
     private Long id;
 

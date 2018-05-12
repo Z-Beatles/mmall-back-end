@@ -36,6 +36,10 @@ public class ResultUtil {
         return info(resultEnum, null);
     }
 
+    public static <T> Result<T> error(ResultEnum resultEnum, T t) {
+        return info(resultEnum, t);
+    }
+
     public static Result error(Integer errorCode, String errorMessage) {
         Result result = new Result();
         result.setCode(errorCode);
