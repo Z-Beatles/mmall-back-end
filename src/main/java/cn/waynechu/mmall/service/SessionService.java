@@ -1,7 +1,6 @@
 package cn.waynechu.mmall.service;
 
 import cn.waynechu.mmall.dto.UserDTO;
-import org.apache.shiro.subject.Subject;
 
 /**
  * @author waynechu
@@ -12,15 +11,14 @@ public interface SessionService {
     /**
      * 用户登录
      *
-     * @param loginType   登录类型
-     * @param account     帐号
-     * @param password    密码
-     * @param rememberMe  记住我
-     * @param host        IP地址
-     * @param currentUser 用户
-     * @return 用户id
+     * @param loginType  登录类型
+     * @param account    帐号
+     * @param password   密码
+     * @param rememberMe 记住我
+     * @param host       IP地址
+     * @return 用户信息
      */
-    UserDTO doLogin(String loginType, String account, String password, boolean rememberMe, String host, Subject currentUser);
+    UserDTO doLogin(String loginType, String account, String password, boolean rememberMe, String host);
 
     /**
      * 用户退出

@@ -23,7 +23,7 @@ public class UserMapperTest {
 
     @Test
     public void getByUserName() {
-        User user = userMapper.getByUserName("waynechu");
+        User user = userMapper.getByUsername("waynechu");
         Assert.assertEquals(1L, user.getId().longValue());
     }
 }

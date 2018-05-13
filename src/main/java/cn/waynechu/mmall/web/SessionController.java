@@ -39,17 +39,14 @@ public class SessionController {
             @RequestParam(required = false, defaultValue = "true") boolean rememberMe,
             @ApiParam(name = "host", value = "登陆IP")
             @RequestParam(required = false) String host) {
-        Subject currentUser = SecurityUtils.getSubject();
-        if (!currentUser.isAuthenticated()) {
-            UserDTO userId = sessionService.doLogin(loginType, account, password, rememberMe, host, currentUser);
-            return ResultUtil.success(ResultEnum.LOGIN_SUCCEED_INFO, userId);
-        }
-        return ResultUtil.error(ResultEnum.REPEAT_LOGIN_ERROR);
+        UserDTO userDTO = sessionService.doLogin(loginType, account, password, rememberMe, host);
+        return ResultUtil.success(ResultEnum.LOGIN_SUCCEED_INFO, userDTO);
     }
 
     @DeleteMapping
     @ApiOperation(value = "用户退出", produces = "application/json")
     public Result logoutAction() {
-        return ResultUtil.success(ResultEnum.LOGOUT_SUCCEED_INFO, sessionService.doLogout());
+        Long userId = sessionService.doLogout();
+        return ResultUtil.success(ResultEnum.LOGOUT_SUCCEED_INFO, userId);
     }
 }

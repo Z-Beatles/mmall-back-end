@@ -11,14 +11,6 @@ import cn.waynechu.mmall.entity.User;
 public interface UserService {
 
     /**
-     * 根据用户名获取用户信息
-     *
-     * @param username 用户名
-     * @return 用户信息
-     */
-    User getByUsername(String username);
-
-    /**
      * 用户注册
      *
      * @param username 用户名

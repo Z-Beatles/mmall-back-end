@@ -27,14 +27,9 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     @Override
-    public User getByUsername(String username) {
-        return userMapper.getByUserName(username);
-    }
-
-    @Override
     @Transactional(rollbackFor = Exception.class)
     public UserDTO insertUser(String username, String password) {
-        User user = userMapper.getByUserName(username);
+        User user = userMapper.getByUsername(username);
         if (user != null) {
             throw new AppException(ResultEnum.ACCOUNT_EXIST_ERROR);
         }

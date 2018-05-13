@@ -11,7 +11,7 @@ import java.util.Date;
  * Created 2018-05-12 00:19
  */
 @Data
-public class User implements Serializable{
+public class User implements Serializable {
 
     private Long id;
 

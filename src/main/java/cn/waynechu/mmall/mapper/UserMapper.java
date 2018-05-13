@@ -16,7 +16,7 @@ public interface UserMapper {
      * @param userName 用户名
      * @return 用户信息
      */
-    User getByUserName(String userName);
+    User getByUsername(String userName);
 
     /**
      * 添加新用户

@@ -18,10 +18,10 @@ public enum ResultEnum {
      * 请求失败
      **/
     FAILED(1, "failed"),
-    ACCOUNT_NOT_EXIST_ERROR(1000, "账号不存在"),
+    ACCOUNT_NOT_EXIST_ERROR(1000, "该账号不存在"),
     WRONG_PASSWORD_ERROR(1003, "密码错误"),
     LOGIN_FAILED_ERROR(1004, "登陆失败"),
-    REPEAT_LOGIN_ERROR(1005, "您已登录，勿重复登录"),
+    REPEAT_LOGIN_ERROR(1005, "您已在线，勿重复登录"),
     NOT_LOGIN_ERROR(1006, "抱歉，您尚未登录"),
     LOGIN_SUCCEED_INFO(1007, "登陆成功"),
     LOGOUT_SUCCEED_INFO(1008, "退出成功"),

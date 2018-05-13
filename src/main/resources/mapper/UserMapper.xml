@@ -5,7 +5,7 @@
         insert into t_user (username, password_hash, password_salt, password_algo, password_iteration)
         values (#{username}, #{passwordHash}, #{passwordSalt}, #{passwordAlgo}, #{passwordIteration})
     </insert>
-    <select id="getByUserName" resultType="cn.waynechu.mmall.entity.User">
+    <select id="getByUsername" resultType="cn.waynechu.mmall.entity.User">
         select
             id,
             username,

@@ -1,7 +1,7 @@
 package cn.waynechu.mmall.shiro;
 
 import cn.waynechu.mmall.entity.User;
-import cn.waynechu.mmall.service.UserService;
+import cn.waynechu.mmall.mapper.UserMapper;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
@@ -24,12 +24,12 @@ import javax.annotation.PostConstruct;
 public class ShiroRealm extends AuthorizingRealm {
 
     @Autowired
-    private UserService userService;
+    private UserMapper userMapper;
 
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) {
         LoginAuthenticationToken myToken = (LoginAuthenticationToken) token;
-        User user = userService.getByUsername(myToken.getUsername());
+        User user = userMapper.getByUsername(myToken.getUsername());
 
         if (user == null) {
             throw new UnknownAccountException("账号[" + myToken.getLoginType() + "," + myToken.getUsername() + "]不存在");
