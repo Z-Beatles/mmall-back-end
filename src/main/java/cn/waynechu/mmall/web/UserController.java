@@ -1,10 +1,8 @@
 package cn.waynechu.mmall.web;
 
-import cn.waynechu.mmall.dto.UserDTO;
 import cn.waynechu.mmall.dto.Result;
-import cn.waynechu.mmall.emuns.ResultEnum;
+import cn.waynechu.mmall.dto.UserDTO;
 import cn.waynechu.mmall.service.UserService;
-import cn.waynechu.mmall.util.ResultUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -32,7 +30,7 @@ public class UserController {
             @ApiParam(name = "password", value = "密码", required = true)
             @RequestParam String password) {
         UserDTO userDTO = userService.insertUser(username, password);
-        return ResultUtil.success(ResultEnum.REGISTER_SUCCESS_INFO, userDTO);
+        return Result.createBySuccess(userDTO);
     }
 
     @GetMapping("/me")
@@ -40,6 +38,7 @@ public class UserController {
     @ApiOperation(value = "获取当前用户的个人信息", produces = "application/json")
     public Result<UserDTO> getUserInfo() {
         Long currentUserId = userService.getCurrentUserId();
-        return ResultUtil.success(userService.getUserByUserId(currentUserId));
+        UserDTO userDTO = userService.getUserByUserId(currentUserId);
+        return Result.createBySuccess(userDTO);
     }
 }

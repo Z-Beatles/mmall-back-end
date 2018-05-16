@@ -3,7 +3,6 @@ package cn.waynechu.mmall.handler;
 import cn.waynechu.mmall.dto.Result;
 import cn.waynechu.mmall.emuns.ResultEnum;
 import cn.waynechu.mmall.exception.AppException;
-import cn.waynechu.mmall.util.ResultUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -23,12 +22,14 @@ public class AppExceptionHandler {
     public Result handle(Exception e) {
         if (e instanceof AppException) {
             AppException appException = (AppException) e;
-            return ResultUtil.error(appException.getErrorCode(), appException.getErrorMessage());
+            return Result.createByError(appException.getErrorCode(), appException.getErrorMessage());
         } else if (e instanceof MissingServletRequestParameterException) {
-            return ResultUtil.error(ResultEnum.MISSING_SERVLET_REQUEST_PARAMETER_ERROR, ((MissingServletRequestParameterException) e).getParameterName());
+            // 缺少请求参数
+            String parameterName = ((MissingServletRequestParameterException) e).getParameterName();
+            return Result.createByError(ResultEnum.MISSING_REQUEST_PARAMETER_ERROR, parameterName);
         } else {
-            log.error("【系统异常】 {}", e);
-            return ResultUtil.error(ResultEnum.SYSTEM_ERROR);
+            log.error("[系统异常]", e);
+            return Result.createByError(ResultEnum.ERROR.getCode(), e.getMessage());
         }
     }
 }
