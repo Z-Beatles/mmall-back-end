@@ -21,6 +21,31 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+
+    @GetMapping("/check-username")
+    @ResponseBody
+    @ApiOperation(value = "检查用户名是否有效", produces = "application/json")
+    public Result<String> checkUsername(@RequestParam String username) {
+        userService.checkUsername(username);
+        return Result.createBySuccess("校验成功");
+    }
+
+    @GetMapping("/check-email")
+    @ResponseBody
+    @ApiOperation(value = "检查邮箱是否有效", produces = "application/json")
+    public Result<String> checkEmail(@RequestParam String email) {
+        userService.checkEmail(email);
+        return Result.createBySuccess("校验成功");
+    }
+
+    @GetMapping("/check-mobile")
+    @ResponseBody
+    @ApiOperation(value = "检查手机号是否有效", produces = "application/json")
+    public Result<String> checkMobile(@RequestParam String mobile) {
+        userService.checkMobile(mobile);
+        return Result.createBySuccess("校验成功");
+    }
+
     @PostMapping
     @ResponseBody
     @ApiOperation(value = "用户注册", notes = "注册成功返回用户id", produces = "application/json")

@@ -1,8 +1,6 @@
 package cn.waynechu.mmall.service.impl;
 
-import cn.waynechu.mmall.ShiroTestHelper;
 import cn.waynechu.mmall.dto.UserDTO;
-import cn.waynechu.mmall.entity.User;
 import cn.waynechu.mmall.service.SessionService;
 import org.apache.shiro.util.ThreadContext;
 import org.junit.Assert;
@@ -14,8 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
-
-import static org.junit.Assert.*;
 
 /**
  * @author waynechu

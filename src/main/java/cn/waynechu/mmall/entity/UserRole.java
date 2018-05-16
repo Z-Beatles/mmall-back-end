@@ -1,18 +1,8 @@
 package cn.waynechu.mmall.entity;
 
-
-import lombok.Data;
-
-import java.io.Serializable;
 import java.util.Date;
 
-/**
- * @author waynechu
- * Created 2018-05-12 13:52
- */
-@Data
-public class UserRole implements Serializable {
-
+public class UserRole {
     private Long id;
 
     private Long userId;
@@ -22,4 +12,56 @@ public class UserRole implements Serializable {
     private Date createTime;
 
     private Date updateTime;
+
+    public UserRole(Long id, Long userId, Long roleId, Date createTime, Date updateTime) {
+        this.id = id;
+        this.userId = userId;
+        this.roleId = roleId;
+        this.createTime = createTime;
+        this.updateTime = updateTime;
+    }
+
+    public UserRole() {
+        super();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Long getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
 }

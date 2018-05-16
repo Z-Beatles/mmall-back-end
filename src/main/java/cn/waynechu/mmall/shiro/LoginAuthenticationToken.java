@@ -10,15 +10,14 @@ import org.apache.shiro.authc.RememberMeAuthenticationToken;
 public class LoginAuthenticationToken implements HostAuthenticationToken, RememberMeAuthenticationToken {
 
     private String loginType;
-    private String username;
+    private String account;
     private String password;
     private boolean rememberMe;
     private String host;
 
-    public LoginAuthenticationToken(String loginType, String username, String password, boolean rememberMe, String
-            host) {
+    public LoginAuthenticationToken(String loginType, String account, String password, boolean rememberMe, String host) {
         this.loginType = loginType;
-        this.username = username;
+        this.account = account;
         this.password = password;
         this.rememberMe = rememberMe;
         this.host = host;
@@ -28,17 +27,17 @@ public class LoginAuthenticationToken implements HostAuthenticationToken, Rememb
         return loginType;
     }
 
-    public String getUsername() {
-        return username;
+    public String getAccount() {
+        return account;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setAccount(String account) {
+        this.account = account;
     }
 
     @Override
     public Object getPrincipal() {
-        return "[" + loginType + "," + username + "]";
+        return "[" + loginType + "," + account + "]";
     }
 
     @Override
@@ -59,5 +58,4 @@ public class LoginAuthenticationToken implements HostAuthenticationToken, Rememb
     public String getHost() {
         return host;
     }
-
 }

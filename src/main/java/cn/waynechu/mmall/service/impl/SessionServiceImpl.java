@@ -24,23 +24,23 @@ import org.springframework.stereotype.Service;
 public class SessionServiceImpl implements SessionService {
 
     @Override
-    public UserDTO doLogin(String loginType, String username, String password, boolean rememberMe, String host) {
+    public UserDTO doLogin(String loginType, String account, String password, boolean rememberMe, String host) {
         Subject currentUser = SecurityUtils.getSubject();
         if (!currentUser.isAuthenticated()) {
-            LoginAuthenticationToken token = new LoginAuthenticationToken(loginType, username, password, rememberMe, host);
+            LoginAuthenticationToken token = new LoginAuthenticationToken(loginType, account, password, rememberMe, host);
             token.setRememberMe(rememberMe);
             try {
                 currentUser.login(token);
                 User principal = (User) currentUser.getPrincipal();
                 UserDTO userDTO = new UserDTO();
                 BeanUtils.copyProperties(principal, userDTO);
-                log.info("用户 {} 登陆系统", username);
+                log.info("用户 {} 登陆系统", account);
                 return userDTO;
             } catch (UnknownAccountException e) {
-                log.warn("用户 {} 不存在", username);
+                log.warn("用户 {} 不存在", account);
                 throw new AppException(ResultEnum.ACCOUNT_NOT_EXIST_ERROR);
             } catch (IncorrectCredentialsException e) {
-                log.warn("密码错误，账号：{}", username);
+                log.warn("密码错误，账号：{}", account);
                 throw new AppException(ResultEnum.WRONG_PASSWORD_ERROR);
             } catch (AuthenticationException e) {
                 log.warn("登录失败", e);

@@ -1,42 +1,210 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="cn.waynechu.mmall.mapper.UserMapper">
-    <insert id="insertUser">
-        insert into t_user (username, password_hash, password_salt, password_algo, password_iteration)
-        values (#{username}, #{passwordHash}, #{passwordSalt}, #{passwordAlgo}, #{passwordIteration})
-    </insert>
+    <resultMap id="BaseResultMap" type="cn.waynechu.mmall.entity.User">
+        <constructor>
+            <idArg column="id" jdbcType="BIGINT" javaType="java.lang.Long"/>
+            <arg column="username" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="password_hash" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="password_salt" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="password_algo" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="password_iteration" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="email" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="mobile" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="phone" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="question" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="answer" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+            <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+        </constructor>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, username, password_hash, password_salt, password_algo, password_iteration, email,
+        mobile, phone, question, answer, create_time, update_time
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from t_user
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="getByEmail" resultType="cn.waynechu.mmall.entity.User">
+        select
+        <include refid="Base_Column_List"/>
+        from t_user
+        where email = #{email}
+    </select>
+    <select id="getByMobile" resultType="cn.waynechu.mmall.entity.User">
+        select
+        <include refid="Base_Column_List"/>
+        from t_user
+        where mobile = #{mobile}
+    </select>
     <select id="getByUsername" resultType="cn.waynechu.mmall.entity.User">
         select
-            id,
-            username,
-            password_hash,
-            password_salt,
-            password_algo,
-            password_iteration,
-            email,
-            phone,
-            question,
-            answer,
-            create_time,
-            update_time
+        <include refid="Base_Column_List"/>
         from t_user
-        where username = #{userName}
+        where username = #{username}
     </select>
-    <select id="getUserByUserId" resultType="cn.waynechu.mmall.entity.User">
-        select
-            id,
-            username,
-            password_hash,
-            password_salt,
-            password_algo,
-            password_iteration,
-            email,
-            phone,
-            question,
-            answer,
-            create_time,
-            update_time
-        from t_user
-        where id = #{userId}
-    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from t_user
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="cn.waynechu.mmall.entity.User">
+        insert into t_user (id, username, password_hash,
+                            password_salt, password_algo, password_iteration,
+                            email, mobile, phone,
+                            question, answer, create_time,
+                            update_time)
+        values (#{id,jdbcType=BIGINT}, #{username,jdbcType=VARCHAR}, #{passwordHash,jdbcType=VARCHAR},
+                                       #{passwordSalt,jdbcType=VARCHAR}, #{passwordAlgo,jdbcType=VARCHAR},
+                                       #{passwordIteration,jdbcType=INTEGER},
+                                       #{email,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
+                                       #{question,jdbcType=VARCHAR}, #{answer,jdbcType=VARCHAR},
+                #{createTime,jdbcType=TIMESTAMP},
+                #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="cn.waynechu.mmall.entity.User" useGeneratedKeys="true" keyProperty="id">
+        insert into t_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="username != null">
+                username,
+            </if>
+            <if test="passwordHash != null">
+                password_hash,
+            </if>
+            <if test="passwordSalt != null">
+                password_salt,
+            </if>
+            <if test="passwordAlgo != null">
+                password_algo,
+            </if>
+            <if test="passwordIteration != null">
+                password_iteration,
+            </if>
+            <if test="email != null">
+                email,
+            </if>
+            <if test="mobile != null">
+                mobile,
+            </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="question != null">
+                question,
+            </if>
+            <if test="answer != null">
+                answer,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="username != null">
+                #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="passwordHash != null">
+                #{passwordHash,jdbcType=VARCHAR},
+            </if>
+            <if test="passwordSalt != null">
+                #{passwordSalt,jdbcType=VARCHAR},
+            </if>
+            <if test="passwordAlgo != null">
+                #{passwordAlgo,jdbcType=VARCHAR},
+            </if>
+            <if test="passwordIteration != null">
+                #{passwordIteration,jdbcType=INTEGER},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null">
+                #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="question != null">
+                #{question,jdbcType=VARCHAR},
+            </if>
+            <if test="answer != null">
+                #{answer,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.waynechu.mmall.entity.User">
+        update t_user
+        <set>
+            <if test="username != null">
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="passwordHash != null">
+                password_hash = #{passwordHash,jdbcType=VARCHAR},
+            </if>
+            <if test="passwordSalt != null">
+                password_salt = #{passwordSalt,jdbcType=VARCHAR},
+            </if>
+            <if test="passwordAlgo != null">
+                password_algo = #{passwordAlgo,jdbcType=VARCHAR},
+            </if>
+            <if test="passwordIteration != null">
+                password_iteration = #{passwordIteration,jdbcType=INTEGER},
+            </if>
+            <if test="email != null">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null">
+                mobile = #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="phone != null">
+                phone = #{phone,jdbcType=VARCHAR},
+            </if>
+            <if test="question != null">
+                question = #{question,jdbcType=VARCHAR},
+            </if>
+            <if test="answer != null">
+                answer = #{answer,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.waynechu.mmall.entity.User">
+        update t_user
+        set username           = #{username,jdbcType=VARCHAR},
+            password_hash      = #{passwordHash,jdbcType=VARCHAR},
+            password_salt      = #{passwordSalt,jdbcType=VARCHAR},
+            password_algo      = #{passwordAlgo,jdbcType=VARCHAR},
+            password_iteration = #{passwordIteration,jdbcType=INTEGER},
+            email              = #{email,jdbcType=VARCHAR},
+            mobile             = #{mobile,jdbcType=VARCHAR},
+            phone              = #{phone,jdbcType=VARCHAR},
+            question           = #{question,jdbcType=VARCHAR},
+            answer             = #{answer,jdbcType=VARCHAR},
+            create_time        = #{createTime,jdbcType=TIMESTAMP},
+            update_time        = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
 </mapper>

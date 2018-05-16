@@ -19,6 +19,7 @@ public class AppException extends RuntimeException {
     private Throwable errorCause;
 
     public AppException(ResultEnum resultEnum) {
+        super(resultEnum.getMsg());
         this.errorCode = resultEnum.getCode();
         this.errorMessage = resultEnum.getMsg();
     }

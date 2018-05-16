@@ -11,6 +11,14 @@ import cn.waynechu.mmall.entity.User;
 public interface UserService {
 
     /**
+     * 根据帐号获取用户信息
+     *
+     * @param account 帐号(用户名、邮箱、移动电话)
+     * @return 用户信息
+     */
+    User getByAccount(String account);
+
+    /**
      * 用户注册
      *
      * @param username 用户名
@@ -33,4 +41,28 @@ public interface UserService {
      * @return 用户信息
      */
     UserDTO getUserByUserId(Long userId);
+
+    /**
+     * 检查用户名是否有效
+     *
+     * @param username 用户名
+     * @return 有效:true
+     */
+    boolean checkUsername(String username);
+
+    /**
+     * 检查邮箱是否有效
+     *
+     * @param email 邮箱
+     * @return 有效:true
+     */
+    boolean checkEmail(String email);
+
+    /**
+     * 检查手机号是否有效
+     *
+     * @param mobile 手机号
+     * @return 有效:true
+     */
+    boolean checkMobile(String mobile);
 }

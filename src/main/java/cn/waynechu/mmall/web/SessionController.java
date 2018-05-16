@@ -26,15 +26,15 @@ public class SessionController {
     public Result<UserDTO> loginAction(
             @ApiParam(name = "loginType", value = "登陆的类型")
             @RequestParam(required = false) String loginType,
-            @ApiParam(name = "username", value = "用户名", required = true)
-            @RequestParam String username,
+            @ApiParam(name = "account", value = "帐号", required = true)
+            @RequestParam String account,
             @ApiParam(name = "password", value = "密码", required = true)
             @RequestParam String password,
             @ApiParam(name = "rememberMe", value = "记住我")
             @RequestParam(required = false, defaultValue = "true") boolean rememberMe,
             @ApiParam(name = "host", value = "登陆IP")
             @RequestParam(required = false) String host) {
-        UserDTO userDTO = sessionService.doLogin(loginType, username, password, rememberMe, host);
+        UserDTO userDTO = sessionService.doLogin(loginType, account, password, rememberMe, host);
         return Result.createBySuccess(userDTO);
     }
 

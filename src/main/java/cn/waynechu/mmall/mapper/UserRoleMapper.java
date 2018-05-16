@@ -1,20 +1,17 @@
 package cn.waynechu.mmall.mapper;
 
-import org.apache.ibatis.annotations.Mapper;
+import cn.waynechu.mmall.entity.UserRole;
 
-import java.util.List;
-
-/**
- * @author waynechu
- * Created 2018-05-12 16:19
- */
-@Mapper
 public interface UserRoleMapper {
+    int deleteByPrimaryKey(Long id);
 
-    /**
-     * 根据用户id获取权限id列表
-     * @param id 用户id
-     * @return 权限id列表
-     */
-    List<Long> getRoleIdsByUserId(Long id);
+    int insert(UserRole record);
+
+    int insertSelective(UserRole record);
+
+    UserRole selectByPrimaryKey(Long id);
+
+    int updateByPrimaryKeySelective(UserRole record);
+
+    int updateByPrimaryKey(UserRole record);
 }
