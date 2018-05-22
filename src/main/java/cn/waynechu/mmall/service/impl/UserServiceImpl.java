@@ -202,4 +202,12 @@ public class UserServiceImpl implements UserService {
         return ServerResponse.createBySuccess(userInfoVO);
     }
 
+    @Override
+    public ServerResponse checkAdminRole(UserInfoVO userInfoVO) {
+        if (userInfoVO != null && userInfoVO.getRole() == Const.Role.ROLE_ADMIN) {
+            return ServerResponse.createBySuccess();
+        }
+        return ServerResponse.createByError();
+    }
+
 }
