@@ -1,9 +1,7 @@
 package cn.waynechu.mmall.service;
 
 import cn.waynechu.mmall.common.ServerResponse;
-import cn.waynechu.mmall.entity.User;
 import cn.waynechu.mmall.vo.UserInfoVO;
-import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * @author waynechu
@@ -28,4 +26,6 @@ public interface UserService {
     ServerResponse<UserInfoVO> updateInformation(UserInfoVO currentUser, String email, String phone, String question, String answer);
 
     ServerResponse<UserInfoVO> getInformation(Integer userId);
+
+    ServerResponse checkAdminRole(UserInfoVO userInfoVO);
 }
