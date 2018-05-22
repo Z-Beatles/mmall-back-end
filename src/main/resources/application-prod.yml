@@ -8,10 +8,13 @@ spring:
     druid:
       initial-size: 5
       max-active: 10
+      filters: stat,wall
+      aop-patterns: cn.waynechu.mmall.service.*
       connection-properties: config.decrypt=true;config.decrypt.key=${public-key}
       filter:
         config:
           enabled: true
+
   # redis
   redis:
     host: 192.168.1.100

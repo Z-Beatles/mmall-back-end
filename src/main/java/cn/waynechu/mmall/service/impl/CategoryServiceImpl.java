@@ -64,7 +64,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public ServerResponse getCategoryAndChildrenById(Integer categoryId) {
         Set<Category> categorySet = new HashSet<>();
-        Set<Category> childCategory = getChildCategory(categorySet, categoryId);
+        getChildCategory(categorySet, categoryId);
 
         List<Integer> categoryIdList = new ArrayList<>();
         for (Category categoryItem : categorySet) {

@@ -8,9 +8,9 @@ spring:
     druid:
       initial-size: 5
       max-active: 10
-      filter:
-        config:
-          enabled: true
+      filters: stat,wall
+      aop-patterns: cn.waynechu.mmall.service.*
+
   # redis
   redis:
     host: localhost
