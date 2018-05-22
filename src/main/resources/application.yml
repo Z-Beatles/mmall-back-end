@@ -1,6 +1,9 @@
 spring:
   profiles:
     active: dev
+  cache:
+    type: caffeine
+    cache-names: forgetToken
 mybatis:
     type-aliases-package: cn.waynechu.mmall.entity
     mapper-locations: classpath:mapper/*.xml

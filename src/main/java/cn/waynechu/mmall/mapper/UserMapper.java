@@ -58,4 +58,31 @@ public interface UserMapper {
      * @return 正确：1
      */
     int checkAnswer(@Param("username") String username, @Param("question") String question, @Param("answer") String answer);
+
+    /**
+     * 更新用户密码
+     *
+     * @param username    用户名
+     * @param md5Password 密码摘要
+     * @return 受影响的行数
+     */
+    int updatePasswordByUsername(@Param("username") String username, @Param("md5Password") String md5Password);
+
+    /**
+     * 检查密码是否正确
+     *
+     * @param md5Password 密码摘要
+     * @param userId      用户Id
+     * @return 正确：1
+     */
+    int checkPassword(@Param("md5Password") String md5Password, @Param("userId") Integer userId);
+
+    /**
+     * 根据用户id检查邮箱是否正确
+     *
+     * @param email 邮箱
+     * @param userId 用户id
+     * @return 正确：1
+     */
+    int checkEmailByUserId(@Param("email") String email, @Param("userId")Integer userId);
 }
