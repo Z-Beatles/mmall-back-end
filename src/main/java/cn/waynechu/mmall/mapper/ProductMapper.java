@@ -20,4 +20,6 @@ public interface ProductMapper {
     int updateByPrimaryKey(Product record);
 
     List<Product> listProducts();
+
+    List<Product> serachProductByName(String concatProductName);
 }

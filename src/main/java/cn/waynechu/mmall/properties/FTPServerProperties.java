@@ -17,7 +17,7 @@ public class FTPServerProperties {
 
     private String urlPrefix;
 
-    private String username;
+    private String user;
 
     private String password;
 

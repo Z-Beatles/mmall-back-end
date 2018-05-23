@@ -105,6 +105,27 @@ public class ProductServiceImpl implements ProductService {
         PageHelper.startPage(pageNum, pageSize, orderBy);
         List<Product> productList = productMapper.listProducts();
 
+        List<ProductListVO> productListVOS = assembleProductListVO(productList);
+        PageInfo pageInfo = new PageInfo(productList);
+        pageInfo.setList(productListVOS);
+        return ServerResponse.createBySuccess(pageInfo);
+    }
+
+    @Override
+    public ServerResponse<PageInfo> searchProduct(String keywords, int pageNum, int pageSize, String orderBy) {
+        PageHelper.startPage(pageNum, pageSize, orderBy);
+        List<Product> productList = productMapper.serachProductByName("%" + keywords + "%");
+
+        List<ProductListVO> productListVOS = assembleProductListVO(productList);
+        PageInfo pageInfo = new PageInfo(productList);
+        pageInfo.setList(productListVOS);
+        return ServerResponse.createBySuccess(pageInfo);
+    }
+
+    /**
+     * 组装VO列表
+     */
+    private List<ProductListVO> assembleProductListVO(List<Product> productList) {
         List<ProductListVO> productListVOS = new ArrayList<>();
         ProductListVO productListVO;
         for (Product product : productList) {
@@ -114,9 +135,7 @@ public class ProductServiceImpl implements ProductService {
             productListVO.setImageHost(ftpServerProperties.getUrlPrefix());
             productListVOS.add(productListVO);
         }
-        PageInfo pageInfo = new PageInfo(productList);
-        pageInfo.setList(productListVOS);
-        return ServerResponse.createBySuccess(pageInfo);
+        return productListVOS;
     }
 
 }

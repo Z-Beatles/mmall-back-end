@@ -1,3 +1,9 @@
+server:
+  port: 80
+
+# public key for datasource password
+public-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAIIzAa+DzYwsgscjjyKvwlrjKguFMU/WGxt9ezWoHwuiwac/tVbHjjAK4J/RfoyxyS6t7oDctcGIyTGj4DGdS/UCAwEAAQ==
+
 spring:
   # datasource
   datasource:
@@ -18,22 +24,30 @@ spring:
       filter:
         config:
           enabled: true
-
   # redis
   redis:
     host: 192.168.1.100
     port: 6379
     password: 123456
 
-server:
-  port: 80
+mybatis:
+    type-aliases-package: cn.waynechu.mmall.entity
+    mapper-locations: classpath:mapper/*.xml
+    configuration:
+          cache-enabled: false
+          map-underscore-to-camel-case: true
+          use-generated-keys: true
+          log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
-public-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAIIzAa+DzYwsgscjjyKvwlrjKguFMU/WGxt9ezWoHwuiwac/tVbHjjAK4J/RfoyxyS6t7oDctcGIyTGj4DGdS/UCAwEAAQ==
-
+pagehelper:
+    helperDialect: mysql
+    reasonable: true
+    supportMethodsArguments: true
+    params: count=countSql
 
 ftp:
   server:
     ip: 192.168.1.100
-    url-prefix: http://www.topblog.cn
-    username: waynechu
+    url-prefix: http://www.topblog.cn/
+    user: waynechu
     password: pa4word
