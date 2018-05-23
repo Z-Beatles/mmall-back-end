@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
@@ -34,7 +35,7 @@ public class UserManagerController {
             @ApiImplicitParam(name = "password", value = "密码", paramType = "query", required = true)
     })
     @PostMapping(value = "/login.do")
-    public ServerResponse<UserInfoVO> login(String username, String password, HttpSession session) {
+    public ServerResponse<UserInfoVO> login(@RequestParam String username, String password, HttpSession session) {
         ServerResponse<UserInfoVO> response = userService.login(username, password);
         if (response.isSuccess()) {
             UserInfoVO user = response.getData();

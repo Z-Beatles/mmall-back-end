@@ -38,7 +38,7 @@ public class CategoryManagerController {
             @ApiImplicitParam(name = "categoryName", value = "分类名称", paramType = "query", required = true)
     })
     @PostMapping("/add_category.do")
-    public ServerResponse addCategory(@RequestParam(value = "parentId", defaultValue = "0") int parentId,
+    public ServerResponse addCategory(@RequestParam(defaultValue = "0") int parentId,
                                       @RequestParam String categoryName,
                                       HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
@@ -78,7 +78,7 @@ public class CategoryManagerController {
     })
     @GetMapping("/get_category.do")
     public ServerResponse<List<Category>> getChildrenParallelCategory(
-            @RequestParam(value = "categoryId", defaultValue = "0") Integer categoryId,
+            @RequestParam(defaultValue = "0") Integer categoryId,
             HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {
@@ -97,7 +97,7 @@ public class CategoryManagerController {
     })
     @GetMapping("/get_deep_category.do")
     public ServerResponse getCategoryAndDeepChildrenCategory(
-            @RequestParam(value = "categoryId", defaultValue = "0") Integer categoryId,
+            @RequestParam(defaultValue = "0") Integer categoryId,
             HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {

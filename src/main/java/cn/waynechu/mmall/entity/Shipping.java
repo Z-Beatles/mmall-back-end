@@ -1,6 +1,6 @@
 package cn.waynechu.mmall.entity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class Shipping {
     private Integer id;
@@ -23,11 +23,11 @@ public class Shipping {
 
     private String receiverZip;
 
-    private Date createTime;
+    private LocalDateTime createTime;
 
-    private Date updateTime;
+    private LocalDateTime updateTime;
 
-    public Shipping(Integer id, Integer userId, String receiverName, String receiverPhone, String receiverMobile, String receiverProvince, String receiverCity, String receiverDistrict, String receiverAddress, String receiverZip, Date createTime, Date updateTime) {
+    public Shipping(Integer id, Integer userId, String receiverName, String receiverPhone, String receiverMobile, String receiverProvince, String receiverCity, String receiverDistrict, String receiverAddress, String receiverZip, LocalDateTime createTime, LocalDateTime updateTime) {
         this.id = id;
         this.userId = userId;
         this.receiverName = receiverName;
@@ -126,19 +126,19 @@ public class Shipping {
         this.receiverZip = receiverZip == null ? null : receiverZip.trim();
     }
 
-    public Date getCreateTime() {
+    public LocalDateTime getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(LocalDateTime createTime) {
         this.createTime = createTime;
     }
 
-    public Date getUpdateTime() {
+    public LocalDateTime getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(LocalDateTime updateTime) {
         this.updateTime = updateTime;
     }
 }

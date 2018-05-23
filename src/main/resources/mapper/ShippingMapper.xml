@@ -13,8 +13,8 @@
       <arg column="receiver_district" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="receiver_address" jdbcType="VARCHAR" javaType="java.lang.String" />
       <arg column="receiver_zip" jdbcType="VARCHAR" javaType="java.lang.String" />
-      <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
-      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime" />
+      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime" />
     </constructor>
   </resultMap>
   <sql id="Base_Column_List" >

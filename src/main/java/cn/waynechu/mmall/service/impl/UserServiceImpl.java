@@ -6,6 +6,7 @@ import cn.waynechu.mmall.common.ServerResponse;
 import cn.waynechu.mmall.entity.User;
 import cn.waynechu.mmall.mapper.UserMapper;
 import cn.waynechu.mmall.service.UserService;
+import cn.waynechu.mmall.util.DateTimeUtil;
 import cn.waynechu.mmall.util.MD5Util;
 import cn.waynechu.mmall.vo.UserInfoVO;
 import org.springframework.beans.BeanUtils;
@@ -38,6 +39,8 @@ public class UserServiceImpl implements UserService {
         }
         UserInfoVO userInfoVO = new UserInfoVO();
         BeanUtils.copyProperties(user, userInfoVO);
+        userInfoVO.setCreateTime(DateTimeUtil.toStringFromLocalDateTime(user.getCreateTime()));
+        userInfoVO.setUpdateTime(DateTimeUtil.toStringFromLocalDateTime(user.getUpdateTime()));
         return ServerResponse.createBySuccess("登录成功", userInfoVO);
     }
 

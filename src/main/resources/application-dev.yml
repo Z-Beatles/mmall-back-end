@@ -9,6 +9,10 @@ spring:
       initial-size: 5
       max-active: 10
       filters: stat,wall
+      stat-view-servlet:
+        login-username: admin
+        login-password: 123456
+        reset-enable: true
       aop-patterns: cn.waynechu.mmall.service.*
 
   # redis
@@ -19,3 +23,10 @@ spring:
 
 server:
   port: 8080
+
+ftp:
+  server:
+    ip: 192.168.1.100
+    url-prefix: http://img.topblog.com
+    username: waynechu
+    password: 123456

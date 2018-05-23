@@ -1,6 +1,6 @@
 package cn.waynechu.mmall.entity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class Category {
     private Integer id;
@@ -13,11 +13,11 @@ public class Category {
 
     private Integer sortOrder;
 
-    private Date createTime;
+    private LocalDateTime createTime;
 
-    private Date updateTime;
+    private LocalDateTime updateTime;
 
-    public Category(Integer id, Integer parentId, String name, Integer status, Integer sortOrder, Date createTime, Date updateTime) {
+    public Category(Integer id, Integer parentId, String name, Integer status, Integer sortOrder, LocalDateTime createTime, LocalDateTime updateTime) {
         this.id = id;
         this.parentId = parentId;
         this.name = name;
@@ -71,19 +71,19 @@ public class Category {
         this.sortOrder = sortOrder;
     }
 
-    public Date getCreateTime() {
+    public LocalDateTime getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(LocalDateTime createTime) {
         this.createTime = createTime;
     }
 
-    public Date getUpdateTime() {
+    public LocalDateTime getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(LocalDateTime updateTime) {
         this.updateTime = updateTime;
     }
 

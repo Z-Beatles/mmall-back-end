@@ -27,7 +27,7 @@ public class AppExceptionHandler {
             return ServerResponse.createByError(code, desc, parameterName);
         } else {
             log.error("[系统异常]", e);
-            return ServerResponse.createByErrorMessage(e.getMessage());
+            return ServerResponse.createByErrorMessage(e.toString());
         }
     }
 }

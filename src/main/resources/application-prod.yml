@@ -9,6 +9,10 @@ spring:
       initial-size: 5
       max-active: 10
       filters: stat,wall
+      stat-view-servlet:
+        login-username: admin
+        login-password: pa4word
+        reset-enable: false
       aop-patterns: cn.waynechu.mmall.service.*
       connection-properties: config.decrypt=true;config.decrypt.key=${public-key}
       filter:
@@ -25,3 +29,11 @@ server:
   port: 80
 
 public-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAIIzAa+DzYwsgscjjyKvwlrjKguFMU/WGxt9ezWoHwuiwac/tVbHjjAK4J/RfoyxyS6t7oDctcGIyTGj4DGdS/UCAwEAAQ==
+
+
+ftp:
+  server:
+    ip: 192.168.1.100
+    url-prefix: http://www.topblog.cn
+    username: waynechu
+    password: pa4word

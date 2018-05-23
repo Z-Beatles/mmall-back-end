@@ -1,6 +1,6 @@
 package cn.waynechu.mmall.entity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class User {
     private Integer id;
@@ -19,11 +19,11 @@ public class User {
 
     private Integer role;
 
-    private Date createTime;
+    private LocalDateTime createTime;
 
-    private Date updateTime;
+    private LocalDateTime updateTime;
 
-    public User(Integer id, String username, String password, String email, String phone, String question, String answer, Integer role, Date createTime, Date updateTime) {
+    public User(Integer id, String username, String password, String email, String phone, String question, String answer, Integer role, LocalDateTime createTime, LocalDateTime updateTime) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -104,19 +104,19 @@ public class User {
         this.role = role;
     }
 
-    public Date getCreateTime() {
+    public LocalDateTime getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(LocalDateTime createTime) {
         this.createTime = createTime;
     }
 
-    public Date getUpdateTime() {
+    public LocalDateTime getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(LocalDateTime updateTime) {
         this.updateTime = updateTime;
     }
 }

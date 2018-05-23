@@ -11,8 +11,8 @@
             <arg column="question" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <arg column="answer" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <arg column="role" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
-            <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+            <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"/>
+            <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"/>
         </constructor>
     </resultMap>
     <sql id="Base_Column_List">

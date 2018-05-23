@@ -2,6 +2,7 @@ package cn.waynechu.mmall.vo;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -23,7 +24,7 @@ public class UserInfoVO {
 
     private Integer role;
 
-    private Date createTime;
+    private String createTime;
 
-    private Date updateTime;
+    private String updateTime;
 }
