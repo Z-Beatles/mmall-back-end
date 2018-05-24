@@ -15,7 +15,19 @@ public interface CategoryService {
 
     ServerResponse updateCategoryName(Integer categoryId, String categoryName);
 
+    /**
+     * 获取同级分类列表
+     *
+     * @param parentId 当前分类
+     * @return 同级分类列表
+     */
     ServerResponse<List<Category>> getChildrenParallelCategory(Integer parentId);
 
-    ServerResponse getCategoryAndChildrenById(Integer categoryId);
+    /**
+     * 获取当前分类id及所有子分类id列表
+     *
+     * @param categoryId 当前分类id
+     * @return 当前分类id及所有子分类id
+     */
+    ServerResponse<List<Integer>> getCategoryAndChildrenById(Integer categoryId);
 }

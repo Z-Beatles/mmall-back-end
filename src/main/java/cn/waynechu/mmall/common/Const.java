@@ -24,4 +24,29 @@ public class Const {
         /** 未使用 **/
         int UNUSAGE = 1;
     }
+
+    public enum ProductStatusEnum{
+        /** 下架状态 **/
+        NOT_SALE(0, "下架"),
+        /** 在售状态 **/
+        ON_SALE(1, "在售"),
+        /** 伪删除 **/
+        DELETE(2, "删除");
+
+        private String value;
+        private int code;
+
+        ProductStatusEnum(int code,String value){
+            this.code = code;
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public int getCode() {
+            return code;
+        }
+    }
 }

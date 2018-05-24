@@ -1,11 +1,14 @@
 package cn.waynechu.mmall.service.impl;
 
+import cn.waynechu.mmall.common.Const;
+import cn.waynechu.mmall.common.ResponseCode;
 import cn.waynechu.mmall.common.ServerResponse;
 import cn.waynechu.mmall.entity.Category;
 import cn.waynechu.mmall.entity.Product;
 import cn.waynechu.mmall.mapper.CategoryMapper;
 import cn.waynechu.mmall.mapper.ProductMapper;
 import cn.waynechu.mmall.properties.FTPServerProperties;
+import cn.waynechu.mmall.service.CategoryService;
 import cn.waynechu.mmall.service.ProductService;
 import cn.waynechu.mmall.util.DateTimeUtil;
 import cn.waynechu.mmall.vo.ProductDetialVO;
@@ -34,6 +37,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private CategoryMapper categoryMapper;
+
+    @Autowired
+    private CategoryService categoryService;
 
     @Override
     public ServerResponse saveOrUpdateProduct(Product product) {
@@ -74,30 +80,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ServerResponse<ProductDetialVO> getProductDetail(Integer productId) {
+    public ServerResponse<ProductDetialVO> managerProductDetail(Integer productId) {
         Product product = productMapper.selectByPrimaryKey(productId);
-        if (product != null) {
-            ProductDetialVO productDetialVO = new ProductDetialVO();
-            BeanUtils.copyProperties(product, productDetialVO);
-
-            // 设置图片前缀
-            productDetialVO.setImageHost(ftpServerProperties.getUrlPrefix());
-
-            // 设置父类id
-            Category category = categoryMapper.selectByPrimaryKey(product.getCategoryId());
-            if (category == null) {
-                // 默认为根节点
-                productDetialVO.setParentCategoryId(0);
-            } else {
-                productDetialVO.setParentCategoryId(category.getParentId());
-            }
-
-            // 设置时间
-            productDetialVO.setCreateTime(DateTimeUtil.toStringFromLocalDateTime(product.getCreateTime()));
-            productDetialVO.setUpdateTime(DateTimeUtil.toStringFromLocalDateTime(product.getUpdateTime()));
-            return ServerResponse.createBySuccess(productDetialVO);
+        if (product == null) {
+            return ServerResponse.createByErrorMessage("该商品不存在");
         }
-        return ServerResponse.createByErrorMessage("该商品不存在");
+        ProductDetialVO productDetialVO = assembleProductDetailVO(product);
+        return ServerResponse.createBySuccess(productDetialVO);
     }
 
     @Override
@@ -122,8 +111,79 @@ public class ProductServiceImpl implements ProductService {
         return ServerResponse.createBySuccess(pageInfo);
     }
 
+    @Override
+    public ServerResponse<ProductDetialVO> getProductDetail(Integer productId) {
+        Product product = productMapper.selectByPrimaryKey(productId);
+        if (product == null) {
+            return ServerResponse.createByErrorMessage("该商品不存在");
+        }
+        if (product.getStatus() != Const.ProductStatusEnum.ON_SALE.getCode()) {
+            return ServerResponse.createByErrorMessage("该商品已下架或者删除");
+        }
+        ProductDetialVO productDetialVO = assembleProductDetailVO(product);
+        return ServerResponse.createBySuccess(productDetialVO);
+    }
+
+    @Override
+    public ServerResponse<PageInfo> getProductByKeywordCategory(String keyword, Integer categoryId, int pageNum, int pageSize, String orderBy) {
+        if (keyword == null && categoryId == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.MISSING_REQUEST_PARAMETER.getCode(), ResponseCode.MISSING_REQUEST_PARAMETER.getDesc());
+        }
+
+        // 递归获取categoryId下所有子分类id
+        List<Integer> categoryIdList = new ArrayList<>();
+        if (categoryId != null) {
+            Category category = categoryMapper.selectByPrimaryKey(categoryId);
+            if (category == null && keyword == null) {
+                // 没有该分类，并且还没有关键字，这个时候返回一个空的结果集，不报错
+                PageHelper.startPage(pageNum, pageSize);
+                List<ProductListVO> productListVoList = new ArrayList<>();
+                PageInfo pageInfo = new PageInfo(productListVoList);
+                return ServerResponse.createBySuccess(pageInfo);
+            }
+            categoryIdList = categoryService.getCategoryAndChildrenById(categoryId).getData();
+        }
+
+        // 拼接关键字
+        if (keyword != null) {
+            keyword = "%" + keyword + "%";
+        }
+        PageHelper.startPage(pageNum, pageSize, orderBy);
+        List<Product> productList = productMapper.selectByNameAndCategoryIds(keyword, categoryIdList.size() == 0 ? null : categoryIdList);
+
+        List<ProductListVO> productListVoList = assembleProductListVO(productList);
+        PageInfo pageInfo = new PageInfo(productList);
+        pageInfo.setList(productListVoList);
+        return ServerResponse.createBySuccess(pageInfo);
+    }
+
     /**
-     * 组装VO列表
+     * 组装ProductDetailVO
+     */
+    private ProductDetialVO assembleProductDetailVO(Product product) {
+        ProductDetialVO productDetialVO = new ProductDetialVO();
+        BeanUtils.copyProperties(product, productDetialVO);
+
+        // 设置图片前缀
+        productDetialVO.setImageHost(ftpServerProperties.getUrlPrefix());
+
+        // 设置父类id
+        Category category = categoryMapper.selectByPrimaryKey(product.getCategoryId());
+        if (category == null) {
+            // 默认为根节点
+            productDetialVO.setParentCategoryId(0);
+        } else {
+            productDetialVO.setParentCategoryId(category.getParentId());
+        }
+
+        // 设置时间
+        productDetialVO.setCreateTime(DateTimeUtil.toStringFromLocalDateTime(product.getCreateTime()));
+        productDetialVO.setUpdateTime(DateTimeUtil.toStringFromLocalDateTime(product.getUpdateTime()));
+        return productDetialVO;
+    }
+
+    /**
+     * 组装ProductListVO列表
      */
     private List<ProductListVO> assembleProductListVO(List<Product> productList) {
         List<ProductListVO> productListVOS = new ArrayList<>();

@@ -20,14 +20,16 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author waynechu
  * Created 2018-05-23 13:06
  */
-@Api(tags = "商品后台管理接口")
+@Api(tags = "后台-商品管理接口")
 @RestController
 @RequestMapping("/v1/manager/product")
 public class ProductManagerController {
@@ -90,13 +92,13 @@ public class ProductManagerController {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录,请登录管理员");
         }
         if (userService.checkAdminRole(user).isSuccess()) {
-            return productService.getProductDetail(productId);
+            return productService.managerProductDetail(productId);
         } else {
             return ServerResponse.createByErrorMessage("无权限操作");
         }
     }
 
-    @ApiOperation(value = "获取产品列表", notes = "排序字段默认按id升序排序，若要降序则为iddesc")
+    @ApiOperation(value = "获取产品列表", notes = "排序字段默认按id升序排序，若要降序则为id desc")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageNum", value = "页数", paramType = "query", defaultValue = "1"),
             @ApiImplicitParam(name = "pageSize", value = "页大小", paramType = "query", defaultValue = "10"),
@@ -144,7 +146,7 @@ public class ProductManagerController {
 
     @ApiOperation(value = "文件上传")
     @PostMapping(value = "/upload.do")
-    public ServerResponse upload(@RequestParam(value = "upload_file", required = false) MultipartFile file,
+    public ServerResponse upload(@RequestParam(value = "upload_file") MultipartFile file,
                                  HttpServletRequest request,
                                  HttpSession session) {
         UserInfoVO user = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
@@ -164,6 +166,43 @@ public class ProductManagerController {
             return ServerResponse.createBySuccess(fileMap);
         } else {
             return ServerResponse.createByErrorMessage("无权限操作");
+        }
+    }
+
+    @ApiOperation(value = "富文本文件上传")
+    @PostMapping(value = "/richtext_img_upload.do")
+    public Map richTextImgUpload(@RequestParam(value = "upload_file") MultipartFile file,
+                                 HttpServletRequest request,
+                                 HttpServletResponse response,
+                                 HttpSession session) {
+        UserInfoVO user = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+        HashMap<String, Object> resultMap = new HashMap<>();
+        if (user == null) {
+            resultMap.put("success", false);
+            resultMap.put("msg", "请登录管理员");
+            return resultMap;
+        }
+        if (userService.checkAdminRole(user).isSuccess()) {
+            String path = request.getSession().getServletContext().getRealPath("upload");
+            // 上传后生成的文件名
+            String targetFileName = fileService.upload(file, path);
+            if (targetFileName.isEmpty()) {
+                resultMap.put("success", false);
+                resultMap.put("msg", "上传失败");
+                return resultMap;
+            }
+
+            // FTP文件路径
+            String url = ftpServerProperties.getUrlPrefix() + targetFileName;
+            resultMap.put("success", true);
+            resultMap.put("msg", "上传成功");
+            resultMap.put("file_path", url);
+            response.addHeader("Access-Control-Allow-Headers", "X-File-Name");
+            return resultMap;
+        } else {
+            resultMap.put("success", false);
+            resultMap.put("msg", "无权限操作");
+            return resultMap;
         }
     }
 }

@@ -62,12 +62,13 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public ServerResponse getCategoryAndChildrenById(Integer categoryId) {
+    public ServerResponse<List<Integer>> getCategoryAndChildrenById(Integer categoryId) {
         Set<Category> categorySet = new HashSet<>();
-        getChildCategory(categorySet, categoryId);
+        // 递归获取子分类
+        Set<Category> categorySetByRecursion = getChildCategory(categorySet, categoryId);
 
         List<Integer> categoryIdList = new ArrayList<>();
-        for (Category categoryItem : categorySet) {
+        for (Category categoryItem : categorySetByRecursion) {
             categoryIdList.add(categoryItem.getId());
         }
         return ServerResponse.createBySuccess(categoryIdList);

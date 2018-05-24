@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
  * @author waynechu
  * Created 2018-05-21 19:40
  */
-@Api(tags = "用户接口")
+@Api(tags = "前台-用户管理接口")
 @RestController
 @RequestMapping("/v1/user")
 public class UserController {

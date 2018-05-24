@@ -21,7 +21,7 @@ import java.util.List;
  * @author waynechu
  * Created 2018-05-22 20:31
  */
-@Api(tags = "商品分类后台管理接口")
+@Api(tags = "后台-商品分类接口")
 @RestController
 @RequestMapping("/v1/manager/category")
 public class CategoryManagerController {

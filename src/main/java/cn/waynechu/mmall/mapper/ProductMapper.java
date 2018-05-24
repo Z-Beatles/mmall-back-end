@@ -1,6 +1,7 @@
 package cn.waynechu.mmall.mapper;
 
 import cn.waynechu.mmall.entity.Product;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -22,4 +23,6 @@ public interface ProductMapper {
     List<Product> listProducts();
 
     List<Product> serachProductByName(String concatProductName);
+
+    List<Product> selectByNameAndCategoryIds(@Param("productName") String productName, @Param("categoryIdList") List<Integer> categoryIdList);
 }

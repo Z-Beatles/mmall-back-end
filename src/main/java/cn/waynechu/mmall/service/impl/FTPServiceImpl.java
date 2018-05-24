@@ -4,6 +4,8 @@ import cn.waynechu.mmall.service.FTPService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.PrintCommandListener;
 import org.apache.commons.net.ftp.FTPClient;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -16,13 +18,18 @@ import java.io.*;
 @Service
 public class FTPServiceImpl implements FTPService {
 
+    @Autowired
+    private Environment environment;
+
     private FTPClient ftpClient;
 
     @Override
     public void connectToFTP(String ip, String user, String password) {
         ftpClient = new FTPClient();
-        // 将FTP过程中使用的命令输出到控制台
-        ftpClient.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out)));
+        // 开发环境下将FTP过程中使用的命令输出到控制台
+        if (environment.acceptsProfiles("dev")) {
+            ftpClient.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out)));
+        }
 
         try {
             ftpClient.connect(ip);
@@ -38,13 +45,17 @@ public class FTPServiceImpl implements FTPService {
             ftpClient.changeWorkingDirectory(ftpHostDir);
             ftpClient.setBufferSize(1024);
             ftpClient.setControlEncoding("UTF-8");
-            // 设置
+            // 设置文件类型
             ftpClient.setFileType(FTPClient.BINARY_FILE_TYPE);
             // 使用被动模式建立连接
             ftpClient.enterLocalPassiveMode();
 
             InputStream inputStream = new FileInputStream(file);
-            return ftpClient.storeFile(serverFilename, inputStream);
+            boolean result = ftpClient.storeFile(serverFilename, inputStream);
+            if (result) {
+                log.info("文件上传FTP服务器成功，FTP目录：{}，上传文件名：{}", ftpHostDir, serverFilename);
+            }
+            return result;
         } catch (IOException e) {
             log.error("上传文件失败", e);
         }
@@ -52,10 +63,10 @@ public class FTPServiceImpl implements FTPService {
     }
 
     @Override
-    public void downloadFileFromFTP(String ftpRelativePath, String copytoPath) {
-        FileOutputStream fos = null;
+    public void downloadFileFromFTP(String ftpRelativePath, String copyToPath) {
+        FileOutputStream fos;
         try {
-            fos = new FileOutputStream(copytoPath);
+            fos = new FileOutputStream(copyToPath);
             ftpClient.retrieveFile(ftpRelativePath, fos);
         } catch (IOException e) {
             log.error("下载文件失败", e);

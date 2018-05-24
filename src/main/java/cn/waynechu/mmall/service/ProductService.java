@@ -15,9 +15,13 @@ public interface ProductService {
 
     ServerResponse setSaleStatus(Integer productId, Integer status);
 
-    ServerResponse<ProductDetialVO> getProductDetail(Integer productId);
+    ServerResponse<ProductDetialVO> managerProductDetail(Integer productId);
 
     ServerResponse<PageInfo> getProductList(int pageNum, int pageSize, String orderBy);
 
     ServerResponse<PageInfo> searchProduct(String keywords, int pageNum, int pageSize, String orderBy);
+
+    ServerResponse<ProductDetialVO> getProductDetail(Integer productId);
+
+    ServerResponse<PageInfo> getProductByKeywordCategory(String keyword, Integer categoryId, int pageNum, int pageSize, String orderBy);
 }

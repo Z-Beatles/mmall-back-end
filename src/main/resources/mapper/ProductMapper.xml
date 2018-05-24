@@ -62,6 +62,23 @@
         from mmall_product
         where name like #{concatProductName}
     </select>
+    <select id="selectByNameAndCategoryIds" resultType="cn.waynechu.mmall.entity.Product">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from mmall_product
+        where status = 1
+        <if test="productName != null">
+            and name like #{productName}
+        </if>
+        <if test="categoryIdList != null">
+            and category_id in
+            <foreach item="item" index="index" collection="categoryIdList" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from mmall_product
         where id = #{id,jdbcType=INTEGER}
