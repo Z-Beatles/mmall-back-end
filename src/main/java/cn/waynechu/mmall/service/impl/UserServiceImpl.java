@@ -202,6 +202,8 @@ public class UserServiceImpl implements UserService {
         }
         UserInfoVO userInfoVO = new UserInfoVO();
         BeanUtils.copyProperties(user, userInfoVO);
+        userInfoVO.setCreateTime(DateTimeUtil.toStringFromLocalDateTime(user.getCreateTime()));
+        userInfoVO.setUpdateTime(DateTimeUtil.toStringFromLocalDateTime(user.getUpdateTime()));
         return ServerResponse.createBySuccess(userInfoVO);
     }
 

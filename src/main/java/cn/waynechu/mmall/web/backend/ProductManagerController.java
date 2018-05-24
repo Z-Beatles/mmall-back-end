@@ -63,7 +63,7 @@ public class ProductManagerController {
 
     @ApiOperation(value = "产品上下架")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "productId", value = "产品id", paramType = "query"),
+            @ApiImplicitParam(name = "productId", value = "产品id", paramType = "query", required = true),
             @ApiImplicitParam(name = "status", value = "产品状态：0下架，1在售，2删除", paramType = "query", required = true)
     })
     @PostMapping("/set_sale_status.do")
@@ -120,9 +120,9 @@ public class ProductManagerController {
         }
     }
 
-    @ApiOperation(value = "商品名称模糊查询", notes = "排序字段默认按id升序排序，若要降序则为iddesc")
+    @ApiOperation(value = "商品名称模糊查询", notes = "排序字段默认按id升序排序，若要降序则为id desc")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "keywords", value = "查询关键字", paramType = "query"),
+            @ApiImplicitParam(name = "keywords", value = "查询关键字", paramType = "query", required = true),
             @ApiImplicitParam(name = "pageNum", value = "页数", paramType = "query", defaultValue = "1"),
             @ApiImplicitParam(name = "pageSize", value = "页大小", paramType = "query", defaultValue = "10"),
             @ApiImplicitParam(name = "orderBy", value = "排序字段", paramType = "query", defaultValue = "id")

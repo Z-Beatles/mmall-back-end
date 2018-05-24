@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author waynechu
  * Created 2018-05-24 20:18
  */
-@Api(tags = "前台-商品管理接口")
+@Api(tags = "门户-商品查询接口")
 @RestController
 @RequestMapping("/v1/product/")
 public class ProductController {

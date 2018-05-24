@@ -20,7 +20,7 @@ import javax.servlet.http.HttpSession;
  * @author waynechu
  * Created 2018-05-22 15:58
  */
-@Api(tags = "后台-用户管理接口")
+@Api(tags = "后台-用户接口")
 @RestController
 @RequestMapping("/v1/manager/user")
 public class UserManagerController {
