@@ -29,7 +29,7 @@ public class UserManagerController {
     private UserService userService;
 
 
-    @ApiOperation(value = "后台用户登录", notes = "登陆成功后返回用户信息", produces = "application/json")
+    @ApiOperation(value = "后台用户登录", notes = "登陆成功后返回用户信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "username", value = "用户名", paramType = "query", required = true),
             @ApiImplicitParam(name = "password", value = "密码", paramType = "query", required = true)

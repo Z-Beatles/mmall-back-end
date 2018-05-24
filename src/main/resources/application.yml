@@ -4,3 +4,8 @@ spring:
   cache:
     type: caffeine
     cache-names: forgetToken
+  thymeleaf:
+    mode: HTML5
+    encoding: UTF-8
+    servlet:
+      content-type: text/html

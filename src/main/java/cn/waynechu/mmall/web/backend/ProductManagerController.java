@@ -44,7 +44,7 @@ public class ProductManagerController {
     @Autowired
     private FileService fileService;
 
-    @ApiOperation(value = "新增/更新产品信息", produces = "application/json")
+    @ApiOperation(value = "新增/更新产品信息")
     @PostMapping("/save.do")
     public ServerResponse productSave(Product product,
                                       HttpSession session) {
@@ -59,7 +59,7 @@ public class ProductManagerController {
         }
     }
 
-    @ApiOperation(value = "产品上下架", produces = "application/json")
+    @ApiOperation(value = "产品上下架")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "productId", value = "产品id", paramType = "query"),
             @ApiImplicitParam(name = "status", value = "产品状态：0下架，1在售，2删除", paramType = "query", required = true)
@@ -79,7 +79,7 @@ public class ProductManagerController {
         }
     }
 
-    @ApiOperation(value = "获取产品详情", produces = "application/json")
+    @ApiOperation(value = "获取产品详情")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "productId", value = "产品id", paramType = "query", required = true)
     })
@@ -96,7 +96,7 @@ public class ProductManagerController {
         }
     }
 
-    @ApiOperation(value = "获取产品列表", notes = "排序字段默认按id升序排序，若要降序则为iddesc", produces = "application/json")
+    @ApiOperation(value = "获取产品列表", notes = "排序字段默认按id升序排序，若要降序则为iddesc")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageNum", value = "页数", paramType = "query", defaultValue = "1"),
             @ApiImplicitParam(name = "pageSize", value = "页大小", paramType = "query", defaultValue = "10"),
@@ -118,7 +118,7 @@ public class ProductManagerController {
         }
     }
 
-    @ApiOperation(value = "商品名称模糊查询", notes = "排序字段默认按id升序排序，若要降序则为iddesc", produces = "application/json")
+    @ApiOperation(value = "商品名称模糊查询", notes = "排序字段默认按id升序排序，若要降序则为iddesc")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "keywords", value = "查询关键字", paramType = "query"),
             @ApiImplicitParam(name = "pageNum", value = "页数", paramType = "query", defaultValue = "1"),
@@ -142,7 +142,7 @@ public class ProductManagerController {
         }
     }
 
-    @ApiOperation(value = "文件上传", produces = "application/json")
+    @ApiOperation(value = "文件上传")
     @PostMapping(value = "/upload.do")
     public ServerResponse upload(@RequestParam(value = "upload_file", required = false) MultipartFile file,
                                  HttpServletRequest request,

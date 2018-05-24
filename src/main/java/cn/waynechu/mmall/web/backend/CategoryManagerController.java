@@ -32,7 +32,7 @@ public class CategoryManagerController {
     @Autowired
     private CategoryService categoryService;
 
-    @ApiOperation(value = "添加商品分类", produces = "application/json")
+    @ApiOperation(value = "添加商品分类")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "parentId", value = "父类id（默认0，顶级分类）", paramType = "query"),
             @ApiImplicitParam(name = "categoryName", value = "分类名称", paramType = "query", required = true)
@@ -52,7 +52,7 @@ public class CategoryManagerController {
         }
     }
 
-    @ApiOperation(value = "修改商品分类名称", produces = "application/json")
+    @ApiOperation(value = "修改商品分类名称")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "categoryId", value = "分类id", paramType = "query", required = true),
             @ApiImplicitParam(name = "categoryName", value = "分类名称", paramType = "query", required = true)
@@ -72,7 +72,7 @@ public class CategoryManagerController {
         }
     }
 
-    @ApiOperation(value = "获取下一级子分类列表", produces = "application/json")
+    @ApiOperation(value = "获取下一级子分类列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "categoryId", value = "当前分类id", paramType = "query")
     })
@@ -91,7 +91,7 @@ public class CategoryManagerController {
         }
     }
 
-    @ApiOperation(value = "获取当前分类id及递归子节点id", produces = "application/json")
+    @ApiOperation(value = "获取当前分类id及递归子节点id")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "categoryId", value = "当前分类id", paramType = "query")
     })

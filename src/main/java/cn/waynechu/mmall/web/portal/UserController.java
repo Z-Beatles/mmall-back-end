@@ -26,7 +26,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @ApiOperation(value = "用户登录", notes = "登陆成功后返回用户信息", produces = "application/json")
+    @ApiOperation(value = "用户登录", notes = "登陆成功后返回用户信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "username", value = "用户名", paramType = "query", required = true),
             @ApiImplicitParam(name = "password", value = "密码", paramType = "query", required = true)
@@ -42,7 +42,7 @@ public class UserController {
         return response;
     }
 
-    @ApiOperation(value = "获取当前用户信息，并强制登录", notes = "", produces = "application/json")
+    @ApiOperation(value = "获取当前用户信息，并强制登录")
     @GetMapping(value = "/get_information.do")
     public ServerResponse<UserInfoVO> getInformation(HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
@@ -52,7 +52,7 @@ public class UserController {
         return userService.getInformation(currentUser.getId());
     }
 
-    @ApiOperation(value = "退出登录", notes = "", produces = "application/json")
+    @ApiOperation(value = "退出登录", notes = "")
     @DeleteMapping(value = "/logout.do")
     public ServerResponse<String> logout(HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
@@ -63,7 +63,7 @@ public class UserController {
         return ServerResponse.createByErrorMessage("尚未登录");
     }
 
-    @ApiOperation(value = "用户注册", notes = "", produces = "application/json")
+    @ApiOperation(value = "用户注册", notes = "")
     @PostMapping(value = "/register.do")
     public ServerResponse<String> register(@RequestParam String username,
                                            @RequestParam String password,
@@ -74,7 +74,7 @@ public class UserController {
         return userService.register(username, password, email, phone, question, answer);
     }
 
-    @ApiOperation(value = "检查注册参数", notes = "用于检查用户名、邮箱等是否已经被注册，其中参数类型可以是：username, email，默认username", produces = "application/json")
+    @ApiOperation(value = "检查注册参数", notes = "用于检查用户名、邮箱等是否已经被注册，其中参数类型可以是：username, email，默认username")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "value", value = "参数值", paramType = "query", required = true),
             @ApiImplicitParam(name = "type", value = "参数类型", defaultValue = "username", paramType = "query")
@@ -86,7 +86,7 @@ public class UserController {
     }
 
 
-    @ApiOperation(value = "忘记密码", notes = "", produces = "application/json")
+    @ApiOperation(value = "忘记密码", notes = "")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "username", value = "用户名", paramType = "query", required = true)
     })
@@ -95,7 +95,7 @@ public class UserController {
         return userService.selectQuestion(username);
     }
 
-    @ApiOperation(value = "提交问题答案", notes = "", produces = "application/json")
+    @ApiOperation(value = "提交问题答案", notes = "")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "username", value = "用户名", paramType = "query", required = true),
             @ApiImplicitParam(name = "question", value = "密保问题", paramType = "query", required = true),
@@ -108,7 +108,7 @@ public class UserController {
         return userService.checkAnswer(username, question, answer);
     }
 
-    @ApiOperation(value = "忘记密码的重设密码", notes = "", produces = "application/json")
+    @ApiOperation(value = "忘记密码的重设密码", notes = "")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "username", value = "用户名", paramType = "query", required = true),
             @ApiImplicitParam(name = "passwordNew", value = "新密码", paramType = "query", required = true),
@@ -121,7 +121,7 @@ public class UserController {
         return userService.forgetResetPassword(username, passwordNew, forgetToken);
     }
 
-    @ApiOperation(value = "登录中状态重置密码", notes = "", produces = "application/json")
+    @ApiOperation(value = "登录中状态重置密码", notes = "")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "passwordOld", value = "原始密码", paramType = "query", required = true),
             @ApiImplicitParam(name = "passwordNew", value = "新密码", paramType = "query", required = true)
@@ -137,7 +137,7 @@ public class UserController {
         return userService.resetPassword(passwordOld, passwordNew, userInfoVO);
     }
 
-    @ApiOperation(value = "登录状态下更新用户信息", notes = "", produces = "application/json")
+    @ApiOperation(value = "登录状态下更新用户信息", notes = "")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "email", value = "邮箱", paramType = "query"),
             @ApiImplicitParam(name = "phone", value = "电话", paramType = "query"),
@@ -163,7 +163,7 @@ public class UserController {
         return response;
     }
 
-    @ApiOperation(value = "获取当前用户信息", notes = "", produces = "application/json")
+    @ApiOperation(value = "获取当前用户信息", notes = "")
     @GetMapping(value = "/get_user_info.do")
     public ServerResponse<UserInfoVO> getUserInfo(HttpSession session) {
         UserInfoVO userInfoVO = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
