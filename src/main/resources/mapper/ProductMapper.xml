@@ -79,6 +79,17 @@
             </foreach>
         </if>
     </select>
+    <select id="mapProductByProductIds" resultType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from mmall_product
+        where id in
+        <foreach index="index" item="item" collection="productIds" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete from mmall_product
         where id = #{id,jdbcType=INTEGER}

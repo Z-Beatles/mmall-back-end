@@ -1,9 +1,11 @@
 package cn.waynechu.mmall.mapper;
 
 import cn.waynechu.mmall.entity.Product;
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ProductMapper {
     int deleteByPrimaryKey(Integer id);
@@ -25,4 +27,7 @@ public interface ProductMapper {
     List<Product> serachProductByName(String concatProductName);
 
     List<Product> selectByNameAndCategoryIds(@Param("productName") String productName, @Param("categoryIdList") List<Integer> categoryIdList);
+
+    @MapKey("id")
+    Map<Integer, Product> mapProductByProductIds(List<Integer> productIds);
 }

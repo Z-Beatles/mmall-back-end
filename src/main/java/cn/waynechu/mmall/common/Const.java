@@ -25,6 +25,18 @@ public class Const {
         int UNUSAGE = 1;
     }
 
+    public interface CartStatus {
+        /** 未勾选 **/
+        int UN_CHECKED = 0;
+        /** 已勾选 **/
+        int CHECKED = 1;
+
+        /** 购买数量在库存上限以内 **/
+        String LIMIT_NUM_SUCCESS = "LIMIT_NUM_SUCCESS";
+        /** 购买数量超出库存上限 **/
+        String LIMIT_NUM_FAIL = "LIMIT_NUM_FAIL";
+    }
+
     public enum ProductStatusEnum{
         /** 下架状态 **/
         NOT_SALE(0, "下架"),
@@ -49,4 +61,5 @@ public class Const {
             return code;
         }
     }
+
 }
