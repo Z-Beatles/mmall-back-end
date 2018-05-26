@@ -43,7 +43,7 @@ public class ShippingController {
 
     @ApiOperation(value = "添加收获地址")
     @PostMapping("/add.do")
-    public ServerResponse add(@RequestParam Shipping shipping, HttpSession session) {
+    public ServerResponse add(Shipping shipping, HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
@@ -66,7 +66,7 @@ public class ShippingController {
 
     @ApiOperation(value = "更新收获地址")
     @PostMapping("/update.do")
-    public ServerResponse update(@RequestParam Shipping shipping, HttpSession session) {
+    public ServerResponse update(Shipping shipping, HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());

@@ -25,7 +25,7 @@ public class ShippingServiceImpl implements ShippingService {
 
     @Override
     public ServerResponse<Shipping> select(Integer userId, Integer shippingId) {
-        Shipping shipping = shippingMapper.selectByShippingIdAndUserId(userId, shippingId);
+        Shipping shipping = shippingMapper.selectByShippingIdAndUserId(shippingId,userId);
         if (shipping == null) {
             return ServerResponse.createByErrorMessage("无法查询到该地址");
         }
