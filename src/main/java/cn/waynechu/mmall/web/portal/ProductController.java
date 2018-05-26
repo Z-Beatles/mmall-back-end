@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api(tags = "门户-商品查询接口")
 @RestController
-@RequestMapping("/v1/product/")
+@RequestMapping("/v1/product")
 public class ProductController {
 
     @Autowired
@@ -44,11 +44,11 @@ public class ProductController {
             @ApiImplicitParam(name = "orderBy", value = "排序字段", paramType = "query", defaultValue = "id")
     })
     @GetMapping("/list.do")
-    public ServerResponse<PageInfo> listProducts(@RequestParam(value = "keyword", required = false) String keyword,
-                                                 @RequestParam(value = "categoryId", required = false) Integer categoryId,
-                                                 @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                                                 @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                                                 @RequestParam(value = "orderBy", defaultValue = "id") String orderBy) {
+    public ServerResponse<PageInfo> listProducts(@RequestParam(required = false) String keyword,
+                                                 @RequestParam(required = false) Integer categoryId,
+                                                 @RequestParam(defaultValue = "1") int pageNum,
+                                                 @RequestParam(defaultValue = "10") int pageSize,
+                                                 @RequestParam(defaultValue = "id") String orderBy) {
         return productService.getProductByKeywordCategory(keyword, categoryId, pageNum, pageSize, orderBy);
     }
 }

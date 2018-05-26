@@ -1,6 +1,9 @@
 package cn.waynechu.mmall.mapper;
 
 import cn.waynechu.mmall.entity.Shipping;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface ShippingMapper {
     int deleteByPrimaryKey(Integer id);
@@ -14,4 +17,12 @@ public interface ShippingMapper {
     int updateByPrimaryKeySelective(Shipping record);
 
     int updateByPrimaryKey(Shipping record);
+
+    Shipping selectByShippingIdAndUserId(@Param("userId") Integer shippingId, @Param("userId") Integer userId);
+
+    int deleteByShippingIdAndUserId(@Param("userId") Integer shippingId, @Param("userId") Integer userId);
+
+    int updateByShipping(Shipping shipping);
+
+    List<Shipping> selectByUserId(Integer userId);
 }
