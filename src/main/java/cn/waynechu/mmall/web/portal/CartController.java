@@ -61,7 +61,7 @@ public class CartController {
 
     @ApiOperation(value = "删除购物车中的指定商品")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "productId", value = "商品id列表，若多个则用英文逗号分割", paramType = "query")
+            @ApiImplicitParam(name = "productIds", value = "商品id列表，若多个则用英文逗号分割", paramType = "query")
     })
     @DeleteMapping("/delete.do")
     public ServerResponse<CartVO> delete(@RequestParam String productIds,

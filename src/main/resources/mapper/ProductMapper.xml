@@ -79,7 +79,7 @@
             </foreach>
         </if>
     </select>
-    <select id="mapProductByProductIds" resultType="java.util.Map">
+    <select id="mapProductByProductIds" resultType="cn.waynechu.mmall.entity.Product">
         select
         <include refid="Base_Column_List"/>
         ,

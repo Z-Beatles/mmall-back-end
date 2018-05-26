@@ -30,7 +30,7 @@ public interface CartMapper {
      */
     int countUnCheckedByUserId(Integer userId);
 
-    int deleteByUserIdAndProductIds(@Param("userId") Integer userId, @Param("ids") String[] ids);
+    int deleteByUserIdAndProductIds(@Param("userId") Integer userId, @Param("ids") List<Integer> ids);
 
     /**
      * 设置用户购物车全选/全不选
@@ -38,7 +38,7 @@ public interface CartMapper {
      * @param userId  用户id
      * @param checked 全选/全不选
      */
-    void updateAllCheckedStatusByUserId(Integer userId, int checked);
+    void updateAllCheckedStatusByUserId(@Param("userId") Integer userId,@Param("checked")  int checked);
 
     void updateCheckedStatusByUserIdAndProductId(@Param("userId") Integer userId, @Param("productId") Integer productId, @Param("checked") int checked);
 

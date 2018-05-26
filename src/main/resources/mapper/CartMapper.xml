@@ -59,7 +59,7 @@
         delete from mmall_cart
         where user_id = #{userId}
         and product_id in
-        <foreach index="index" item="item" collection="array" open="(" separator="," close=")">
+        <foreach index="index" item="item" collection="ids" open="(" separator="," close=")">
             #{item}
         </foreach>
     </delete>

@@ -44,11 +44,15 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public ServerResponse<CartVO> add(Integer userId, Integer productId, Integer count) {
+        Product selectProduct = productMapper.selectByPrimaryKey(productId);
+        if (selectProduct == null) {
+            return ServerResponse.createByErrorMessage("不存在该商品");
+        }
         Cart cart = cartMapper.selectByUserIdAndProductId(userId, productId);
         if (cart == null) {
             // 新加入购物车
             Cart insertCart = new Cart();
-            insertCart.setUserId(1);
+            insertCart.setUserId(userId);
             insertCart.setProductId(productId);
             insertCart.setQuantity(count);
             insertCart.setChecked(Const.CartStatus.CHECKED);
@@ -76,14 +80,16 @@ public class CartServiceImpl implements CartService {
     @Override
     public ServerResponse<CartVO> delete(Integer userId, String productIds) {
         String[] ids = productIds.split(",");
+        ArrayList<Integer> deleteProductIds = new ArrayList<>();
         for (String id : ids) {
             try {
                 Integer productId = Integer.valueOf(id);
+                deleteProductIds.add(productId);
             } catch (NumberFormatException e) {
                 return ServerResponse.createByErrorMessage("参数格式不正确，请输入数字并按逗号分割");
             }
         }
-        cartMapper.deleteByUserIdAndProductIds(userId, ids);
+        cartMapper.deleteByUserIdAndProductIds(userId, deleteProductIds);
         return this.list(userId);
     }
 
@@ -159,7 +165,7 @@ public class CartServiceImpl implements CartService {
             cartProductVO.setProductPrice(product.getPrice());
             cartProductVO.setProductStatus(product.getStatus());
             // 设置单个商品的总价格
-            cartProductVO.setProductTotalPrice(BigDecimalUtil.mul(product.getPrice().doubleValue(), cart.getQuantity()));
+            cartProductVO.setProductTotalPrice(BigDecimalUtil.mul(product.getPrice().doubleValue(), cartProductVO.getQuantity()));
             cartProductVO.setProductStock(product.getStock());
             cartProductVO.setProductChecked(cart.getChecked());
 
