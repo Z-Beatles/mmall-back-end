@@ -48,8 +48,7 @@ public class ProductManagerController {
 
     @ApiOperation(value = "新增/更新产品信息")
     @PostMapping("/save.do")
-    public ServerResponse productSave(Product product,
-                                      HttpSession session) {
+    public ServerResponse productSave(Product product, HttpSession session) {
         UserInfoVO user = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录，请登录管理员");
