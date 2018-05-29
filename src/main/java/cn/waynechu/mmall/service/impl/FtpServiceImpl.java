@@ -1,6 +1,7 @@
 package cn.waynechu.mmall.service.impl;
 
 import cn.waynechu.mmall.service.FtpService;
+import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.PrintCommandListener;
 import org.apache.commons.net.ftp.FTPClient;
@@ -50,7 +51,7 @@ public class FtpServiceImpl implements FtpService {
             // 使用被动模式建立连接
             ftpClient.enterLocalPassiveMode();
 
-            InputStream inputStream = new FileInputStream(file);
+            @Cleanup InputStream inputStream = new FileInputStream(file);
             boolean result = ftpClient.storeFile(serverFilename, inputStream);
             if (result) {
                 log.info("文件上传FTP服务器成功，FTP目录：{}，上传文件名：{}", ftpHostDir, serverFilename);
@@ -64,9 +65,8 @@ public class FtpServiceImpl implements FtpService {
 
     @Override
     public void downloadFileFromFTP(String ftpRelativePath, String copyToPath) {
-        FileOutputStream fos;
         try {
-            fos = new FileOutputStream(copyToPath);
+            @Cleanup FileOutputStream fos = new FileOutputStream(copyToPath);
             ftpClient.retrieveFile(ftpRelativePath, fos);
         } catch (IOException e) {
             log.error("下载文件失败", e);
