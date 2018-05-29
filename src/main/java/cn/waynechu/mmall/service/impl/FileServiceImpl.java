@@ -1,7 +1,7 @@
 package cn.waynechu.mmall.service.impl;
 
-import cn.waynechu.mmall.properties.FTPServerProperties;
-import cn.waynechu.mmall.service.FTPService;
+import cn.waynechu.mmall.properties.FtpServerProperties;
+import cn.waynechu.mmall.service.FtpService;
 import cn.waynechu.mmall.service.FileService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +21,10 @@ import java.util.UUID;
 public class FileServiceImpl implements FileService {
 
     @Autowired
-    private FTPService ftpService;
+    private FtpService ftpService;
 
     @Autowired
-    private FTPServerProperties ftpServerProperties;
+    private FtpServerProperties ftpServerProperties;
 
     @Override
     public String upload(MultipartFile file, String path) {

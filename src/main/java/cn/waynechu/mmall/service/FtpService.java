@@ -6,7 +6,7 @@ import java.io.File;
  * @author waynechu
  * Created 2018-05-23 22:33
  */
-public interface FTPService {
+public interface FtpService {
 
     void connectToFTP(String host, String user, String pass);
 

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "ftp.server")
 @Data
-public class FTPServerProperties {
+public class FtpServerProperties {
 
     private String ip;
 

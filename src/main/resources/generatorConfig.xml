@@ -69,6 +69,10 @@
             <columnOverride column="update_time" javaType="java.time.LocalDateTime" jdbcType="TIMESTAMP"/>
         </table>
         <table tableName="mmall_order" domainObjectName="Order" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
+            <columnOverride column="payment_time" javaType="java.time.LocalDateTime" jdbcType="TIMESTAMP"/>
+            <columnOverride column="send_time" javaType="java.time.LocalDateTime" jdbcType="TIMESTAMP"/>
+            <columnOverride column="end_time" javaType="java.time.LocalDateTime" jdbcType="TIMESTAMP"/>
+            <columnOverride column="close_time" javaType="java.time.LocalDateTime" jdbcType="TIMESTAMP"/>
             <columnOverride column="create_time" javaType="java.time.LocalDateTime" jdbcType="TIMESTAMP"/>
             <columnOverride column="update_time" javaType="java.time.LocalDateTime" jdbcType="TIMESTAMP"/></table>
         <table tableName="mmall_order_item" domainObjectName="OrderItem" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">

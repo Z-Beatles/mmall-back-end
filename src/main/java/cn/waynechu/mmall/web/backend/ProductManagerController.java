@@ -4,7 +4,7 @@ import cn.waynechu.mmall.common.Const;
 import cn.waynechu.mmall.common.ResponseCode;
 import cn.waynechu.mmall.common.ServerResponse;
 import cn.waynechu.mmall.entity.Product;
-import cn.waynechu.mmall.properties.FTPServerProperties;
+import cn.waynechu.mmall.properties.FtpServerProperties;
 import cn.waynechu.mmall.service.FileService;
 import cn.waynechu.mmall.service.ProductService;
 import cn.waynechu.mmall.service.UserService;
@@ -35,7 +35,7 @@ import java.util.Map;
 public class ProductManagerController {
 
     @Autowired
-    private FTPServerProperties ftpServerProperties;
+    private FtpServerProperties ftpServerProperties;
 
     @Autowired
     private UserService userService;

@@ -1,6 +1,6 @@
 package cn.waynechu.mmall.service.impl;
 
-import cn.waynechu.mmall.service.FTPService;
+import cn.waynechu.mmall.service.FtpService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.PrintCommandListener;
 import org.apache.commons.net.ftp.FTPClient;
@@ -16,7 +16,7 @@ import java.io.*;
  */
 @Slf4j
 @Service
-public class FTPServiceImpl implements FTPService {
+public class FtpServiceImpl implements FtpService {
 
     @Autowired
     private Environment environment;

@@ -2,7 +2,6 @@ package cn.waynechu.mmall.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class Order {
     private Integer id;
@@ -21,19 +20,19 @@ public class Order {
 
     private Integer status;
 
-    private Date paymentTime;
+    private LocalDateTime paymentTime;
 
-    private Date sendTime;
+    private LocalDateTime sendTime;
 
-    private Date endTime;
+    private LocalDateTime endTime;
 
-    private Date closeTime;
+    private LocalDateTime closeTime;
 
     private LocalDateTime createTime;
 
     private LocalDateTime updateTime;
 
-    public Order(Integer id, Long orderNo, Integer userId, Integer shippingId, BigDecimal payment, Integer paymentType, Integer postage, Integer status, Date paymentTime, Date sendTime, Date endTime, Date closeTime, LocalDateTime createTime, LocalDateTime updateTime) {
+    public Order(Integer id, Long orderNo, Integer userId, Integer shippingId, BigDecimal payment, Integer paymentType, Integer postage, Integer status, LocalDateTime paymentTime, LocalDateTime sendTime, LocalDateTime endTime, LocalDateTime closeTime, LocalDateTime createTime, LocalDateTime updateTime) {
         this.id = id;
         this.orderNo = orderNo;
         this.userId = userId;
@@ -118,35 +117,35 @@ public class Order {
         this.status = status;
     }
 
-    public Date getPaymentTime() {
+    public LocalDateTime getPaymentTime() {
         return paymentTime;
     }
 
-    public void setPaymentTime(Date paymentTime) {
+    public void setPaymentTime(LocalDateTime paymentTime) {
         this.paymentTime = paymentTime;
     }
 
-    public Date getSendTime() {
+    public LocalDateTime getSendTime() {
         return sendTime;
     }
 
-    public void setSendTime(Date sendTime) {
+    public void setSendTime(LocalDateTime sendTime) {
         this.sendTime = sendTime;
     }
 
-    public Date getEndTime() {
+    public LocalDateTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }
 
-    public Date getCloseTime() {
+    public LocalDateTime getCloseTime() {
         return closeTime;
     }
 
-    public void setCloseTime(Date closeTime) {
+    public void setCloseTime(LocalDateTime closeTime) {
         this.closeTime = closeTime;
     }
 

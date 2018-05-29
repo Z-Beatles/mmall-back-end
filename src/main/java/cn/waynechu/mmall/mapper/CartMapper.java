@@ -38,15 +38,23 @@ public interface CartMapper {
      * @param userId  用户id
      * @param checked 全选/全不选
      */
-    void updateAllCheckedStatusByUserId(@Param("userId") Integer userId,@Param("checked")  int checked);
+    void updateAllCheckedStatusByUserId(@Param("userId") Integer userId, @Param("checked") int checked);
 
     void updateCheckedStatusByUserIdAndProductId(@Param("userId") Integer userId, @Param("productId") Integer productId, @Param("checked") int checked);
 
     /**
-     * 获取购物车中商品总数量
+     * 获取指定用户购物车中商品总数量
      *
      * @param userId 用户id
      * @return 商品总数量，用户id不存在返回0
      */
     int countCartProductByUserId(Integer userId);
+
+    /**
+     * 获取指定用户勾选的商品列表
+     *
+     * @param userId 用户id
+     * @return 购物车商品列表
+     */
+    List<Cart> listCheckedCartByUserId(Integer userId);
 }

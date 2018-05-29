@@ -7,7 +7,7 @@ import cn.waynechu.mmall.entity.Category;
 import cn.waynechu.mmall.entity.Product;
 import cn.waynechu.mmall.mapper.CategoryMapper;
 import cn.waynechu.mmall.mapper.ProductMapper;
-import cn.waynechu.mmall.properties.FTPServerProperties;
+import cn.waynechu.mmall.properties.FtpServerProperties;
 import cn.waynechu.mmall.service.CategoryService;
 import cn.waynechu.mmall.service.ProductService;
 import cn.waynechu.mmall.util.DateTimeUtil;
@@ -30,7 +30,7 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
 
     @Autowired
-    private FTPServerProperties ftpServerProperties;
+    private FtpServerProperties ftpServerProperties;
 
     @Autowired
     private ProductMapper productMapper;

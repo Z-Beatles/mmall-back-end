@@ -6,7 +6,7 @@ import cn.waynechu.mmall.entity.Cart;
 import cn.waynechu.mmall.entity.Product;
 import cn.waynechu.mmall.mapper.CartMapper;
 import cn.waynechu.mmall.mapper.ProductMapper;
-import cn.waynechu.mmall.properties.FTPServerProperties;
+import cn.waynechu.mmall.properties.FtpServerProperties;
 import cn.waynechu.mmall.service.CartService;
 import cn.waynechu.mmall.util.BigDecimalUtil;
 import cn.waynechu.mmall.vo.CartProductVO;
@@ -34,7 +34,7 @@ public class CartServiceImpl implements CartService {
     private ProductMapper productMapper;
 
     @Autowired
-    private FTPServerProperties ftpServerProperties;
+    private FtpServerProperties ftpServerProperties;
 
     @Override
     public ServerResponse<CartVO> list(Integer userId) {
