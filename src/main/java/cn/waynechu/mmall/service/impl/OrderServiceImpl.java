@@ -252,7 +252,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public ServerResponse createOrder(Integer userId, Integer shippingId) {
-        // 从购物车中获取已勾选的商品
+        // 从购物车中获取已勾选的购物列表
         List<Cart> cartList = cartMapper.listCheckedCartByUserId(userId);
 
         // 计算这个订单总价(校验库存)
@@ -400,6 +400,7 @@ public class OrderServiceImpl implements OrderService {
                 orderMapper.updateByPrimaryKeySelective(order);
                 return ServerResponse.createBySuccess("发货成功");
             }
+            return ServerResponse.createByErrorMessage("订单尚未支付");
         }
         return ServerResponse.createByErrorMessage("订单不存在");
     }
@@ -456,6 +457,7 @@ public class OrderServiceImpl implements OrderService {
         orderItemVO.setOrderNo(orderItem.getOrderNo());
         orderItemVO.setProductId(orderItem.getProductId());
         orderItemVO.setProductName(orderItem.getProductName());
+        orderItemVO.setProductImage(orderItem.getProductImage());
         orderItemVO.setCurrentUnitPrice(orderItem.getCurrentUnitPrice());
         orderItemVO.setQuantity(orderItem.getQuantity());
         orderItemVO.setTotalPrice(orderItem.getTotalPrice());
@@ -544,7 +546,7 @@ public class OrderServiceImpl implements OrderService {
     private ServerResponse<List<OrderItem>> getCartOrderItem(Integer userId, List<Cart> cartList) {
         List<OrderItem> orderItemList = new ArrayList<>();
         if (cartList.isEmpty()) {
-            return ServerResponse.createByErrorMessage("购物车为空");
+            return ServerResponse.createByErrorMessage("购物车为空或者未勾选任何商品");
         }
 
         // 校验购物车的数据，包括产品的状态和数量
@@ -552,16 +554,17 @@ public class OrderServiceImpl implements OrderService {
             OrderItem orderItem = new OrderItem();
             Product product = productMapper.selectByPrimaryKey(cartItem.getProductId());
             // 校验产品状态
-            if (Const.ProductStatusEnum.ON_SALE.getCode() != product.getStock()) {
+            if (Const.ProductStatusEnum.ON_SALE.getCode() != product.getStatus()) {
                 return ServerResponse.createByErrorMessage("产品" + product.getName() + "不在售卖状态");
             }
-            // 校验产品数量
+            // 校验库存数量
             if (cartItem.getQuantity() > product.getStock()) {
                 return ServerResponse.createByErrorMessage("产品" + product.getName() + "库存不足");
             }
 
             orderItem.setUserId(userId);
             orderItem.setProductId(product.getId());
+            orderItem.setProductName(product.getName());
             orderItem.setProductImage(product.getMainImage());
             orderItem.setCurrentUnitPrice(product.getPrice());
             orderItem.setQuantity(cartItem.getQuantity());

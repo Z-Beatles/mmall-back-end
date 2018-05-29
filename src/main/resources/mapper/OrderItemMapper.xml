@@ -127,12 +127,10 @@
         </trim>
     </insert>
     <insert id="batchInsert">
-        insert into mmall_order_item (id, user_id, order_no,
-        product_id, product_name, product_image,
-        current_unit_price, quantity, total_price,
-        create_time, update_time)
+        insert into mmall_order_item (id, user_id, order_no, product_id, product_name, product_image,
+        current_unit_price, quantity, total_price, create_time, update_time)
         values
-        <foreach index="index" item="item" collection="orderItemList" separator=";">
+        <foreach index="index" item="item" collection="orderItemList" separator=",">
             (#{item.id}, #{item.userId}, #{item.orderNo},
             #{item.productId}, #{item.productName}, #{item.productImage},
             #{item.currentUnitPrice}, #{item.quantity}, #{item.totalPrice},

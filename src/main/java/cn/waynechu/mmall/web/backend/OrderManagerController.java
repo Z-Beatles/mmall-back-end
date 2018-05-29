@@ -77,15 +77,15 @@ public class OrderManagerController {
         }
     }
 
-    @RequestMapping("/send_goods.do")
-    public ServerResponse<String> orderSendGoods(HttpSession session, Long orderNo){
+    @GetMapping("/send_goods.do")
+    public ServerResponse<String> orderSendGoods(Long orderNo, HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录，请登录管理员");
         }
-        if(userService.checkAdminRole(currentUser).isSuccess()){
+        if (userService.checkAdminRole(currentUser).isSuccess()) {
             return orderService.manageSendGoods(orderNo);
-        }else{
+        } else {
             return ServerResponse.createByErrorMessage("无权限操作");
         }
     }
