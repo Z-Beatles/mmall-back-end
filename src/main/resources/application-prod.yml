@@ -24,11 +24,19 @@ spring:
       filter:
         config:
           enabled: true
-  # redis
+  # redis sentinel
   redis:
-    host: 192.168.1.100
-    port: 6379
-    password: 123456
+      host: 192.168.1.107
+      port: 6379
+      password: pa4word
+      sentinel:
+        master: mymaster
+        nodes: 192.168.1.107:26379,192.168.1.107:26380,192.168.1.107:26381
+  # multipart
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 
 mybatis:
     type-aliases-package: cn.waynechu.mmall.entity
@@ -37,7 +45,6 @@ mybatis:
           cache-enabled: false
           map-underscore-to-camel-case: true
           use-generated-keys: true
-          log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 pagehelper:
     helperDialect: mysql
