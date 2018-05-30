@@ -3,8 +3,8 @@
 <mapper namespace="cn.waynechu.mmall.mapper.PayInfoMapper">
     <resultMap id="BaseResultMap" type="cn.waynechu.mmall.entity.PayInfo">
         <constructor>
-            <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="user_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <idArg column="id" jdbcType="BIGINT" javaType="java.lang.Long"/>
+            <arg column="user_id" jdbcType="BIGINT" javaType="java.lang.Long"/>
             <arg column="order_no" jdbcType="BIGINT" javaType="java.lang.Long"/>
             <arg column="pay_platform" jdbcType="INTEGER" javaType="java.lang.Integer"/>
             <arg column="platform_number" jdbcType="VARCHAR" javaType="java.lang.String"/>
@@ -17,15 +17,15 @@
         id, user_id, order_no, pay_platform, platform_number, platform_status, create_time,
         update_time
     </sql>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
         <include refid="Base_Column_List"/>
         from mmall_pay_info
-        where id = #{id,jdbcType=INTEGER}
+        where id = #{id,jdbcType=BIGINT}
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from mmall_pay_info
-        where id = #{id,jdbcType=INTEGER}
+        where id = #{id,jdbcType=BIGINT}
     </delete>
     <insert id="insert" parameterType="cn.waynechu.mmall.entity.PayInfo">
         insert into mmall_pay_info (id, user_id, order_no,
@@ -33,7 +33,7 @@
                                     create_time, update_time)
         values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{orderNo,jdbcType=BIGINT},
                 #{payPlatform,jdbcType=INTEGER}, #{platformNumber,jdbcType=VARCHAR}, #{platformStatus,jdbcType=VARCHAR},
-                now(), now()
+                now(), now())
     </insert>
     <insert id="insertSelective" parameterType="cn.waynechu.mmall.entity.PayInfo">
         insert into mmall_pay_info
@@ -83,10 +83,10 @@
                 #{platformStatus,jdbcType=VARCHAR},
             </if>
             <if test="createTime != null">
-                #{createTime,jdbcType=TIMESTAMP},
+                now(),
             </if>
             <if test="updateTime != null">
-                #{updateTime,jdbcType=TIMESTAMP},
+                now(),
             </if>
         </trim>
     </insert>

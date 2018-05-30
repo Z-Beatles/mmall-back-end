@@ -3,11 +3,11 @@
 <mapper namespace="cn.waynechu.mmall.mapper.CartMapper">
     <resultMap id="BaseResultMap" type="cn.waynechu.mmall.entity.Cart">
         <constructor>
-            <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="user_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="product_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <idArg column="id" jdbcType="BIGINT" javaType="java.lang.Long"/>
+            <arg column="user_id" jdbcType="BIGINT" javaType="java.lang.Long"/>
+            <arg column="product_id" jdbcType="BIGINT" javaType="java.lang.Long"/>
             <arg column="quantity" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="checked" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <arg column="checked" jdbcType="TINYINT" javaType="java.lang.Integer"/>
             <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"/>
             <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.time.LocalDateTime"/>
         </constructor>
@@ -15,11 +15,11 @@
     <sql id="Base_Column_List">
         id, user_id, product_id, quantity, checked, create_time, update_time
     </sql>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
         <include refid="Base_Column_List"/>
         from mmall_cart
-        where id = #{id,jdbcType=INTEGER}
+        where id = #{id,jdbcType=BIGINT}
     </select>
     <select id="selectByUserIdAndProductId" resultType="cn.waynechu.mmall.entity.Cart">
         select
@@ -58,9 +58,9 @@
         where user_id = #{userId}
         and checked = 1
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from mmall_cart
-        where id = #{id,jdbcType=INTEGER}
+        where id = #{id,jdbcType=BIGINT}
     </delete>
     <delete id="deleteByUserIdAndProductIds">
         delete from mmall_cart
@@ -119,10 +119,10 @@
                 #{checked,jdbcType=INTEGER},
             </if>
             <if test="createTime != null">
-                #{createTime,jdbcType=TIMESTAMP},
+                now(),
             </if>
             <if test="updateTime != null">
-                #{updateTime,jdbcType=TIMESTAMP},
+                now(),
             </if>
         </trim>
     </insert>

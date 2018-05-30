@@ -33,7 +33,7 @@ public class CartController {
             @ApiImplicitParam(name = "count", value = "购买数量", paramType = "query", required = true)
     })
     @PostMapping("/add.do")
-    public ServerResponse<CartVO> add(@RequestParam Integer productId,
+    public ServerResponse<CartVO> add(@RequestParam Long productId,
                                       @RequestParam Integer count,
                                       HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
@@ -49,7 +49,7 @@ public class CartController {
             @ApiImplicitParam(name = "count", value = "更新后的数量", paramType = "query", required = true)
     })
     @PostMapping("/update.do")
-    public ServerResponse<CartVO> update(@RequestParam Integer productId,
+    public ServerResponse<CartVO> update(@RequestParam Long productId,
                                          @RequestParam Integer count,
                                          HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
@@ -119,7 +119,7 @@ public class CartController {
             @ApiImplicitParam(name = "productId", value = "商品id", paramType = "query", required = true)
     })
     @PostMapping("/select.do")
-    public ServerResponse<CartVO> select(@RequestParam Integer productId, HttpSession session) {
+    public ServerResponse<CartVO> select(@RequestParam Long productId, HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
@@ -132,7 +132,7 @@ public class CartController {
             @ApiImplicitParam(name = "productId", value = "商品id", paramType = "query", required = true)
     })
     @PostMapping("/un_select.do")
-    public ServerResponse<CartVO> unSelect(@RequestParam Integer productId, HttpSession session) {
+    public ServerResponse<CartVO> unSelect(@RequestParam Long productId, HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());

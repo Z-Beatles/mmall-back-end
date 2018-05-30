@@ -11,9 +11,9 @@ import java.math.BigDecimal;
 @Data
 public class ProductDetialVO {
 
-    private Integer id;
+    private Long id;
 
-    private Integer categoryId;
+    private Long categoryId;
 
     private String name;
 
@@ -38,5 +38,5 @@ public class ProductDetialVO {
 
     private String imageHost;
 
-    private Integer parentCategoryId;
+    private Long parentCategoryId;
 }

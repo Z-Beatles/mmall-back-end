@@ -3,8 +3,8 @@
 <mapper namespace="cn.waynechu.mmall.mapper.ShippingMapper">
     <resultMap id="BaseResultMap" type="cn.waynechu.mmall.entity.Shipping">
         <constructor>
-            <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="user_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <idArg column="id" jdbcType="BIGINT" javaType="java.lang.Long"/>
+            <arg column="user_id" jdbcType="BIGINT" javaType="java.lang.Long"/>
             <arg column="receiver_name" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <arg column="receiver_phone" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <arg column="receiver_mobile" jdbcType="VARCHAR" javaType="java.lang.String"/>
@@ -21,11 +21,11 @@
         id, user_id, receiver_name, receiver_phone, receiver_mobile, receiver_province, receiver_city,
         receiver_district, receiver_address, receiver_zip, create_time, update_time
     </sql>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
         <include refid="Base_Column_List"/>
         from mmall_shipping
-        where id = #{id,jdbcType=INTEGER}
+        where id = #{id,jdbcType=BIGINT}
     </select>
     <select id="selectByShippingIdAndUserId" resultType="cn.waynechu.mmall.entity.Shipping">
         select
@@ -40,9 +40,9 @@
         from mmall_shipping
         where user_id = #{userId}
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from mmall_shipping
-        where id = #{id,jdbcType=INTEGER}
+        where id = #{id,jdbcType=BIGINT}
     </delete>
     <delete id="deleteByShippingIdAndUserId">
         delete from mmall_shipping
@@ -135,10 +135,10 @@
                 #{receiverZip,jdbcType=VARCHAR},
             </if>
             <if test="createTime != null">
-                #{createTime,jdbcType=TIMESTAMP},
+                now(),
             </if>
             <if test="updateTime != null">
-                #{updateTime,jdbcType=TIMESTAMP},
+                now(),
             </if>
         </trim>
     </insert>

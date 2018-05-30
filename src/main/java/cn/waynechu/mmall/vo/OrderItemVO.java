@@ -13,7 +13,7 @@ public class OrderItemVO {
 
     private Long orderNo;
 
-    private Integer productId;
+    private Long productId;
 
     private String productName;
 

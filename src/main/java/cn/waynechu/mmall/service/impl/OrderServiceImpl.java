@@ -84,7 +84,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public ServerResponse pay(Long orderNo, Integer userId, String path) {
+    public ServerResponse pay(Long orderNo, Long userId, String path) {
         Map<String, String> resultMap = new HashMap<>();
         Order order = orderMapper.selectByUserIdAndOrderNo(userId, orderNo);
         if (order == null) {
@@ -239,7 +239,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public ServerResponse queryOrderPayStatus(Long orderNo, Integer userId) {
+    public ServerResponse queryOrderPayStatus(Long orderNo, Long userId) {
         Order order = orderMapper.selectByUserIdAndOrderNo(userId, orderNo);
         if (order == null) {
             return ServerResponse.createByErrorMessage("用户没有该订单");
@@ -251,7 +251,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public ServerResponse createOrder(Integer userId, Integer shippingId) {
+    public ServerResponse createOrder(Long userId, Long shippingId) {
         // 从购物车中获取已勾选的购物列表
         List<Cart> cartList = cartMapper.listCheckedCartByUserId(userId);
 
@@ -289,7 +289,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public ServerResponse<String> cancel(Integer userId, Long orderNo) {
+    public ServerResponse<String> cancel(Long userId, Long orderNo) {
         Order order = orderMapper.selectByUserIdAndOrderNo(userId, orderNo);
         if (order == null) {
             return ServerResponse.createByErrorMessage("该用户不存在该订单");
@@ -309,7 +309,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public ServerResponse getOrderCartProduct(Integer userId) {
+    public ServerResponse getOrderCartProduct(Long userId) {
         OrderProductVO orderProductVO = new OrderProductVO();
 
         // 获取购物车中勾选的商品列表
@@ -334,7 +334,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public ServerResponse<OrderVO> getOrderDetail(Integer userId, Long orderNo) {
+    public ServerResponse<OrderVO> getOrderDetail(Long userId, Long orderNo) {
         Order order = orderMapper.selectByUserIdAndOrderNo(userId, orderNo);
         if (order != null) {
             List<OrderItem> orderItemList = orderItemMapper.listByOrderNoAndUserId(orderNo, userId);
@@ -345,7 +345,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public ServerResponse getOrderList(Integer userId, int pageNum, int pageSize) {
+    public ServerResponse getOrderList(Long userId, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<Order> orderList = orderMapper.listByUserId(userId);
         List<OrderVO> orderVOList = this.assembleOrderVOList(orderList, userId);
@@ -405,7 +405,7 @@ public class OrderServiceImpl implements OrderService {
         return ServerResponse.createByErrorMessage("订单不存在");
     }
 
-    private List<OrderVO> assembleOrderVOList(List<Order> orderList, Integer userId) {
+    private List<OrderVO> assembleOrderVOList(List<Order> orderList, Long userId) {
         List<OrderVO> orderVOList = new ArrayList<>();
         for (Order order : orderList) {
             List<OrderItem> orderItemList;
@@ -495,7 +495,7 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-    private Order assembleOrder(Integer userId, Integer shippingId, BigDecimal payment) {
+    private Order assembleOrder(Long userId, Long shippingId, BigDecimal payment) {
         Order order = new Order();
         order.setOrderNo(this.generateOrderNo());
         order.setUserId(userId);
@@ -543,7 +543,7 @@ public class OrderServiceImpl implements OrderService {
      * @param cartList 购物车勾选的商品列表
      * @return 订单详情列表
      */
-    private ServerResponse<List<OrderItem>> getCartOrderItem(Integer userId, List<Cart> cartList) {
+    private ServerResponse<List<OrderItem>> getCartOrderItem(Long userId, List<Cart> cartList) {
         List<OrderItem> orderItemList = new ArrayList<>();
         if (cartList.isEmpty()) {
             return ServerResponse.createByErrorMessage("购物车为空或者未勾选任何商品");

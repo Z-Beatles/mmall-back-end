@@ -32,7 +32,7 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping("/create.do")
-    public ServerResponse create(Integer shippingId, HttpSession session) {
+    public ServerResponse create(Long shippingId, HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());

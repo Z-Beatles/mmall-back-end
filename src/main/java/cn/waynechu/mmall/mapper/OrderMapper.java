@@ -6,23 +6,23 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface OrderMapper {
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Long id);
 
     int insert(Order record);
 
     int insertSelective(Order record);
 
-    Order selectByPrimaryKey(Integer id);
+    Order selectByPrimaryKey(Long id);
 
     int updateByPrimaryKeySelective(Order record);
 
     int updateByPrimaryKey(Order record);
 
-    Order selectByUserIdAndOrderNo(@Param("userId") Integer userId, @Param("orderNo") Long orderNo);
+    Order selectByUserIdAndOrderNo(@Param("userId") Long userId, @Param("orderNo") Long orderNo);
 
     Order selectByOrderNo(Long orderNo);
 
-    List<Order> listByUserId(Integer userId);
+    List<Order> listByUserId(Long userId);
 
     List<Order> listAll();
 }

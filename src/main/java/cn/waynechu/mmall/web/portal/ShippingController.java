@@ -33,7 +33,7 @@ public class ShippingController {
             @ApiImplicitParam(name = "shippingId", value = "收货地址id", paramType = "query")
     })
     @GetMapping("/select.do")
-    public ServerResponse<Shipping> select(@RequestParam Integer shippingId, HttpSession session) {
+    public ServerResponse<Shipping> select(@RequestParam Long shippingId, HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
@@ -56,7 +56,7 @@ public class ShippingController {
             @ApiImplicitParam(name = "shippingId", value = "收货地址id", paramType = "query")
     })
     @DeleteMapping("/del.do")
-    public ServerResponse del(@RequestParam Integer shippingId, HttpSession session) {
+    public ServerResponse del(@RequestParam Long shippingId, HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());

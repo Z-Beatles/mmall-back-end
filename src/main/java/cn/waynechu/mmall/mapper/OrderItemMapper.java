@@ -6,19 +6,19 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface OrderItemMapper {
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Long id);
 
     int insert(OrderItem record);
 
     int insertSelective(OrderItem record);
 
-    OrderItem selectByPrimaryKey(Integer id);
+    OrderItem selectByPrimaryKey(Long id);
 
     int updateByPrimaryKeySelective(OrderItem record);
 
     int updateByPrimaryKey(OrderItem record);
 
-    List<OrderItem> listByOrderNoAndUserId(@Param("orderNo") Long orderNo, @Param("userId") Integer userId);
+    List<OrderItem> listByOrderNoAndUserId(@Param("orderNo") Long orderNo, @Param("userId") Long userId);
 
     void batchInsert(@Param("orderItemList") List<OrderItem> orderItemList);
 

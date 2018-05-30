@@ -11,9 +11,9 @@ import java.util.List;
  */
 public interface CategoryService {
 
-    ServerResponse addCategory(int parentId, String categoryName);
+    ServerResponse addCategory(Long parentId, String categoryName);
 
-    ServerResponse updateCategoryName(Integer categoryId, String categoryName);
+    ServerResponse updateCategoryName(Long categoryId, String categoryName);
 
     /**
      * 获取同级分类列表
@@ -21,7 +21,7 @@ public interface CategoryService {
      * @param parentId 当前分类
      * @return 同级分类列表
      */
-    ServerResponse<List<Category>> getChildrenParallelCategory(Integer parentId);
+    ServerResponse<List<Category>> getChildrenParallelCategory(Long parentId);
 
     /**
      * 获取当前分类id及所有子分类id列表
@@ -29,5 +29,5 @@ public interface CategoryService {
      * @param categoryId 当前分类id
      * @return 当前分类id及所有子分类id
      */
-    ServerResponse<List<Integer>> getCategoryAndChildrenById(Integer categoryId);
+    ServerResponse<List<Long>> getCategoryAndChildrenById(Long categoryId);
 }

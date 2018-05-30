@@ -11,11 +11,11 @@ import java.util.Map;
  * Created 2018-05-28 13:23
  */
 public interface OrderService {
-    ServerResponse pay(Long orderNo, Integer userId, String path);
+    ServerResponse pay(Long orderNo, Long userId, String path);
 
     ServerResponse aliCallback(Map<String, String> params);
 
-    ServerResponse queryOrderPayStatus(Long orderNo, Integer userId);
+    ServerResponse queryOrderPayStatus(Long orderNo, Long userId);
 
     /**
      * 创建订单
@@ -24,7 +24,7 @@ public interface OrderService {
      * @param shippingId 收货地址id
      * @return 订单详情
      */
-    ServerResponse createOrder(Integer userId, Integer shippingId);
+    ServerResponse createOrder(Long userId, Long shippingId);
 
     /**
      * 取消订单
@@ -33,9 +33,9 @@ public interface OrderService {
      * @param orderNo 订单id
      * @return string
      */
-    ServerResponse<String> cancel(Integer userId, Long orderNo);
+    ServerResponse<String> cancel(Long userId, Long orderNo);
 
-    ServerResponse getOrderCartProduct(Integer userId);
+    ServerResponse getOrderCartProduct(Long userId);
 
     /**
      * 获取订单详情
@@ -44,7 +44,7 @@ public interface OrderService {
      * @param orderNo 订单id
      * @return 订单详情
      */
-    ServerResponse<OrderVO> getOrderDetail(Integer userId, Long orderNo);
+    ServerResponse<OrderVO> getOrderDetail(Long userId, Long orderNo);
 
     /**
      * 获取指定用户订单列表
@@ -54,7 +54,7 @@ public interface OrderService {
      * @param pageSize 页大小
      * @return 订单列表
      */
-    ServerResponse getOrderList(Integer userId, int pageNum, int pageSize);
+    ServerResponse getOrderList(Long userId, int pageNum, int pageSize);
 
     ServerResponse<PageInfo> manageList(int pageNum, int pageSize, String orderBy);
 

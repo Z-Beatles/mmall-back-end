@@ -66,7 +66,7 @@ public class ProductManagerController {
             @ApiImplicitParam(name = "status", value = "产品状态：0下架，1在售，2删除", paramType = "query", required = true)
     })
     @PostMapping("/set_sale_status.do")
-    public ServerResponse setSaleStatus(@RequestParam Integer productId,
+    public ServerResponse setSaleStatus(@RequestParam Long productId,
                                         @RequestParam Integer status,
                                         HttpSession session) {
         UserInfoVO user = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
@@ -85,7 +85,7 @@ public class ProductManagerController {
             @ApiImplicitParam(name = "productId", value = "产品id", paramType = "query", required = true)
     })
     @GetMapping("/detail.do")
-    public ServerResponse<ProductDetialVO> getProductDetail(@RequestParam Integer productId, HttpSession session) {
+    public ServerResponse<ProductDetialVO> getProductDetail(@RequestParam Long productId, HttpSession session) {
         UserInfoVO user = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
         if (user == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录,请登录管理员");

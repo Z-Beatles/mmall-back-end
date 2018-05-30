@@ -4,13 +4,13 @@ import cn.waynechu.mmall.entity.User;
 import org.apache.ibatis.annotations.Param;
 
 public interface UserMapper {
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Long id);
 
     int insert(User record);
 
     int insertSelective(User record);
 
-    User selectByPrimaryKey(Integer id);
+    User selectByPrimaryKey(Long id);
 
     int updateByPrimaryKeySelective(User record);
 
@@ -75,7 +75,7 @@ public interface UserMapper {
      * @param userId      用户Id
      * @return 正确：1
      */
-    int checkPassword(@Param("md5Password") String md5Password, @Param("userId") Integer userId);
+    int checkPassword(@Param("md5Password") String md5Password, @Param("userId") Long userId);
 
     /**
      * 根据用户id检查邮箱是否正确
@@ -84,5 +84,5 @@ public interface UserMapper {
      * @param userId 用户id
      * @return 正确：1
      */
-    int checkEmailByUserId(@Param("email") String email, @Param("userId")Integer userId);
+    int checkEmailByUserId(@Param("email") String email, @Param("userId")Long userId);
 }

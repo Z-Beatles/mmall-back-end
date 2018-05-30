@@ -3,8 +3,8 @@
 <mapper namespace="cn.waynechu.mmall.mapper.CategoryMapper">
     <resultMap id="BaseResultMap" type="cn.waynechu.mmall.entity.Category">
         <constructor>
-            <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
-            <arg column="parent_id" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+            <idArg column="id" jdbcType="BIGINT" javaType="java.lang.Long"/>
+            <arg column="parent_id" jdbcType="BIGINT" javaType="java.lang.Long"/>
             <arg column="name" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <arg column="status" jdbcType="TINYINT" javaType="java.lang.Integer"/>
             <arg column="sort_order" jdbcType="INTEGER" javaType="java.lang.Integer"/>
@@ -15,11 +15,11 @@
     <sql id="Base_Column_List">
         id, parent_id, name, status, sort_order, create_time, update_time
     </sql>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long">
         select
         <include refid="Base_Column_List"/>
         from mmall_category
-        where id = #{id,jdbcType=INTEGER}
+        where id = #{id,jdbcType=BIGINT}
     </select>
     <select id="getChildrenParallelCategory" resultType="cn.waynechu.mmall.entity.Category">
         select
@@ -27,17 +27,15 @@
         from mmall_category
         where parent_id = #{parentId}
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from mmall_category
-        where id = #{id,jdbcType=INTEGER}
+        where id = #{id,jdbcType=BIGINT}
     </delete>
     <insert id="insert" parameterType="cn.waynechu.mmall.entity.Category">
         insert into mmall_category (id, parent_id, name,
-                                    status, sort_order, create_time,
-                                    update_time)
+                                    status, sort_order, create_time, update_time)
         values (#{id,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
-                #{status,jdbcType=TINYINT}, #{sortOrder,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
-                #{updateTime,jdbcType=TIMESTAMP})
+                #{status,jdbcType=TINYINT}, #{sortOrder,jdbcType=INTEGER}, now(), now())
     </insert>
     <insert id="insertSelective" parameterType="cn.waynechu.mmall.entity.Category">
         insert into mmall_category
@@ -81,10 +79,10 @@
                 #{sortOrder,jdbcType=INTEGER},
             </if>
             <if test="createTime != null">
-                #{createTime,jdbcType=TIMESTAMP},
+                now(),
             </if>
             <if test="updateTime != null">
-                #{updateTime,jdbcType=TIMESTAMP},
+                now(),
             </if>
         </trim>
     </insert>
@@ -116,7 +114,7 @@
         update mmall_category
         set parent_id   = #{parentId,jdbcType=INTEGER},
             name        = #{name,jdbcType=VARCHAR},
-            status        = #{status,jdbcType=TINYINT},
+            status      = #{status,jdbcType=TINYINT},
             sort_order  = #{sortOrder,jdbcType=INTEGER},
             create_time = #{createTime,jdbcType=TIMESTAMP},
             update_time = #{updateTime,jdbcType=TIMESTAMP}

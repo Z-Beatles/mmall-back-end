@@ -25,7 +25,7 @@ public interface UserService {
 
     ServerResponse<UserInfoVO> updateInformation(UserInfoVO currentUser, String email, String phone, String question, String answer);
 
-    ServerResponse<UserInfoVO> getInformation(Integer userId);
+    ServerResponse<UserInfoVO> getInformation(Long userId);
 
     ServerResponse checkAdminRole(UserInfoVO userInfoVO);
 }

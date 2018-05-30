@@ -13,15 +13,15 @@ public interface ProductService {
 
     ServerResponse saveOrUpdateProduct(Product product);
 
-    ServerResponse setSaleStatus(Integer productId, Integer status);
+    ServerResponse setSaleStatus(Long productId, Integer status);
 
-    ServerResponse<ProductDetialVO> managerProductDetail(Integer productId);
+    ServerResponse<ProductDetialVO> managerProductDetail(Long productId);
 
     ServerResponse<PageInfo> getProductList(int pageNum, int pageSize, String orderBy);
 
     ServerResponse<PageInfo> searchProduct(String keywords, int pageNum, int pageSize, String orderBy);
 
-    ServerResponse<ProductDetialVO> getProductDetail(Integer productId);
+    ServerResponse<ProductDetialVO> getProductDetail(Long productId);
 
-    ServerResponse<PageInfo> getProductByKeywordCategory(String keyword, Integer categoryId, int pageNum, int pageSize, String orderBy);
+    ServerResponse<PageInfo> getProductByKeywordCategory(String keyword, Long categoryId, int pageNum, int pageSize, String orderBy);
 }

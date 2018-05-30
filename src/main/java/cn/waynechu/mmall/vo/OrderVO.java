@@ -38,7 +38,7 @@ public class OrderVO {
 
     private String imageHost;
 
-    private Integer shippingId;
+    private Long shippingId;
 
     private String receiverName;
 

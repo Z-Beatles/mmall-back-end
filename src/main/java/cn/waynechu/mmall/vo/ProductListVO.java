@@ -11,9 +11,9 @@ import java.math.BigDecimal;
 @Data
 public class ProductListVO {
 
-    private Integer id;
+    private Long id;
 
-    private Integer categoryId;
+    private Long categoryId;
 
     private String name;
 

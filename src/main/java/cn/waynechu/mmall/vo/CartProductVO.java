@@ -11,11 +11,11 @@ import java.math.BigDecimal;
 @Data
 public class CartProductVO {
 
-    private Integer id;
+    private Long id;
 
-    private Integer userId;
+    private Long userId;
 
-    private Integer productId;
+    private Long productId;
 
     /**
      * 购物车中此商品的数量

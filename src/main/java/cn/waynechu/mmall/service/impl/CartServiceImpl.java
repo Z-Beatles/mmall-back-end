@@ -37,13 +37,13 @@ public class CartServiceImpl implements CartService {
     private FtpServerProperties ftpServerProperties;
 
     @Override
-    public ServerResponse<CartVO> list(Integer userId) {
+    public ServerResponse<CartVO> list(Long userId) {
         CartVO cartVO = this.getCartVOList(userId);
         return ServerResponse.createBySuccess(cartVO);
     }
 
     @Override
-    public ServerResponse<CartVO> add(Integer userId, Integer productId, Integer count) {
+    public ServerResponse<CartVO> add(Long userId, Long productId, Integer count) {
         Product selectProduct = productMapper.selectByPrimaryKey(productId);
         if (selectProduct == null) {
             return ServerResponse.createByErrorMessage("不存在该商品");
@@ -67,7 +67,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public ServerResponse<CartVO> update(Integer userId, Integer productId, Integer count) {
+    public ServerResponse<CartVO> update(Long userId, Long productId, Integer count) {
         Cart selectCart = cartMapper.selectByUserIdAndProductId(userId, productId);
         if (selectCart == null) {
             return ServerResponse.createByErrorMessage("购物车中没有该商品");
@@ -78,12 +78,12 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public ServerResponse<CartVO> delete(Integer userId, String productIds) {
+    public ServerResponse<CartVO> delete(Long userId, String productIds) {
         String[] ids = productIds.split(",");
-        ArrayList<Integer> deleteProductIds = new ArrayList<>();
+        ArrayList<Long> deleteProductIds = new ArrayList<>();
         for (String id : ids) {
             try {
-                Integer productId = Integer.valueOf(id);
+                Long productId = Long.valueOf(id);
                 deleteProductIds.add(productId);
             } catch (NumberFormatException e) {
                 return ServerResponse.createByErrorMessage("参数格式不正确，请输入数字并按逗号分割");
@@ -94,7 +94,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public ServerResponse<CartVO> selectOrUnSelect(Integer userId, Integer productId, int checked) {
+    public ServerResponse<CartVO> selectOrUnSelect(Long userId, Long productId, int checked) {
         if (productId == null) {
             // 未指定商品，则操作购物车中全部商品
             cartMapper.updateAllCheckedStatusByUserId(userId, checked);
@@ -106,7 +106,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public ServerResponse<Integer> getCartProductCount(Integer userId) {
+    public ServerResponse<Integer> getCartProductCount(Long userId) {
         int count = cartMapper.countCartProductByUserId(userId);
         return ServerResponse.createBySuccess(count);
     }
@@ -117,7 +117,7 @@ public class CartServiceImpl implements CartService {
      * @param userId 用户id
      * @return 购物车详情
      */
-    private CartVO getCartVOList(Integer userId) {
+    private CartVO getCartVOList(Long userId) {
         CartVO cartVO = new CartVO();
         // 初始化购物车总价格为0
         BigDecimal cartTotalPrice = new BigDecimal("0");
@@ -129,8 +129,8 @@ public class CartServiceImpl implements CartService {
             return cartVO;
         }
 
-        List<Integer> productIds = cartList.stream().map(Cart::getProductId).collect(Collectors.toList());
-        Map<Integer, Product> productMap = productMapper.mapProductByProductIds(productIds);
+        List<Long> productIds = cartList.stream().map(Cart::getProductId).collect(Collectors.toList());
+        Map<Long, Product> productMap = productMapper.mapProductByProductIds(productIds);
 
         List<CartProductVO> cartProductVOList = new ArrayList<>();
         CartProductVO cartProductVO;
@@ -188,7 +188,7 @@ public class CartServiceImpl implements CartService {
      * @param userId 用户id
      * @return 勾选：true
      */
-    private boolean selectAllCheckedStatus(Integer userId) {
+    private boolean selectAllCheckedStatus(Long userId) {
         if (userId == null) {
             return false;
         }

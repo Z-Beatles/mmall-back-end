@@ -26,7 +26,7 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryMapper categoryMapper;
 
     @Override
-    public ServerResponse addCategory(int parentId, String categoryName) {
+    public ServerResponse addCategory(Long parentId, String categoryName) {
         Category category = new Category();
         category.setParentId(parentId);
         category.setName(categoryName);
@@ -40,7 +40,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public ServerResponse updateCategoryName(Integer categoryId, String categoryName) {
+    public ServerResponse updateCategoryName(Long categoryId, String categoryName) {
         Category category = new Category();
         category.setId(categoryId);
         category.setName(categoryName);
@@ -53,7 +53,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public ServerResponse<List<Category>> getChildrenParallelCategory(Integer parentId) {
+    public ServerResponse<List<Category>> getChildrenParallelCategory(Long parentId) {
         List<Category> categoryList = categoryMapper.getChildrenParallelCategory(parentId);
         if (categoryList.isEmpty()) {
             log.warn("未找到子分类，当前分类ID：{}", parentId);
@@ -62,12 +62,12 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public ServerResponse<List<Integer>> getCategoryAndChildrenById(Integer categoryId) {
+    public ServerResponse<List<Long>> getCategoryAndChildrenById(Long categoryId) {
         Set<Category> categorySet = new HashSet<>();
         // 递归获取子分类
         Set<Category> categorySetByRecursion = getChildCategory(categorySet, categoryId);
 
-        List<Integer> categoryIdList = new ArrayList<>();
+        List<Long> categoryIdList = new ArrayList<>();
         for (Category categoryItem : categorySetByRecursion) {
             categoryIdList.add(categoryItem.getId());
         }
@@ -78,7 +78,7 @@ public class CategoryServiceImpl implements CategoryService {
     /**
      * 递归查找子节点
      **/
-    private Set<Category> getChildCategory(Set<Category> categorySet, Integer categoryId) {
+    private Set<Category> getChildCategory(Set<Category> categorySet, Long categoryId) {
         Category category = categoryMapper.selectByPrimaryKey(categoryId);
         if (category != null) {
             categorySet.add(category);

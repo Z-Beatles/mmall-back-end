@@ -24,7 +24,7 @@ public class ShippingServiceImpl implements ShippingService {
     private ShippingMapper shippingMapper;
 
     @Override
-    public ServerResponse<Shipping> select(Integer userId, Integer shippingId) {
+    public ServerResponse<Shipping> select(Long userId, Long shippingId) {
         Shipping shipping = shippingMapper.selectByShippingIdAndUserId(shippingId,userId);
         if (shipping == null) {
             return ServerResponse.createByErrorMessage("无法查询到该地址");
@@ -33,11 +33,11 @@ public class ShippingServiceImpl implements ShippingService {
     }
 
     @Override
-    public ServerResponse add(Integer userId, Shipping shipping) {
+    public ServerResponse add(Long userId, Shipping shipping) {
         shipping.setUserId(userId);
         int insertCount = shippingMapper.insert(shipping);
         if (insertCount > 0) {
-            Map<String, Integer> result = new HashMap<>();
+            Map<String, Long> result = new HashMap<>();
             result.put("shippingId", shipping.getId());
             return ServerResponse.createBySuccess("新增收获地址成功", result);
         }
@@ -45,7 +45,7 @@ public class ShippingServiceImpl implements ShippingService {
     }
 
     @Override
-    public ServerResponse del(Integer userId, Integer shippingId) {
+    public ServerResponse del(Long userId, Long shippingId) {
         int deleteCount = shippingMapper.deleteByShippingIdAndUserId(shippingId, userId);
         if (deleteCount > 0) {
             return ServerResponse.createBySuccessMessage("删除收获地址成功");
@@ -54,7 +54,7 @@ public class ShippingServiceImpl implements ShippingService {
     }
 
     @Override
-    public ServerResponse update(Integer userId, Shipping shipping) {
+    public ServerResponse update(Long userId, Shipping shipping) {
         shipping.setUserId(userId);
         int updateCount = shippingMapper.updateByShipping(shipping);
         if (updateCount > 0) {
@@ -64,7 +64,7 @@ public class ShippingServiceImpl implements ShippingService {
     }
 
     @Override
-    public ServerResponse<PageInfo> list(Integer userId, int pageNum, int pageSize, String orderBy) {
+    public ServerResponse<PageInfo> list(Long userId, int pageNum, int pageSize, String orderBy) {
         PageHelper.startPage(pageNum, pageSize, orderBy);
         List<Shipping> shippings = shippingMapper.selectByUserId(userId);
         PageInfo<Shipping> pageInfo = new PageInfo<>(shippings);

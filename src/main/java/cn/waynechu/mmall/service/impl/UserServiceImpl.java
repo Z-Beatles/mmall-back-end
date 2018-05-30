@@ -195,7 +195,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ServerResponse<UserInfoVO> getInformation(Integer userId) {
+    public ServerResponse<UserInfoVO> getInformation(Long userId) {
         User user = userMapper.selectByPrimaryKey(userId);
         if (user == null) {
             return ServerResponse.createByErrorMessage("找不到当前用户");

@@ -1,167 +1,46 @@
 package cn.waynechu.mmall.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+/**
+ * @author waynechu
+ * Created 2018-05-21 11:09
+ */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Order {
-    private Integer id;
-
+    /** 订单id **/
+    private Long id;
+    /** 订单号 **/
     private Long orderNo;
-
-    private Integer userId;
-
-    private Integer shippingId;
-
+    /** 用户id **/
+    private Long userId;
+    /** 收获地址id **/
+    private Long shippingId;
+    /** 实际付款金额：单位/元，保留两位小数 **/
     private BigDecimal payment;
-
+    /** 支付类型：1在线支付 **/
     private Integer paymentType;
-
+    /** 运费：单位/元 **/
     private Integer postage;
-
+    /** 订单状态：0已取消，10未付款，20已付款，40已发货，50交易成功，60交易关闭 **/
     private Integer status;
-
+    /** 支付时间 **/
     private LocalDateTime paymentTime;
-
+    /** 发货时间 **/
     private LocalDateTime sendTime;
-
+    /** 交易完成时间 **/
     private LocalDateTime endTime;
-
+    /** 交易关闭时间 **/
     private LocalDateTime closeTime;
-
+    /** 创建时间 **/
     private LocalDateTime createTime;
-
+    /** 更新时间 **/
     private LocalDateTime updateTime;
-
-    public Order(Integer id, Long orderNo, Integer userId, Integer shippingId, BigDecimal payment, Integer paymentType, Integer postage, Integer status, LocalDateTime paymentTime, LocalDateTime sendTime, LocalDateTime endTime, LocalDateTime closeTime, LocalDateTime createTime, LocalDateTime updateTime) {
-        this.id = id;
-        this.orderNo = orderNo;
-        this.userId = userId;
-        this.shippingId = shippingId;
-        this.payment = payment;
-        this.paymentType = paymentType;
-        this.postage = postage;
-        this.status = status;
-        this.paymentTime = paymentTime;
-        this.sendTime = sendTime;
-        this.endTime = endTime;
-        this.closeTime = closeTime;
-        this.createTime = createTime;
-        this.updateTime = updateTime;
-    }
-
-    public Order() {
-        super();
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Long getOrderNo() {
-        return orderNo;
-    }
-
-    public void setOrderNo(Long orderNo) {
-        this.orderNo = orderNo;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public Integer getShippingId() {
-        return shippingId;
-    }
-
-    public void setShippingId(Integer shippingId) {
-        this.shippingId = shippingId;
-    }
-
-    public BigDecimal getPayment() {
-        return payment;
-    }
-
-    public void setPayment(BigDecimal payment) {
-        this.payment = payment;
-    }
-
-    public Integer getPaymentType() {
-        return paymentType;
-    }
-
-    public void setPaymentType(Integer paymentType) {
-        this.paymentType = paymentType;
-    }
-
-    public Integer getPostage() {
-        return postage;
-    }
-
-    public void setPostage(Integer postage) {
-        this.postage = postage;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public LocalDateTime getPaymentTime() {
-        return paymentTime;
-    }
-
-    public void setPaymentTime(LocalDateTime paymentTime) {
-        this.paymentTime = paymentTime;
-    }
-
-    public LocalDateTime getSendTime() {
-        return sendTime;
-    }
-
-    public void setSendTime(LocalDateTime sendTime) {
-        this.sendTime = sendTime;
-    }
-
-    public LocalDateTime getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(LocalDateTime endTime) {
-        this.endTime = endTime;
-    }
-
-    public LocalDateTime getCloseTime() {
-        return closeTime;
-    }
-
-    public void setCloseTime(LocalDateTime closeTime) {
-        this.closeTime = closeTime;
-    }
-
-    public LocalDateTime getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(LocalDateTime createTime) {
-        this.createTime = createTime;
-    }
-
-    public LocalDateTime getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(LocalDateTime updateTime) {
-        this.updateTime = updateTime;
-    }
 }

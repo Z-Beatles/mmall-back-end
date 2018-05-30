@@ -3,13 +3,13 @@ package cn.waynechu.mmall.mapper;
 import cn.waynechu.mmall.entity.PayInfo;
 
 public interface PayInfoMapper {
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Long id);
 
     int insert(PayInfo record);
 
     int insertSelective(PayInfo record);
 
-    PayInfo selectByPrimaryKey(Integer id);
+    PayInfo selectByPrimaryKey(Long id);
 
     int updateByPrimaryKeySelective(PayInfo record);
 

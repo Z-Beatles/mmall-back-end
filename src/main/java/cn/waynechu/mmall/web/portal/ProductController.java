@@ -31,7 +31,7 @@ public class ProductController {
             @ApiImplicitParam(name = "productId", value = "产品id", paramType = "query", required = true)
     })
     @GetMapping("/detail.do")
-    public ServerResponse<ProductDetialVO> getDetail(@RequestParam Integer productId) {
+    public ServerResponse<ProductDetialVO> getDetail(@RequestParam Long productId) {
         return productService.getProductDetail(productId);
     }
 
@@ -45,7 +45,7 @@ public class ProductController {
     })
     @GetMapping("/list.do")
     public ServerResponse<PageInfo> listProducts(@RequestParam(required = false) String keyword,
-                                                 @RequestParam(required = false) Integer categoryId,
+                                                 @RequestParam(required = false) Long categoryId,
                                                  @RequestParam(defaultValue = "1") int pageNum,
                                                  @RequestParam(defaultValue = "10") int pageSize,
                                                  @RequestParam(defaultValue = "id") String orderBy) {

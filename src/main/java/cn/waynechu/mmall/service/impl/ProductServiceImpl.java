@@ -68,7 +68,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ServerResponse setSaleStatus(Integer productId, Integer status) {
+    public ServerResponse setSaleStatus(Long productId, Integer status) {
         Product product = new Product();
         product.setId(productId);
         product.setStatus(status);
@@ -80,7 +80,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ServerResponse<ProductDetialVO> managerProductDetail(Integer productId) {
+    public ServerResponse<ProductDetialVO> managerProductDetail(Long productId) {
         Product product = productMapper.selectByPrimaryKey(productId);
         if (product == null) {
             return ServerResponse.createByErrorMessage("该商品不存在");
@@ -112,7 +112,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ServerResponse<ProductDetialVO> getProductDetail(Integer productId) {
+    public ServerResponse<ProductDetialVO> getProductDetail(Long productId) {
         Product product = productMapper.selectByPrimaryKey(productId);
         if (product == null) {
             return ServerResponse.createByErrorMessage("该商品不存在");
@@ -125,13 +125,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ServerResponse<PageInfo> getProductByKeywordCategory(String keyword, Integer categoryId, int pageNum, int pageSize, String orderBy) {
+    public ServerResponse<PageInfo> getProductByKeywordCategory(String keyword, Long categoryId, int pageNum, int pageSize, String orderBy) {
         if (keyword == null && categoryId == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.MISSING_REQUEST_PARAMETER.getCode(), ResponseCode.MISSING_REQUEST_PARAMETER.getDesc());
         }
 
         // 递归获取categoryId下所有子分类id
-        List<Integer> categoryIdList = new ArrayList<>();
+        List<Long> categoryIdList = new ArrayList<>();
         if (categoryId != null) {
             Category category = categoryMapper.selectByPrimaryKey(categoryId);
             if (category == null && keyword == null) {
@@ -171,7 +171,7 @@ public class ProductServiceImpl implements ProductService {
         Category category = categoryMapper.selectByPrimaryKey(product.getCategoryId());
         if (category == null) {
             // 默认为根节点
-            productDetialVO.setParentCategoryId(0);
+            productDetialVO.setParentCategoryId(0L);
         } else {
             productDetialVO.setParentCategoryId(category.getParentId());
         }

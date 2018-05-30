@@ -1,89 +1,31 @@
 package cn.waynechu.mmall.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 
+/**
+ * @author waynechu
+ * Created 2018-05-21 11:09
+ */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Cart {
-    private Integer id;
-
-    private Integer userId;
-
-    private Integer productId;
-
+    /** 购物车id **/
+    private Long id;
+    /** 用户id **/
+    private Long userId;
+    /** 商品id **/
+    private Long productId;
+    /** 购买数量 **/
     private Integer quantity;
-
+    /** 是否勾选：0未勾选，1已勾选，默认0 **/
     private Integer checked;
-
+    /** 创建时间 **/
     private LocalDateTime createTime;
-
+    /** 更新时间 **/
     private LocalDateTime updateTime;
-
-    public Cart(Integer id, Integer userId, Integer productId, Integer quantity, Integer checked, LocalDateTime createTime, LocalDateTime updateTime) {
-        this.id = id;
-        this.userId = userId;
-        this.productId = productId;
-        this.quantity = quantity;
-        this.checked = checked;
-        this.createTime = createTime;
-        this.updateTime = updateTime;
-    }
-
-    public Cart() {
-        super();
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public Integer getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Integer productId) {
-        this.productId = productId;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public Integer getChecked() {
-        return checked;
-    }
-
-    public void setChecked(Integer checked) {
-        this.checked = checked;
-    }
-
-    public LocalDateTime getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(LocalDateTime createTime) {
-        this.createTime = createTime;
-    }
-
-    public LocalDateTime getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(LocalDateTime updateTime) {
-        this.updateTime = updateTime;
-    }
 }

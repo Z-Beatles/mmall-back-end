@@ -8,17 +8,15 @@ import java.util.List;
 import java.util.Map;
 
 public interface ProductMapper {
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Long id);
 
     int insert(Product record);
 
     int insertSelective(Product record);
 
-    Product selectByPrimaryKey(Integer id);
+    Product selectByPrimaryKey(Long id);
 
     int updateByPrimaryKeySelective(Product record);
-
-    int updateByPrimaryKeyWithBLOBs(Product record);
 
     int updateByPrimaryKey(Product record);
 
@@ -26,8 +24,8 @@ public interface ProductMapper {
 
     List<Product> serachProductByName(String concatProductName);
 
-    List<Product> selectByNameAndCategoryIds(@Param("productName") String productName, @Param("categoryIdList") List<Integer> categoryIdList);
+    List<Product> selectByNameAndCategoryIds(@Param("productName") String productName, @Param("categoryIdList") List<Long> categoryIdList);
 
     @MapKey("id")
-    Map<Integer, Product> mapProductByProductIds(@Param("productIds")List<Integer> productIds);
+    Map<Long, Product> mapProductByProductIds(@Param("productIds")List<Long> productIds);
 }

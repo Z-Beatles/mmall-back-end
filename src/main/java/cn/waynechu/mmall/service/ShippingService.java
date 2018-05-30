@@ -10,13 +10,13 @@ import com.github.pagehelper.PageInfo;
  */
 public interface ShippingService {
 
-    ServerResponse<Shipping> select(Integer userId, Integer shippingId);
+    ServerResponse<Shipping> select(Long userId, Long shippingId);
 
-    ServerResponse add(Integer userId, Shipping shipping);
+    ServerResponse add(Long userId, Shipping shipping);
 
-    ServerResponse del(Integer userId, Integer shippingId);
+    ServerResponse del(Long userId, Long shippingId);
 
-    ServerResponse update(Integer id, Shipping shipping);
+    ServerResponse update(Long userId, Shipping shipping);
 
-    ServerResponse<PageInfo> list(Integer userId, int pageNum, int pageSize, String orderBy);
+    ServerResponse<PageInfo> list(Long userId, int pageNum, int pageSize, String orderBy);
 }
