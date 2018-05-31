@@ -59,7 +59,7 @@ public class UserManagerController {
                 // 说明登录的是管理员
                 //session.setAttribute(Const.CURRENT_USER, user);
                 CookieUtil.writeLoginToke(httpServletResponse, session.getId());
-                fastJsonRedisTemplate.opsForValue().set(session.getId(), response.getData(), 30, TimeUnit.MINUTES);
+                fastJsonRedisTemplate.opsForValue().set(session.getId(), response.getData(), 30L, TimeUnit.MINUTES);
                 return response;
             } else {
                 return ServerResponse.createByErrorMessage("无管理员权限");
