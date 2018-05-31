@@ -1,10 +1,10 @@
 package cn.waynechu.mmall.web.portal;
 
-import cn.waynechu.mmall.common.Const;
 import cn.waynechu.mmall.common.ResponseCode;
 import cn.waynechu.mmall.common.ServerResponse;
 import cn.waynechu.mmall.entity.Shipping;
 import cn.waynechu.mmall.service.ShippingService;
+import cn.waynechu.mmall.util.CookieUtil;
 import cn.waynechu.mmall.vo.UserInfoVO;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
@@ -12,9 +12,10 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author waynechu
@@ -28,13 +29,21 @@ public class ShippingController {
     @Autowired
     private ShippingService shippingService;
 
+    @Autowired
+    private RedisTemplate<String, Object> fastJsonRedisTemplate;
+
     @ApiOperation(value = "查看指定收获地址")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "shippingId", value = "收货地址id", paramType = "query")
     })
     @GetMapping("/select.do")
-    public ServerResponse<Shipping> select(@RequestParam Long shippingId, HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+    public ServerResponse<Shipping> select(@RequestParam Long shippingId, HttpServletRequest httpServletRequest) {
+        String loginToken = CookieUtil.readLoginToken(httpServletRequest);
+        if (loginToken == null) {
+            return ServerResponse.createByErrorMessage("用户未登录");
+        }
+        UserInfoVO currentUser = (UserInfoVO) fastJsonRedisTemplate.opsForValue().get(loginToken);
+
         if (currentUser == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -43,8 +52,13 @@ public class ShippingController {
 
     @ApiOperation(value = "添加收获地址")
     @PostMapping("/add.do")
-    public ServerResponse add(Shipping shipping, HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+    public ServerResponse add(Shipping shipping, HttpServletRequest httpServletRequest) {
+        String loginToken = CookieUtil.readLoginToken(httpServletRequest);
+        if (loginToken == null) {
+            return ServerResponse.createByErrorMessage("用户未登录");
+        }
+        UserInfoVO currentUser = (UserInfoVO) fastJsonRedisTemplate.opsForValue().get(loginToken);
+
         if (currentUser == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -56,8 +70,13 @@ public class ShippingController {
             @ApiImplicitParam(name = "shippingId", value = "收货地址id", paramType = "query")
     })
     @DeleteMapping("/del.do")
-    public ServerResponse del(@RequestParam Long shippingId, HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+    public ServerResponse del(@RequestParam Long shippingId, HttpServletRequest httpServletRequest) {
+        String loginToken = CookieUtil.readLoginToken(httpServletRequest);
+        if (loginToken == null) {
+            return ServerResponse.createByErrorMessage("用户未登录");
+        }
+        UserInfoVO currentUser = (UserInfoVO) fastJsonRedisTemplate.opsForValue().get(loginToken);
+
         if (currentUser == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -66,8 +85,13 @@ public class ShippingController {
 
     @ApiOperation(value = "更新收获地址")
     @PostMapping("/update.do")
-    public ServerResponse update(Shipping shipping, HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+    public ServerResponse update(Shipping shipping, HttpServletRequest httpServletRequest) {
+        String loginToken = CookieUtil.readLoginToken(httpServletRequest);
+        if (loginToken == null) {
+            return ServerResponse.createByErrorMessage("用户未登录");
+        }
+        UserInfoVO currentUser = (UserInfoVO) fastJsonRedisTemplate.opsForValue().get(loginToken);
+
         if (currentUser == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }
@@ -84,8 +108,13 @@ public class ShippingController {
     public ServerResponse<PageInfo> list(@RequestParam(defaultValue = "1") int pageNum,
                                          @RequestParam(defaultValue = "10") int pageSize,
                                          @RequestParam(defaultValue = "id") String orderBy,
-                                         HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+                                         HttpServletRequest httpServletRequest) {
+        String loginToken = CookieUtil.readLoginToken(httpServletRequest);
+        if (loginToken == null) {
+            return ServerResponse.createByErrorMessage("用户未登录");
+        }
+        UserInfoVO currentUser = (UserInfoVO) fastJsonRedisTemplate.opsForValue().get(loginToken);
+
         if (currentUser == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
         }

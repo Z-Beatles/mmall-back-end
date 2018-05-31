@@ -1,20 +1,21 @@
 package cn.waynechu.mmall.web.backend;
 
-import cn.waynechu.mmall.common.Const;
 import cn.waynechu.mmall.common.ResponseCode;
 import cn.waynechu.mmall.common.ServerResponse;
 import cn.waynechu.mmall.entity.Category;
 import cn.waynechu.mmall.service.CategoryService;
 import cn.waynechu.mmall.service.UserService;
+import cn.waynechu.mmall.util.CookieUtil;
 import cn.waynechu.mmall.vo.UserInfoVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -32,6 +33,9 @@ public class CategoryManagerController {
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
+    private RedisTemplate<String, Object> fastJsonRedisTemplate;
+
     @ApiOperation(value = "添加商品分类")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "parentId", value = "父类id（默认0，顶级分类）", paramType = "query"),
@@ -40,8 +44,13 @@ public class CategoryManagerController {
     @PostMapping("/add_category.do")
     public ServerResponse addCategory(@RequestParam(defaultValue = "0") Long parentId,
                                       @RequestParam String categoryName,
-                                      HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+                                      HttpServletRequest httpServletRequest) {
+        String loginToken = CookieUtil.readLoginToken(httpServletRequest);
+        if (loginToken == null) {
+            return ServerResponse.createByErrorMessage("用户未登录");
+        }
+        UserInfoVO currentUser = (UserInfoVO) fastJsonRedisTemplate.opsForValue().get(loginToken);
+
         if (currentUser == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "尚未登陆");
         }
@@ -60,8 +69,13 @@ public class CategoryManagerController {
     @PostMapping("/set_category_name.do")
     public ServerResponse updateCategoryName(@RequestParam Long categoryId,
                                              @RequestParam String categoryName,
-                                             HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+                                             HttpServletRequest httpServletRequest) {
+        String loginToken = CookieUtil.readLoginToken(httpServletRequest);
+        if (loginToken == null) {
+            return ServerResponse.createByErrorMessage("用户未登录");
+        }
+        UserInfoVO currentUser = (UserInfoVO) fastJsonRedisTemplate.opsForValue().get(loginToken);
+
         if (currentUser == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "尚未登陆");
         }
@@ -79,8 +93,13 @@ public class CategoryManagerController {
     @GetMapping("/get_category.do")
     public ServerResponse<List<Category>> getChildrenParallelCategory(
             @RequestParam(defaultValue = "0") Long categoryId,
-            HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+            HttpServletRequest httpServletRequest) {
+        String loginToken = CookieUtil.readLoginToken(httpServletRequest);
+        if (loginToken == null) {
+            return ServerResponse.createByErrorMessage("用户未登录");
+        }
+        UserInfoVO currentUser = (UserInfoVO) fastJsonRedisTemplate.opsForValue().get(loginToken);
+
         if (currentUser == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "尚未登陆");
         }
@@ -98,8 +117,13 @@ public class CategoryManagerController {
     @GetMapping("/get_deep_category.do")
     public ServerResponse getCategoryAndDeepChildrenCategory(
             @RequestParam(defaultValue = "0") Long categoryId,
-            HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+            HttpServletRequest httpServletRequest) {
+        String loginToken = CookieUtil.readLoginToken(httpServletRequest);
+        if (loginToken == null) {
+            return ServerResponse.createByErrorMessage("用户未登录");
+        }
+        UserInfoVO currentUser = (UserInfoVO) fastJsonRedisTemplate.opsForValue().get(loginToken);
+
         if (currentUser == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "尚未登陆");
         }

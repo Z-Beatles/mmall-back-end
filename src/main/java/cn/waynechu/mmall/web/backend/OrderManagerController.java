@@ -1,20 +1,22 @@
 package cn.waynechu.mmall.web.backend;
 
-import cn.waynechu.mmall.common.Const;
 import cn.waynechu.mmall.common.ResponseCode;
 import cn.waynechu.mmall.common.ServerResponse;
 import cn.waynechu.mmall.service.OrderService;
 import cn.waynechu.mmall.service.UserService;
+import cn.waynechu.mmall.util.CookieUtil;
 import cn.waynechu.mmall.vo.OrderVO;
 import cn.waynechu.mmall.vo.UserInfoVO;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -32,12 +34,20 @@ public class OrderManagerController {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private RedisTemplate<String, Object> fastJsonRedisTemplate;
+
     @GetMapping("/list.do")
     public ServerResponse<PageInfo> orderList(@RequestParam(defaultValue = "1") int pageNum,
                                               @RequestParam(defaultValue = "10") int pageSize,
                                               @RequestParam(defaultValue = "create_time desc") String orderBy,
-                                              HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+                                              HttpServletRequest httpServletRequest) {
+        String loginToken = CookieUtil.readLoginToken(httpServletRequest);
+        if (loginToken == null) {
+            return ServerResponse.createByErrorMessage("用户未登录");
+        }
+        UserInfoVO currentUser = (UserInfoVO) fastJsonRedisTemplate.opsForValue().get(loginToken);
+
         if (currentUser == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录，请登录管理员");
         }
@@ -49,8 +59,13 @@ public class OrderManagerController {
     }
 
     @GetMapping("/detail.do")
-    public ServerResponse<OrderVO> orderDetail(Long orderNo, HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+    public ServerResponse<OrderVO> orderDetail(Long orderNo,  HttpServletRequest httpServletRequest) {
+        String loginToken = CookieUtil.readLoginToken(httpServletRequest);
+        if (loginToken == null) {
+            return ServerResponse.createByErrorMessage("用户未登录");
+        }
+        UserInfoVO currentUser = (UserInfoVO) fastJsonRedisTemplate.opsForValue().get(loginToken);
+
         if (currentUser == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录，请登录管理员");
         }
@@ -61,12 +76,17 @@ public class OrderManagerController {
         }
     }
 
-    @GetMapping("search.do")
+    @GetMapping("/search.do")
     public ServerResponse<PageInfo> orderSearch(Long orderNo,
                                                 @RequestParam(defaultValue = "1") int pageNum,
                                                 @RequestParam(defaultValue = "10") int pageSize,
-                                                HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+                                                HttpServletRequest httpServletRequest) {
+        String loginToken = CookieUtil.readLoginToken(httpServletRequest);
+        if (loginToken == null) {
+            return ServerResponse.createByErrorMessage("用户未登录");
+        }
+        UserInfoVO currentUser = (UserInfoVO) fastJsonRedisTemplate.opsForValue().get(loginToken);
+
         if (currentUser == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录，请登录管理员");
         }
@@ -78,8 +98,13 @@ public class OrderManagerController {
     }
 
     @GetMapping("/send_goods.do")
-    public ServerResponse<String> orderSendGoods(Long orderNo, HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+    public ServerResponse<String> orderSendGoods(Long orderNo,  HttpServletRequest httpServletRequest) {
+        String loginToken = CookieUtil.readLoginToken(httpServletRequest);
+        if (loginToken == null) {
+            return ServerResponse.createByErrorMessage("用户未登录");
+        }
+        UserInfoVO currentUser = (UserInfoVO) fastJsonRedisTemplate.opsForValue().get(loginToken);
+
         if (currentUser == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "用户未登录，请登录管理员");
         }

@@ -1,6 +1,5 @@
 package cn.waynechu.mmall.service.impl;
 
-import cn.waynechu.mmall.cache.TokenCache;
 import cn.waynechu.mmall.common.Const;
 import cn.waynechu.mmall.common.ServerResponse;
 import cn.waynechu.mmall.entity.User;
@@ -11,9 +10,11 @@ import cn.waynechu.mmall.util.MD5Util;
 import cn.waynechu.mmall.vo.UserInfoVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author waynechu
@@ -24,6 +25,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     @Override
     public ServerResponse<UserInfoVO> login(String username, String password) {
@@ -111,7 +115,7 @@ public class UserServiceImpl implements UserService {
         int resultCount = userMapper.checkAnswer(username, question, answer);
         if (resultCount > 0) {
             String forgetToken = UUID.randomUUID().toString();
-            TokenCache.setKey(TokenCache.TOKEN_PREFIX + username, forgetToken);
+            stringRedisTemplate.opsForValue().set(Const.FORGET_TOKEN_PREFIX + username, forgetToken, 12, TimeUnit.HOURS);
             return ServerResponse.createBySuccess(forgetToken);
         }
         return ServerResponse.createByErrorMessage("问题的答案错误");
@@ -127,7 +131,7 @@ public class UserServiceImpl implements UserService {
             // 用户不存在
             return ServerResponse.createByErrorMessage("用户不存在");
         }
-        String token = TokenCache.getKey(TokenCache.TOKEN_PREFIX + username);
+        String token = stringRedisTemplate.opsForValue().get(Const.FORGET_TOKEN_PREFIX + username);
         if (token == null) {
             return ServerResponse.createByErrorMessage("token无效或者已过期");
         }
@@ -138,7 +142,7 @@ public class UserServiceImpl implements UserService {
 
             if (resultCount > 0) {
                 // 删除缓存的token
-                TokenCache.deleteKey(TokenCache.TOKEN_PREFIX + username);
+                stringRedisTemplate.delete(Const.FORGET_TOKEN_PREFIX + username);
                 return ServerResponse.createBySuccessMessage("修改密码成功");
             }
         } else {

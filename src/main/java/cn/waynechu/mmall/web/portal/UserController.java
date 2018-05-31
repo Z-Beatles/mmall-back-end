@@ -1,18 +1,22 @@
 package cn.waynechu.mmall.web.portal;
 
-import cn.waynechu.mmall.common.Const;
 import cn.waynechu.mmall.common.ResponseCode;
 import cn.waynechu.mmall.common.ServerResponse;
 import cn.waynechu.mmall.service.UserService;
+import cn.waynechu.mmall.util.CookieUtil;
 import cn.waynechu.mmall.vo.UserInfoVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author waynechu
@@ -26,26 +30,42 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private RedisTemplate<String, Object> fastJsonRedisTemplate;
+
     @ApiOperation(value = "用户登录", notes = "登陆成功后返回用户信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "username", value = "用户名", paramType = "query", required = true),
             @ApiImplicitParam(name = "password", value = "密码", paramType = "query", required = true)
     })
     @PostMapping(value = "/login.do")
-    public ServerResponse<UserInfoVO> login(@RequestParam String username,
-                                            @RequestParam String password,
-                                            HttpSession session) {
+    public ServerResponse<UserInfoVO> login(@RequestParam String username, @RequestParam String password,
+                                            HttpSession session, HttpServletRequest httpServletRequest,
+                                            HttpServletResponse httpServletResponse) {
+        String loginToken = CookieUtil.readLoginToken(httpServletRequest);
+        if (loginToken != null) {
+            UserInfoVO currentUser = (UserInfoVO) fastJsonRedisTemplate.opsForValue().get(loginToken);
+            if (currentUser != null) {
+                return ServerResponse.createBySuccessMessage("用户已登录");
+            }
+        }
+
         ServerResponse<UserInfoVO> response = userService.login(username, password);
         if (response.isSuccess()) {
-            session.setAttribute(Const.CURRENT_USER, response.getData());
+            CookieUtil.writeLoginToke(httpServletResponse, session.getId());
+            fastJsonRedisTemplate.opsForValue().set(session.getId(), response.getData(), 30, TimeUnit.MINUTES);
         }
         return response;
     }
 
     @ApiOperation(value = "获取当前用户信息，并强制登录")
     @GetMapping(value = "/get_information.do")
-    public ServerResponse<UserInfoVO> getInformation(HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+    public ServerResponse<UserInfoVO> getInformation(HttpServletRequest httpServletRequest) {
+        String loginToken = CookieUtil.readLoginToken(httpServletRequest);
+        if (loginToken == null) {
+            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "尚未登录，需要强制登录");
+        }
+        UserInfoVO currentUser = (UserInfoVO) fastJsonRedisTemplate.opsForValue().get(loginToken);
         if (currentUser == null) {
             return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "尚未登录，需要强制登录");
         }
@@ -54,10 +74,11 @@ public class UserController {
 
     @ApiOperation(value = "退出登录", notes = "")
     @DeleteMapping(value = "/logout.do")
-    public ServerResponse<String> logout(HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser != null) {
-            session.removeAttribute(Const.CURRENT_USER);
+    public ServerResponse<String> logout(HttpSession session, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+        String loginToken = CookieUtil.readLoginToken(httpServletRequest);
+        if (loginToken != null) {
+            CookieUtil.delLoginToken(httpServletRequest, httpServletResponse);
+            fastJsonRedisTemplate.delete(loginToken);
             return ServerResponse.createBySuccessMessage("退出成功");
         }
         return ServerResponse.createByErrorMessage("尚未登录");
@@ -129,12 +150,13 @@ public class UserController {
     @PostMapping(value = "/reset_password.do")
     public ServerResponse<String> resetPassword(@RequestParam String passwordOld,
                                                 @RequestParam String passwordNew,
-                                                HttpSession session) {
-        UserInfoVO userInfoVO = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        if (userInfoVO == null) {
+                                                HttpServletRequest httpServletRequest) {
+        String loginToken = CookieUtil.readLoginToken(httpServletRequest);
+        if (loginToken == null) {
             return ServerResponse.createByErrorMessage("用户未登录");
         }
-        return userService.resetPassword(passwordOld, passwordNew, userInfoVO);
+        UserInfoVO currentUser = (UserInfoVO) fastJsonRedisTemplate.opsForValue().get(loginToken);
+        return userService.resetPassword(passwordOld, passwordNew, currentUser);
     }
 
     @ApiOperation(value = "登录状态下更新用户信息", notes = "")
@@ -149,8 +171,12 @@ public class UserController {
                                                         @RequestParam(required = false) String phone,
                                                         @RequestParam(required = false) String question,
                                                         @RequestParam(required = false) String answer,
-                                                        HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+                                                        HttpServletRequest httpServletRequest) {
+        String loginToken = CookieUtil.readLoginToken(httpServletRequest);
+        if (loginToken == null) {
+            return ServerResponse.createByErrorMessage("用户未登录");
+        }
+        UserInfoVO currentUser = (UserInfoVO) fastJsonRedisTemplate.opsForValue().get(loginToken);
         if (currentUser == null) {
             return ServerResponse.createByErrorMessage("用户未登录");
         }
@@ -158,17 +184,20 @@ public class UserController {
         ServerResponse<UserInfoVO> response = userService.updateInformation(currentUser, email, phone, question, answer);
         if (response.isSuccess()) {
             response.getData().setUsername(currentUser.getUsername());
-            session.setAttribute(Const.CURRENT_USER, response.getData());
+            fastJsonRedisTemplate.opsForValue().set(loginToken, response.getData(), 30, TimeUnit.MINUTES);
         }
         return response;
     }
 
     @ApiOperation(value = "获取当前用户信息", notes = "")
     @GetMapping(value = "/get_user_info.do")
-    public ServerResponse<UserInfoVO> getUserInfo(HttpSession session) {
-        UserInfoVO userInfoVO = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        if (userInfoVO != null) {
-            return ServerResponse.createBySuccess(userInfoVO);
+    public ServerResponse<UserInfoVO> getUserInfo(HttpServletRequest httpServletRequest) {
+        String loginToken = CookieUtil.readLoginToken(httpServletRequest);
+        if (loginToken != null) {
+            UserInfoVO currentUser = (UserInfoVO) fastJsonRedisTemplate.opsForValue().get(loginToken);
+            if (currentUser != null) {
+                return ServerResponse.createBySuccess(currentUser);
+            }
         }
         return ServerResponse.createByErrorMessage("尚未登录");
     }
