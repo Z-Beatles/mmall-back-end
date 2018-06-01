@@ -1,11 +1,21 @@
 spring:
   profiles:
     active: dev
-  cache:
-    type: caffeine
-    cache-names: forgetToken
+  # thymeleaf
   thymeleaf:
     mode: HTML
     encoding: UTF-8
     servlet:
       content-type: text/html
+  # spring session
+  session:
+    store-type: redis
+    redis:
+      flush-mode: on_save
+      namespace: spring:session
+
+# session timeout
+server:
+  servlet:
+    session:
+      timeout: 30m

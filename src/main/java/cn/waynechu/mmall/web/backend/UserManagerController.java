@@ -36,6 +36,11 @@ public class UserManagerController {
     })
     @PostMapping(value = "/login.do")
     public ServerResponse<UserInfoVO> login(@RequestParam String username, String password, HttpSession session) {
+        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+        if (currentUser != null) {
+            return ServerResponse.createBySuccessMessage("已登录，勿重复登录");
+        }
+
         ServerResponse<UserInfoVO> response = userService.login(username, password);
         if (response.isSuccess()) {
             UserInfoVO user = response.getData();

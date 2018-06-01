@@ -38,6 +38,7 @@ spring:
       max-file-size: 10MB
       max-request-size: 10MB
 
+# mybatis
 mybatis:
     type-aliases-package: cn.waynechu.mmall.entity
     mapper-locations: classpath:mapper/*.xml
@@ -45,13 +46,14 @@ mybatis:
           cache-enabled: false
           map-underscore-to-camel-case: true
           use-generated-keys: true
-
+# mybatis pagehelper
 pagehelper:
     helperDialect: mysql
     reasonable: true
     supportMethodsArguments: true
     params: count=countSql
 
+# ftp
 ftp:
   server:
     ip: 206.189.41.1
