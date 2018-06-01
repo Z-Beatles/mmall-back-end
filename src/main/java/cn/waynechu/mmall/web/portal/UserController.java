@@ -1,8 +1,8 @@
 package cn.waynechu.mmall.web.portal;
 
 import cn.waynechu.mmall.common.Const;
-import cn.waynechu.mmall.common.ResponseCode;
-import cn.waynechu.mmall.common.ServerResponse;
+import cn.waynechu.mmall.common.ResultEnum;
+import cn.waynechu.mmall.common.Result;
 import cn.waynechu.mmall.service.UserService;
 import cn.waynechu.mmall.vo.UserInfoVO;
 import io.swagger.annotations.Api;
@@ -32,15 +32,15 @@ public class UserController {
             @ApiImplicitParam(name = "password", value = "密码", paramType = "query", required = true)
     })
     @PostMapping(value = "/login.do")
-    public ServerResponse<UserInfoVO> login(@RequestParam String username,
-                                            @RequestParam String password,
-                                            HttpSession session) {
+    public Result<UserInfoVO> login(@RequestParam String username,
+                                    @RequestParam String password,
+                                    HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
         if (currentUser != null) {
-            return ServerResponse.createBySuccessMessage("已登录，勿重复登录");
+            return Result.createBySuccessMessage("已登录，勿重复登录");
         }
 
-        ServerResponse<UserInfoVO> response = userService.login(username, password);
+        Result<UserInfoVO> response = userService.login(username, password);
         if (response.isSuccess()) {
             session.setAttribute(Const.CURRENT_USER, response.getData());
         }
@@ -49,33 +49,33 @@ public class UserController {
 
     @ApiOperation(value = "获取当前用户信息，并强制登录")
     @GetMapping(value = "/get_information.do")
-    public ServerResponse<UserInfoVO> getInformation(HttpSession session) {
+    public Result<UserInfoVO> getInformation(HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), "尚未登录，需要强制登录");
+            return Result.createByErrorCodeMessage(ResultEnum.NEED_LOGIN.getCode(), "尚未登录，需要强制登录");
         }
         return userService.getInformation(currentUser.getId());
     }
 
     @ApiOperation(value = "退出登录", notes = "")
     @DeleteMapping(value = "/logout.do")
-    public ServerResponse<String> logout(HttpSession session) {
+    public Result<String> logout(HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
         if (currentUser != null) {
             session.removeAttribute(Const.CURRENT_USER);
-            return ServerResponse.createBySuccessMessage("退出成功");
+            return Result.createBySuccessMessage("退出成功");
         }
-        return ServerResponse.createByErrorMessage("尚未登录");
+        return Result.createByErrorMessage("尚未登录");
     }
 
     @ApiOperation(value = "用户注册", notes = "")
     @PostMapping(value = "/register.do")
-    public ServerResponse<String> register(@RequestParam String username,
-                                           @RequestParam String password,
-                                           @RequestParam(required = false) String email,
-                                           @RequestParam(required = false) String phone,
-                                           @RequestParam(required = false) String question,
-                                           @RequestParam(required = false) String answer) {
+    public Result<String> register(@RequestParam String username,
+                                   @RequestParam String password,
+                                   @RequestParam(required = false) String email,
+                                   @RequestParam(required = false) String phone,
+                                   @RequestParam(required = false) String question,
+                                   @RequestParam(required = false) String answer) {
         return userService.register(username, password, email, phone, question, answer);
     }
 
@@ -85,8 +85,8 @@ public class UserController {
             @ApiImplicitParam(name = "type", value = "参数类型", defaultValue = "username", paramType = "query")
     })
     @PostMapping(value = "/check_valid.do")
-    public ServerResponse<String> checkValid(@RequestParam String value,
-                                             @RequestParam(required = false, defaultValue = "username") String type) {
+    public Result<String> checkValid(@RequestParam String value,
+                                     @RequestParam(required = false, defaultValue = "username") String type) {
         return userService.checkValid(value, type);
     }
 
@@ -96,7 +96,7 @@ public class UserController {
             @ApiImplicitParam(name = "username", value = "用户名", paramType = "query", required = true)
     })
     @PostMapping(value = "/forget_get_question.do")
-    public ServerResponse<String> forgetGetQuestion(@RequestParam String username) {
+    public Result<String> forgetGetQuestion(@RequestParam String username) {
         return userService.selectQuestion(username);
     }
 
@@ -107,9 +107,9 @@ public class UserController {
             @ApiImplicitParam(name = "answer", value = "密保答案", paramType = "query", required = true)
     })
     @PostMapping(value = "/forget_check_answer.do")
-    public ServerResponse<String> forgetCheckAnswer(@RequestParam String username,
-                                                    @RequestParam String question,
-                                                    @RequestParam String answer) {
+    public Result<String> forgetCheckAnswer(@RequestParam String username,
+                                            @RequestParam String question,
+                                            @RequestParam String answer) {
         return userService.checkAnswer(username, question, answer);
     }
 
@@ -120,9 +120,9 @@ public class UserController {
             @ApiImplicitParam(name = "forgetToken", value = "校验的token", paramType = "query", required = true)
     })
     @PostMapping(value = "/forget_reset_password.do")
-    public ServerResponse<String> forgetRestPassword(@RequestParam String username,
-                                                     @RequestParam String passwordNew,
-                                                     @RequestParam String forgetToken) {
+    public Result<String> forgetRestPassword(@RequestParam String username,
+                                             @RequestParam String passwordNew,
+                                             @RequestParam String forgetToken) {
         return userService.forgetResetPassword(username, passwordNew, forgetToken);
     }
 
@@ -132,12 +132,12 @@ public class UserController {
             @ApiImplicitParam(name = "passwordNew", value = "新密码", paramType = "query", required = true)
     })
     @PostMapping(value = "/reset_password.do")
-    public ServerResponse<String> resetPassword(@RequestParam String passwordOld,
-                                                @RequestParam String passwordNew,
-                                                HttpSession session) {
+    public Result<String> resetPassword(@RequestParam String passwordOld,
+                                        @RequestParam String passwordNew,
+                                        HttpSession session) {
         UserInfoVO userInfoVO = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
         if (userInfoVO == null) {
-            return ServerResponse.createByErrorMessage("用户未登录");
+            return Result.createByErrorMessage("用户未登录");
         }
         return userService.resetPassword(passwordOld, passwordNew, userInfoVO);
     }
@@ -150,17 +150,17 @@ public class UserController {
             @ApiImplicitParam(name = "answer", value = "密保答案", paramType = "query"),
     })
     @PostMapping(value = "/update_information.do")
-    public ServerResponse<UserInfoVO> updateInformation(@RequestParam(required = false) String email,
-                                                        @RequestParam(required = false) String phone,
-                                                        @RequestParam(required = false) String question,
-                                                        @RequestParam(required = false) String answer,
-                                                        HttpSession session) {
+    public Result<UserInfoVO> updateInformation(@RequestParam(required = false) String email,
+                                                @RequestParam(required = false) String phone,
+                                                @RequestParam(required = false) String question,
+                                                @RequestParam(required = false) String answer,
+                                                HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {
-            return ServerResponse.createByErrorMessage("用户未登录");
+            return Result.createByErrorMessage("用户未登录");
         }
 
-        ServerResponse<UserInfoVO> response = userService.updateInformation(currentUser, email, phone, question, answer);
+        Result<UserInfoVO> response = userService.updateInformation(currentUser, email, phone, question, answer);
         if (response.isSuccess()) {
             response.getData().setUsername(currentUser.getUsername());
             session.setAttribute(Const.CURRENT_USER, response.getData());
@@ -170,11 +170,11 @@ public class UserController {
 
     @ApiOperation(value = "获取当前用户信息", notes = "")
     @GetMapping(value = "/get_user_info.do")
-    public ServerResponse<UserInfoVO> getUserInfo(HttpSession session) {
+    public Result<UserInfoVO> getUserInfo(HttpSession session) {
         UserInfoVO userInfoVO = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
         if (userInfoVO != null) {
-            return ServerResponse.createBySuccess(userInfoVO);
+            return Result.createBySuccess(userInfoVO);
         }
-        return ServerResponse.createByErrorMessage("尚未登录");
+        return Result.createByErrorMessage("尚未登录");
     }
 }

@@ -1,7 +1,7 @@
 package cn.waynechu.mmall.service.impl;
 
 import cn.waynechu.mmall.common.Const;
-import cn.waynechu.mmall.common.ServerResponse;
+import cn.waynechu.mmall.common.Result;
 import cn.waynechu.mmall.entity.Category;
 import cn.waynechu.mmall.mapper.CategoryMapper;
 import cn.waynechu.mmall.service.CategoryService;
@@ -26,7 +26,7 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryMapper categoryMapper;
 
     @Override
-    public ServerResponse addCategory(Long parentId, String categoryName) {
+    public Result addCategory(Long parentId, String categoryName) {
         Category category = new Category();
         category.setParentId(parentId);
         category.setName(categoryName);
@@ -34,35 +34,35 @@ public class CategoryServiceImpl implements CategoryService {
 
         int insertCount = categoryMapper.insertSelective(category);
         if (insertCount > 0) {
-            return ServerResponse.createBySuccessMessage("添加品类成功");
+            return Result.createBySuccessMessage("添加品类成功");
         }
-        return ServerResponse.createByErrorMessage("添加品类失败");
+        return Result.createByErrorMessage("添加品类失败");
     }
 
     @Override
-    public ServerResponse updateCategoryName(Long categoryId, String categoryName) {
+    public Result updateCategoryName(Long categoryId, String categoryName) {
         Category category = new Category();
         category.setId(categoryId);
         category.setName(categoryName);
 
         int updateCount = categoryMapper.updateByPrimaryKeySelective(category);
         if (updateCount > 0) {
-            return ServerResponse.createBySuccessMessage("更新品类名称成功");
+            return Result.createBySuccessMessage("更新品类名称成功");
         }
-        return ServerResponse.createByErrorMessage("更新品类名称失败");
+        return Result.createByErrorMessage("更新品类名称失败");
     }
 
     @Override
-    public ServerResponse<List<Category>> getChildrenParallelCategory(Long parentId) {
+    public Result<List<Category>> getChildrenParallelCategory(Long parentId) {
         List<Category> categoryList = categoryMapper.getChildrenParallelCategory(parentId);
         if (categoryList.isEmpty()) {
             log.warn("未找到子分类，当前分类ID：{}", parentId);
         }
-        return ServerResponse.createBySuccess(categoryList);
+        return Result.createBySuccess(categoryList);
     }
 
     @Override
-    public ServerResponse<List<Long>> getCategoryAndChildrenById(Long categoryId) {
+    public Result<List<Long>> getCategoryAndChildrenById(Long categoryId) {
         Set<Category> categorySet = new HashSet<>();
         // 递归获取子分类
         Set<Category> categorySetByRecursion = getChildCategory(categorySet, categoryId);
@@ -71,7 +71,7 @@ public class CategoryServiceImpl implements CategoryService {
         for (Category categoryItem : categorySetByRecursion) {
             categoryIdList.add(categoryItem.getId());
         }
-        return ServerResponse.createBySuccess(categoryIdList);
+        return Result.createBySuccess(categoryIdList);
     }
 
 

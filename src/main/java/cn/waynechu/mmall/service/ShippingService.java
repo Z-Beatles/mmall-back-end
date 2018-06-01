@@ -1,6 +1,6 @@
 package cn.waynechu.mmall.service;
 
-import cn.waynechu.mmall.common.ServerResponse;
+import cn.waynechu.mmall.common.Result;
 import cn.waynechu.mmall.entity.Shipping;
 import com.github.pagehelper.PageInfo;
 
@@ -10,13 +10,13 @@ import com.github.pagehelper.PageInfo;
  */
 public interface ShippingService {
 
-    ServerResponse<Shipping> select(Long userId, Long shippingId);
+    Result<Shipping> select(Long userId, Long shippingId);
 
-    ServerResponse add(Long userId, Shipping shipping);
+    Result add(Long userId, Shipping shipping);
 
-    ServerResponse del(Long userId, Long shippingId);
+    Result del(Long userId, Long shippingId);
 
-    ServerResponse update(Long userId, Shipping shipping);
+    Result update(Long userId, Shipping shipping);
 
-    ServerResponse<PageInfo> list(Long userId, int pageNum, int pageSize, String orderBy);
+    Result<PageInfo> list(Long userId, int pageNum, int pageSize, String orderBy);
 }

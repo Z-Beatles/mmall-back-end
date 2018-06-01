@@ -1,8 +1,8 @@
 package cn.waynechu.mmall.web.portal;
 
 import cn.waynechu.mmall.common.Const;
-import cn.waynechu.mmall.common.ResponseCode;
-import cn.waynechu.mmall.common.ServerResponse;
+import cn.waynechu.mmall.common.ResultEnum;
+import cn.waynechu.mmall.common.Result;
 import cn.waynechu.mmall.service.OrderService;
 import cn.waynechu.mmall.vo.UserInfoVO;
 import com.alipay.api.AlipayApiException;
@@ -32,74 +32,74 @@ public class OrderController {
     private OrderService orderService;
 
     @PostMapping("/create.do")
-    public ServerResponse create(Long shippingId, HttpSession session) {
+    public Result create(Long shippingId, HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
+            return Result.createByErrorCodeMessage(ResultEnum.NEED_LOGIN.getCode(), ResultEnum.NEED_LOGIN.getMsg());
         }
         return orderService.createOrder(currentUser.getId(), shippingId);
     }
 
     @DeleteMapping("/cancel.do")
-    public ServerResponse cancel(Long orderNo, HttpSession session) {
+    public Result cancel(Long orderNo, HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
+            return Result.createByErrorCodeMessage(ResultEnum.NEED_LOGIN.getCode(), ResultEnum.NEED_LOGIN.getMsg());
         }
         return orderService.cancel(currentUser.getId(), orderNo);
     }
 
     @GetMapping("/get_order_cart_product.do")
-    public ServerResponse getOrderCartProduct(HttpSession session) {
+    public Result getOrderCartProduct(HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
+            return Result.createByErrorCodeMessage(ResultEnum.NEED_LOGIN.getCode(), ResultEnum.NEED_LOGIN.getMsg());
         }
         return orderService.getOrderCartProduct(currentUser.getId());
     }
 
     @GetMapping("/detail.do")
-    public ServerResponse detail(Long orderNo, HttpSession session) {
+    public Result detail(Long orderNo, HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
+            return Result.createByErrorCodeMessage(ResultEnum.NEED_LOGIN.getCode(), ResultEnum.NEED_LOGIN.getMsg());
         }
         return orderService.getOrderDetail(currentUser.getId(), orderNo);
     }
 
     @GetMapping("/list.do")
-    public ServerResponse list(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                               @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                               HttpSession session) {
+    public Result list(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+                       @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
+                       HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
+            return Result.createByErrorCodeMessage(ResultEnum.NEED_LOGIN.getCode(), ResultEnum.NEED_LOGIN.getMsg());
         }
         return orderService.getOrderList(currentUser.getId(), pageNum, pageSize);
     }
 
 
     @GetMapping("/pay.do")
-    public ServerResponse pay(Long orderNo, HttpServletRequest request, HttpSession session) {
+    public Result pay(Long orderNo, HttpServletRequest request, HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
+            return Result.createByErrorCodeMessage(ResultEnum.NEED_LOGIN.getCode(), ResultEnum.NEED_LOGIN.getMsg());
         }
         String path = request.getSession().getServletContext().getRealPath("upload");
         return orderService.pay(orderNo, currentUser.getId(), path);
     }
 
     @GetMapping("/query_order_pay_status.do")
-    public ServerResponse<Boolean> queryOrderPayStatus(Long orderNo, HttpSession session) {
+    public Result<Boolean> queryOrderPayStatus(Long orderNo, HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
+            return Result.createByErrorCodeMessage(ResultEnum.NEED_LOGIN.getCode(), ResultEnum.NEED_LOGIN.getMsg());
         }
-        ServerResponse serverResponse = orderService.queryOrderPayStatus(orderNo, currentUser.getId());
-        if (serverResponse.isSuccess()) {
-            return ServerResponse.createBySuccess(true);
+        Result result = orderService.queryOrderPayStatus(orderNo, currentUser.getId());
+        if (result.isSuccess()) {
+            return Result.createBySuccess(true);
         }
-        return ServerResponse.createBySuccess(false);
+        return Result.createBySuccess(false);
     }
 
     @PostMapping("/alipay_callback.do")
@@ -130,7 +130,7 @@ public class OrderController {
         try {
             boolean alipayRSACheckedV2 = AlipaySignature.rsaCheckV2(params, Configs.getAlipayPublicKey(), "utf-8", Configs.getSignType());
             if (!alipayRSACheckedV2) {
-                return ServerResponse.createByErrorMessage("非法请求，如继续恶意请求你将会负相关法律责任！！！");
+                return Result.createByErrorMessage("非法请求，如继续恶意请求你将会负相关法律责任！！！");
             }
         } catch (AlipayApiException e) {
             log.error("支付宝验证回调异常", e);
@@ -138,8 +138,8 @@ public class OrderController {
 
         // TODO 验证各种数据
 
-        ServerResponse serverResponse = orderService.aliCallback(params);
-        if (serverResponse.isSuccess()) {
+        Result result = orderService.aliCallback(params);
+        if (result.isSuccess()) {
             return Const.AlipayCallback.RESPONSE_SUCCESS;
         }
         return Const.AlipayCallback.RESPONSE_FAILED;

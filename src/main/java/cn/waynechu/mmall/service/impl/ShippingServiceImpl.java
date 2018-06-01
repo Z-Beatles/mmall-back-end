@@ -1,6 +1,6 @@
 package cn.waynechu.mmall.service.impl;
 
-import cn.waynechu.mmall.common.ServerResponse;
+import cn.waynechu.mmall.common.Result;
 import cn.waynechu.mmall.entity.Shipping;
 import cn.waynechu.mmall.mapper.ShippingMapper;
 import cn.waynechu.mmall.service.ShippingService;
@@ -24,50 +24,50 @@ public class ShippingServiceImpl implements ShippingService {
     private ShippingMapper shippingMapper;
 
     @Override
-    public ServerResponse<Shipping> select(Long userId, Long shippingId) {
+    public Result<Shipping> select(Long userId, Long shippingId) {
         Shipping shipping = shippingMapper.selectByShippingIdAndUserId(shippingId,userId);
         if (shipping == null) {
-            return ServerResponse.createByErrorMessage("无法查询到该地址");
+            return Result.createByErrorMessage("无法查询到该地址");
         }
-        return ServerResponse.createBySuccess(shipping);
+        return Result.createBySuccess(shipping);
     }
 
     @Override
-    public ServerResponse add(Long userId, Shipping shipping) {
+    public Result add(Long userId, Shipping shipping) {
         shipping.setUserId(userId);
         int insertCount = shippingMapper.insert(shipping);
         if (insertCount > 0) {
             Map<String, Long> result = new HashMap<>();
             result.put("shippingId", shipping.getId());
-            return ServerResponse.createBySuccess("新增收获地址成功", result);
+            return Result.createBySuccess("新增收获地址成功", result);
         }
-        return ServerResponse.createByErrorMessage("新增收获地址失败");
+        return Result.createByErrorMessage("新增收获地址失败");
     }
 
     @Override
-    public ServerResponse del(Long userId, Long shippingId) {
+    public Result del(Long userId, Long shippingId) {
         int deleteCount = shippingMapper.deleteByShippingIdAndUserId(shippingId, userId);
         if (deleteCount > 0) {
-            return ServerResponse.createBySuccessMessage("删除收获地址成功");
+            return Result.createBySuccessMessage("删除收获地址成功");
         }
-        return ServerResponse.createByErrorMessage("删除收获地址失败");
+        return Result.createByErrorMessage("删除收获地址失败");
     }
 
     @Override
-    public ServerResponse update(Long userId, Shipping shipping) {
+    public Result update(Long userId, Shipping shipping) {
         shipping.setUserId(userId);
         int updateCount = shippingMapper.updateByShipping(shipping);
         if (updateCount > 0) {
-            return ServerResponse.createBySuccessMessage("更新收获地址成功");
+            return Result.createBySuccessMessage("更新收获地址成功");
         }
-        return ServerResponse.createByErrorMessage("更新收获地址失败");
+        return Result.createByErrorMessage("更新收获地址失败");
     }
 
     @Override
-    public ServerResponse<PageInfo> list(Long userId, int pageNum, int pageSize, String orderBy) {
+    public Result<PageInfo> list(Long userId, int pageNum, int pageSize, String orderBy) {
         PageHelper.startPage(pageNum, pageSize, orderBy);
         List<Shipping> shippings = shippingMapper.selectByUserId(userId);
         PageInfo<Shipping> pageInfo = new PageInfo<>(shippings);
-        return ServerResponse.createBySuccess(pageInfo);
+        return Result.createBySuccess(pageInfo);
     }
 }

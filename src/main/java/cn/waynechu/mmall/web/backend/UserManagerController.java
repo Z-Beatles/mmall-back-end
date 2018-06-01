@@ -1,7 +1,7 @@
 package cn.waynechu.mmall.web.backend;
 
 import cn.waynechu.mmall.common.Const;
-import cn.waynechu.mmall.common.ServerResponse;
+import cn.waynechu.mmall.common.Result;
 import cn.waynechu.mmall.service.UserService;
 import cn.waynechu.mmall.vo.UserInfoVO;
 import io.swagger.annotations.Api;
@@ -35,13 +35,13 @@ public class UserManagerController {
             @ApiImplicitParam(name = "password", value = "密码", paramType = "query", required = true)
     })
     @PostMapping(value = "/login.do")
-    public ServerResponse<UserInfoVO> login(@RequestParam String username, String password, HttpSession session) {
+    public Result<UserInfoVO> login(@RequestParam String username, String password, HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
         if (currentUser != null) {
-            return ServerResponse.createBySuccessMessage("已登录，勿重复登录");
+            return Result.createBySuccessMessage("已登录，勿重复登录");
         }
 
-        ServerResponse<UserInfoVO> response = userService.login(username, password);
+        Result<UserInfoVO> response = userService.login(username, password);
         if (response.isSuccess()) {
             UserInfoVO user = response.getData();
             if (user.getRole() == Const.Role.ROLE_ADMIN) {
@@ -49,7 +49,7 @@ public class UserManagerController {
                 session.setAttribute(Const.CURRENT_USER, user);
                 return response;
             } else {
-                return ServerResponse.createByErrorMessage("无管理员权限");
+                return Result.createByErrorMessage("无管理员权限");
             }
         }
         return response;

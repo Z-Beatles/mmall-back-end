@@ -1,8 +1,8 @@
 package cn.waynechu.mmall.web.portal;
 
 import cn.waynechu.mmall.common.Const;
-import cn.waynechu.mmall.common.ResponseCode;
-import cn.waynechu.mmall.common.ServerResponse;
+import cn.waynechu.mmall.common.ResultEnum;
+import cn.waynechu.mmall.common.Result;
 import cn.waynechu.mmall.entity.Shipping;
 import cn.waynechu.mmall.service.ShippingService;
 import cn.waynechu.mmall.vo.UserInfoVO;
@@ -33,20 +33,20 @@ public class ShippingController {
             @ApiImplicitParam(name = "shippingId", value = "收货地址id", paramType = "query")
     })
     @GetMapping("/select.do")
-    public ServerResponse<Shipping> select(@RequestParam Long shippingId, HttpSession session) {
+    public Result<Shipping> select(@RequestParam Long shippingId, HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
+            return Result.createByErrorCodeMessage(ResultEnum.NEED_LOGIN.getCode(), ResultEnum.NEED_LOGIN.getMsg());
         }
         return shippingService.select(currentUser.getId(), shippingId);
     }
 
     @ApiOperation(value = "添加收获地址")
     @PostMapping("/add.do")
-    public ServerResponse add(Shipping shipping, HttpSession session) {
+    public Result add(Shipping shipping, HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
+            return Result.createByErrorCodeMessage(ResultEnum.NEED_LOGIN.getCode(), ResultEnum.NEED_LOGIN.getMsg());
         }
         return shippingService.add(currentUser.getId(), shipping);
     }
@@ -56,20 +56,20 @@ public class ShippingController {
             @ApiImplicitParam(name = "shippingId", value = "收货地址id", paramType = "query")
     })
     @DeleteMapping("/del.do")
-    public ServerResponse del(@RequestParam Long shippingId, HttpSession session) {
+    public Result del(@RequestParam Long shippingId, HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
+            return Result.createByErrorCodeMessage(ResultEnum.NEED_LOGIN.getCode(), ResultEnum.NEED_LOGIN.getMsg());
         }
         return shippingService.del(currentUser.getId(), shippingId);
     }
 
     @ApiOperation(value = "更新收获地址")
     @PostMapping("/update.do")
-    public ServerResponse update(Shipping shipping, HttpSession session) {
+    public Result update(Shipping shipping, HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
+            return Result.createByErrorCodeMessage(ResultEnum.NEED_LOGIN.getCode(), ResultEnum.NEED_LOGIN.getMsg());
         }
         return shippingService.update(currentUser.getId(), shipping);
     }
@@ -81,13 +81,13 @@ public class ShippingController {
             @ApiImplicitParam(name = "orderBy", value = "排序字段", paramType = "query", defaultValue = "id")
     })
     @GetMapping("/list.do")
-    public ServerResponse<PageInfo> list(@RequestParam(defaultValue = "1") int pageNum,
-                                         @RequestParam(defaultValue = "10") int pageSize,
-                                         @RequestParam(defaultValue = "id") String orderBy,
-                                         HttpSession session) {
+    public Result<PageInfo> list(@RequestParam(defaultValue = "1") int pageNum,
+                                 @RequestParam(defaultValue = "10") int pageSize,
+                                 @RequestParam(defaultValue = "id") String orderBy,
+                                 HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {
-            return ServerResponse.createByErrorCodeMessage(ResponseCode.NEED_LOGIN.getCode(), ResponseCode.NEED_LOGIN.getDesc());
+            return Result.createByErrorCodeMessage(ResultEnum.NEED_LOGIN.getCode(), ResultEnum.NEED_LOGIN.getMsg());
         }
         return shippingService.list(currentUser.getId(), pageNum, pageSize, orderBy);
     }

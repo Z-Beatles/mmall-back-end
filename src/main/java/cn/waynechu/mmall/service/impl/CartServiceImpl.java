@@ -1,7 +1,7 @@
 package cn.waynechu.mmall.service.impl;
 
 import cn.waynechu.mmall.common.Const;
-import cn.waynechu.mmall.common.ServerResponse;
+import cn.waynechu.mmall.common.Result;
 import cn.waynechu.mmall.entity.Cart;
 import cn.waynechu.mmall.entity.Product;
 import cn.waynechu.mmall.mapper.CartMapper;
@@ -37,16 +37,16 @@ public class CartServiceImpl implements CartService {
     private FtpServerProperties ftpServerProperties;
 
     @Override
-    public ServerResponse<CartVO> list(Long userId) {
+    public Result<CartVO> list(Long userId) {
         CartVO cartVO = this.getCartVOList(userId);
-        return ServerResponse.createBySuccess(cartVO);
+        return Result.createBySuccess(cartVO);
     }
 
     @Override
-    public ServerResponse<CartVO> add(Long userId, Long productId, Integer count) {
+    public Result<CartVO> add(Long userId, Long productId, Integer count) {
         Product selectProduct = productMapper.selectByPrimaryKey(productId);
         if (selectProduct == null) {
-            return ServerResponse.createByErrorMessage("不存在该商品");
+            return Result.createByErrorMessage("不存在该商品");
         }
         Cart cart = cartMapper.selectByUserIdAndProductId(userId, productId);
         if (cart == null) {
@@ -67,10 +67,10 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public ServerResponse<CartVO> update(Long userId, Long productId, Integer count) {
+    public Result<CartVO> update(Long userId, Long productId, Integer count) {
         Cart selectCart = cartMapper.selectByUserIdAndProductId(userId, productId);
         if (selectCart == null) {
-            return ServerResponse.createByErrorMessage("购物车中没有该商品");
+            return Result.createByErrorMessage("购物车中没有该商品");
         }
         selectCart.setQuantity(count);
         cartMapper.updateByPrimaryKey(selectCart);
@@ -78,7 +78,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public ServerResponse<CartVO> delete(Long userId, String productIds) {
+    public Result<CartVO> delete(Long userId, String productIds) {
         String[] ids = productIds.split(",");
         ArrayList<Long> deleteProductIds = new ArrayList<>();
         for (String id : ids) {
@@ -86,7 +86,7 @@ public class CartServiceImpl implements CartService {
                 Long productId = Long.valueOf(id);
                 deleteProductIds.add(productId);
             } catch (NumberFormatException e) {
-                return ServerResponse.createByErrorMessage("参数格式不正确，请输入数字并按逗号分割");
+                return Result.createByErrorMessage("参数格式不正确，请输入数字并按逗号分割");
             }
         }
         cartMapper.deleteByUserIdAndProductIds(userId, deleteProductIds);
@@ -94,7 +94,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public ServerResponse<CartVO> selectOrUnSelect(Long userId, Long productId, int checked) {
+    public Result<CartVO> selectOrUnSelect(Long userId, Long productId, int checked) {
         if (productId == null) {
             // 未指定商品，则操作购物车中全部商品
             cartMapper.updateAllCheckedStatusByUserId(userId, checked);
@@ -106,9 +106,9 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public ServerResponse<Integer> getCartProductCount(Long userId) {
+    public Result<Integer> getCartProductCount(Long userId) {
         int count = cartMapper.countCartProductByUserId(userId);
-        return ServerResponse.createBySuccess(count);
+        return Result.createBySuccess(count);
     }
 
     /**

@@ -1,6 +1,6 @@
 package cn.waynechu.mmall.service;
 
-import cn.waynechu.mmall.common.ServerResponse;
+import cn.waynechu.mmall.common.Result;
 import cn.waynechu.mmall.entity.Category;
 
 import java.util.List;
@@ -11,9 +11,9 @@ import java.util.List;
  */
 public interface CategoryService {
 
-    ServerResponse addCategory(Long parentId, String categoryName);
+    Result addCategory(Long parentId, String categoryName);
 
-    ServerResponse updateCategoryName(Long categoryId, String categoryName);
+    Result updateCategoryName(Long categoryId, String categoryName);
 
     /**
      * 获取同级分类列表
@@ -21,7 +21,7 @@ public interface CategoryService {
      * @param parentId 当前分类
      * @return 同级分类列表
      */
-    ServerResponse<List<Category>> getChildrenParallelCategory(Long parentId);
+    Result<List<Category>> getChildrenParallelCategory(Long parentId);
 
     /**
      * 获取当前分类id及所有子分类id列表
@@ -29,5 +29,5 @@ public interface CategoryService {
      * @param categoryId 当前分类id
      * @return 当前分类id及所有子分类id
      */
-    ServerResponse<List<Long>> getCategoryAndChildrenById(Long categoryId);
+    Result<List<Long>> getCategoryAndChildrenById(Long categoryId);
 }

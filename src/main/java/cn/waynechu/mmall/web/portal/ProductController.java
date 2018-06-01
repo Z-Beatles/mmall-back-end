@@ -1,6 +1,6 @@
 package cn.waynechu.mmall.web.portal;
 
-import cn.waynechu.mmall.common.ServerResponse;
+import cn.waynechu.mmall.common.Result;
 import cn.waynechu.mmall.service.ProductService;
 import cn.waynechu.mmall.vo.ProductDetialVO;
 import com.github.pagehelper.PageInfo;
@@ -31,7 +31,7 @@ public class ProductController {
             @ApiImplicitParam(name = "productId", value = "产品id", paramType = "query", required = true)
     })
     @GetMapping("/detail.do")
-    public ServerResponse<ProductDetialVO> getDetail(@RequestParam Long productId) {
+    public Result<ProductDetialVO> getDetail(@RequestParam Long productId) {
         return productService.getProductDetail(productId);
     }
 
@@ -44,11 +44,11 @@ public class ProductController {
             @ApiImplicitParam(name = "orderBy", value = "排序字段", paramType = "query", defaultValue = "id")
     })
     @GetMapping("/list.do")
-    public ServerResponse<PageInfo> listProducts(@RequestParam(required = false) String keyword,
-                                                 @RequestParam(required = false) Long categoryId,
-                                                 @RequestParam(defaultValue = "1") int pageNum,
-                                                 @RequestParam(defaultValue = "10") int pageSize,
-                                                 @RequestParam(defaultValue = "id") String orderBy) {
+    public Result<PageInfo> listProducts(@RequestParam(required = false) String keyword,
+                                         @RequestParam(required = false) Long categoryId,
+                                         @RequestParam(defaultValue = "1") int pageNum,
+                                         @RequestParam(defaultValue = "10") int pageSize,
+                                         @RequestParam(defaultValue = "id") String orderBy) {
         return productService.getProductByKeywordCategory(keyword, categoryId, pageNum, pageSize, orderBy);
     }
 }

@@ -1,6 +1,6 @@
 package cn.waynechu.mmall.service;
 
-import cn.waynechu.mmall.common.ServerResponse;
+import cn.waynechu.mmall.common.Result;
 import cn.waynechu.mmall.vo.CartVO;
 
 /**
@@ -15,7 +15,7 @@ public interface CartService {
      * @param userId 用户id
      * @return 购物车列表
      */
-    ServerResponse<CartVO> list(Long userId);
+    Result<CartVO> list(Long userId);
 
     /**
      * 添加购物车
@@ -25,7 +25,7 @@ public interface CartService {
      * @param count     购买数量
      * @return 购物车信息
      */
-    ServerResponse<CartVO> add(Long userId, Long productId, Integer count);
+    Result<CartVO> add(Long userId, Long productId, Integer count);
 
     /**
      * 更新购物车数量
@@ -35,7 +35,7 @@ public interface CartService {
      * @param count     购买数量
      * @return 购物车信息
      */
-    ServerResponse<CartVO> update(Long userId, Long productId, Integer count);
+    Result<CartVO> update(Long userId, Long productId, Integer count);
 
     /**
      * 删除购物车中的指定商品
@@ -44,7 +44,7 @@ public interface CartService {
      * @param productIds 产品id列表，用英文逗号分割
      * @return 购物车信息
      */
-    ServerResponse<CartVO> delete(Long userId, String productIds);
+    Result<CartVO> delete(Long userId, String productIds);
 
     /**
      * 购物车商品勾选
@@ -54,7 +54,7 @@ public interface CartService {
      * @param checked   选择状态
      * @return 购物车信息
      */
-    ServerResponse<CartVO> selectOrUnSelect(Long userId, Long productId, int checked);
+    Result<CartVO> selectOrUnSelect(Long userId, Long productId, int checked);
 
     /**
      * 获取购物车中商品总数量
@@ -62,5 +62,5 @@ public interface CartService {
      * @param userId 用户id
      * @return 商品总数量
      */
-    ServerResponse<Integer> getCartProductCount(Long userId);
+    Result<Integer> getCartProductCount(Long userId);
 }

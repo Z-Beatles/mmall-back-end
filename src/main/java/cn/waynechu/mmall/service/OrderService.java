@@ -1,6 +1,6 @@
 package cn.waynechu.mmall.service;
 
-import cn.waynechu.mmall.common.ServerResponse;
+import cn.waynechu.mmall.common.Result;
 import cn.waynechu.mmall.vo.OrderVO;
 import com.github.pagehelper.PageInfo;
 
@@ -11,11 +11,11 @@ import java.util.Map;
  * Created 2018-05-28 13:23
  */
 public interface OrderService {
-    ServerResponse pay(Long orderNo, Long userId, String path);
+    Result pay(Long orderNo, Long userId, String path);
 
-    ServerResponse aliCallback(Map<String, String> params);
+    Result aliCallback(Map<String, String> params);
 
-    ServerResponse queryOrderPayStatus(Long orderNo, Long userId);
+    Result queryOrderPayStatus(Long orderNo, Long userId);
 
     /**
      * 创建订单
@@ -24,7 +24,7 @@ public interface OrderService {
      * @param shippingId 收货地址id
      * @return 订单详情
      */
-    ServerResponse createOrder(Long userId, Long shippingId);
+    Result createOrder(Long userId, Long shippingId);
 
     /**
      * 取消订单
@@ -33,9 +33,9 @@ public interface OrderService {
      * @param orderNo 订单id
      * @return string
      */
-    ServerResponse<String> cancel(Long userId, Long orderNo);
+    Result<String> cancel(Long userId, Long orderNo);
 
-    ServerResponse getOrderCartProduct(Long userId);
+    Result getOrderCartProduct(Long userId);
 
     /**
      * 获取订单详情
@@ -44,7 +44,7 @@ public interface OrderService {
      * @param orderNo 订单id
      * @return 订单详情
      */
-    ServerResponse<OrderVO> getOrderDetail(Long userId, Long orderNo);
+    Result<OrderVO> getOrderDetail(Long userId, Long orderNo);
 
     /**
      * 获取指定用户订单列表
@@ -54,13 +54,13 @@ public interface OrderService {
      * @param pageSize 页大小
      * @return 订单列表
      */
-    ServerResponse getOrderList(Long userId, int pageNum, int pageSize);
+    Result getOrderList(Long userId, int pageNum, int pageSize);
 
-    ServerResponse<PageInfo> manageList(int pageNum, int pageSize, String orderBy);
+    Result<PageInfo> manageList(int pageNum, int pageSize, String orderBy);
 
-    ServerResponse<OrderVO> manageDetail(Long orderNo);
+    Result<OrderVO> manageDetail(Long orderNo);
 
-    ServerResponse<PageInfo> manageSearch(Long orderNo, int pageNum, int pageSize);
+    Result<PageInfo> manageSearch(Long orderNo, int pageNum, int pageSize);
 
-    ServerResponse<String> manageSendGoods(Long orderNo);
+    Result<String> manageSendGoods(Long orderNo);
 }

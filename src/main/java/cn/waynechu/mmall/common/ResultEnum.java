@@ -4,7 +4,7 @@ package cn.waynechu.mmall.common;
  * @author waynechu
  * Created 2018-05-21 19:44
  */
-public enum ResponseCode {
+public enum ResultEnum {
 
     /** 请求成功 **/
     SUCCESS(0, "SUCCESS"),
@@ -18,19 +18,19 @@ public enum ResponseCode {
     NEED_LOGIN(1000, "NEED_LOGIN"),;
 
     private final int code;
-    private final String desc;
+    private final String msg;
 
-    ResponseCode(int code, String desc) {
+    ResultEnum(int code, String msg) {
         this.code = code;
-        this.desc = desc;
+        this.msg = msg;
     }
 
     public int getCode() {
         return code;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getMsg() {
+        return msg;
     }
 
 }
