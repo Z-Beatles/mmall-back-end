@@ -1,7 +1,6 @@
 package cn.waynechu.mmall.web.portal;
 
 import cn.waynechu.mmall.common.Const;
-import cn.waynechu.mmall.common.ResultEnum;
 import cn.waynechu.mmall.common.Result;
 import cn.waynechu.mmall.entity.Shipping;
 import cn.waynechu.mmall.service.ShippingService;
@@ -22,45 +21,11 @@ import javax.servlet.http.HttpSession;
  */
 @Api(tags = "门户-收获地址接口")
 @RestController
-@RequestMapping("/v1/shipping")
+@RequestMapping("/v1/shippings")
 public class ShippingController {
 
     @Autowired
     private ShippingService shippingService;
-
-    @ApiOperation(value = "查看指定收获地址")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "shippingId", value = "收货地址id", paramType = "query")
-    })
-    @GetMapping("/select.do")
-    public Result<Shipping> select(@RequestParam Long shippingId, HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        return shippingService.select(currentUser.getId(), shippingId);
-    }
-
-    @ApiOperation(value = "添加收获地址")
-    @PostMapping("/add.do")
-    public Result add(Shipping shipping, HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        return shippingService.add(currentUser.getId(), shipping);
-    }
-
-    @ApiOperation(value = "删除指定收获地址")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "shippingId", value = "收货地址id", paramType = "query")
-    })
-    @DeleteMapping("/del.do")
-    public Result del(@RequestParam Long shippingId, HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        return shippingService.del(currentUser.getId(), shippingId);
-    }
-
-    @ApiOperation(value = "更新收获地址")
-    @PostMapping("/update.do")
-    public Result update(Shipping shipping, HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        return shippingService.update(currentUser.getId(), shipping);
-    }
 
     @ApiOperation(value = "获取收获地址列表", notes = "排序字段默认按地址id升序排序，若要降序则为id desc")
     @ApiImplicitParams({
@@ -68,12 +33,44 @@ public class ShippingController {
             @ApiImplicitParam(name = "pageSize", value = "页大小", paramType = "query", defaultValue = "10"),
             @ApiImplicitParam(name = "orderBy", value = "排序字段", paramType = "query", defaultValue = "id")
     })
-    @GetMapping("/list.do")
+    @GetMapping
     public Result<PageInfo> list(@RequestParam(defaultValue = "1") int pageNum,
                                  @RequestParam(defaultValue = "10") int pageSize,
                                  @RequestParam(defaultValue = "id") String orderBy,
                                  HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
         return shippingService.list(currentUser.getId(), pageNum, pageSize, orderBy);
+    }
+
+    @ApiOperation(value = "查看收获地址信息")
+    @ApiImplicitParam(name = "shippingId", value = "收货地址id", paramType = "path")
+    @GetMapping("/{shippingId}")
+    public Result<Shipping> select(@PathVariable Long shippingId, HttpSession session) {
+        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+        return shippingService.select(currentUser.getId(), shippingId);
+    }
+
+    @ApiOperation(value = "添加收获地址", notes = "根据Shipping对象创建收获地址")
+    @ApiImplicitParam(name = "shipping", value = "收货地址信息", paramType = "body")
+    @PostMapping
+    public Result add(@RequestBody Shipping shipping, HttpSession session) {
+        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+        return shippingService.add(currentUser.getId(), shipping);
+    }
+
+    @ApiOperation(value = "删除指定收获地址")
+    @ApiImplicitParam(name = "shippingId", value = "收货地址id", paramType = "path")
+    @DeleteMapping("/{shippingId}")
+    public Result del(@PathVariable Long shippingId, HttpSession session) {
+        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+        return shippingService.del(currentUser.getId(), shippingId);
+    }
+
+    @ApiOperation(value = "更新收获地址")
+    @ApiImplicitParam(name = "shipping", value = "收货地址信息", paramType = "body")
+    @PutMapping
+    public Result update(@RequestBody Shipping shipping, HttpSession session) {
+        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+        return shippingService.update(currentUser.getId(), shipping);
     }
 }

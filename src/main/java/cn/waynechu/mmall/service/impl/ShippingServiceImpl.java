@@ -56,7 +56,7 @@ public class ShippingServiceImpl implements ShippingService {
     @Override
     public Result update(Long userId, Shipping shipping) {
         shipping.setUserId(userId);
-        int updateCount = shippingMapper.updateByShipping(shipping);
+        int updateCount = shippingMapper.updateByPrimaryKeySelective(shipping);
         if (updateCount > 0) {
             return Result.createBySuccessMessage("更新收获地址成功");
         }

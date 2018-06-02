@@ -22,7 +22,5 @@ public interface ShippingMapper {
 
     int deleteByShippingIdAndUserId(@Param("shippingId") Long shippingId, @Param("userId") Long userId);
 
-    int updateByShipping(Shipping shipping);
-
     List<Shipping> selectByUserId(Long userId);
 }

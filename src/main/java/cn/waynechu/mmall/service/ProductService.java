@@ -23,5 +23,5 @@ public interface ProductService {
 
     Result<ProductDetialVO> getProductDetail(Long productId);
 
-    Result<PageInfo> getProductByKeywordCategory(String keyword, Long categoryId, int pageNum, int pageSize, String orderBy);
+    Result<PageInfo> getProductByKeywordAndCategoryId(String keyword, Long categoryId, int pageNum, int pageSize, String orderBy);
 }

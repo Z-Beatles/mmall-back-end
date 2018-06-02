@@ -95,7 +95,7 @@ public class ProductServiceImpl implements ProductService {
         List<Product> productList = productMapper.listProducts();
 
         List<ProductListVO> productListVOS = assembleProductListVO(productList);
-        PageInfo pageInfo = new PageInfo(productList);
+        PageInfo pageInfo = new PageInfo<>(productList);
         pageInfo.setList(productListVOS);
         return Result.createBySuccess(pageInfo);
     }
@@ -106,7 +106,7 @@ public class ProductServiceImpl implements ProductService {
         List<Product> productList = productMapper.serachProductByName("%" + keywords + "%");
 
         List<ProductListVO> productListVOS = assembleProductListVO(productList);
-        PageInfo pageInfo = new PageInfo(productList);
+        PageInfo pageInfo = new PageInfo<>(productList);
         pageInfo.setList(productListVOS);
         return Result.createBySuccess(pageInfo);
     }
@@ -125,7 +125,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Result<PageInfo> getProductByKeywordCategory(String keyword, Long categoryId, int pageNum, int pageSize, String orderBy) {
+    public Result<PageInfo> getProductByKeywordAndCategoryId(String keyword, Long categoryId, int pageNum, int pageSize, String orderBy) {
+        // keyword和categoryId必须传一个
         if (keyword == null && categoryId == null) {
             return Result.createByErrorCodeMessage(ResultEnum.MISSING_REQUEST_PARAMETER.getCode(), ResultEnum.MISSING_REQUEST_PARAMETER.getMsg());
         }
@@ -138,7 +139,7 @@ public class ProductServiceImpl implements ProductService {
                 // 没有该分类，并且还没有关键字，这个时候返回一个空的结果集，不报错
                 PageHelper.startPage(pageNum, pageSize);
                 List<ProductListVO> productListVoList = new ArrayList<>();
-                PageInfo pageInfo = new PageInfo(productListVoList);
+                PageInfo pageInfo = new PageInfo<>(productListVoList);
                 return Result.createBySuccess(pageInfo);
             }
             categoryIdList = categoryService.getCategoryAndChildrenById(categoryId).getData();
@@ -152,7 +153,7 @@ public class ProductServiceImpl implements ProductService {
         List<Product> productList = productMapper.selectByNameAndCategoryIds(keyword, categoryIdList.size() == 0 ? null : categoryIdList);
 
         List<ProductListVO> productListVoList = assembleProductListVO(productList);
-        PageInfo pageInfo = new PageInfo(productList);
+        PageInfo pageInfo = new PageInfo<>(productList);
         pageInfo.setList(productListVoList);
         return Result.createBySuccess(pageInfo);
     }
@@ -197,5 +198,4 @@ public class ProductServiceImpl implements ProductService {
         }
         return productListVOS;
     }
-
 }

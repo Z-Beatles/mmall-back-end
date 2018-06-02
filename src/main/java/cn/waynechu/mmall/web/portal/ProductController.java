@@ -9,10 +9,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author waynechu
@@ -20,22 +17,20 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api(tags = "门户-商品查询接口")
 @RestController
-@RequestMapping("/v1/product")
+@RequestMapping("/v1/products")
 public class ProductController {
 
     @Autowired
     private ProductService productService;
 
-    @ApiOperation(value = "获取产品详情")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "productId", value = "产品id", paramType = "query", required = true)
-    })
-    @GetMapping("/detail.do")
-    public Result<ProductDetialVO> getDetail(@RequestParam Long productId) {
+    @ApiOperation(value = "根据商品id获取商品详情")
+    @ApiImplicitParam(name = "productId", value = "产品id", required = true, paramType = "path")
+    @GetMapping("/{productId}")
+    public Result<ProductDetialVO> getDetail(@PathVariable Long productId) {
         return productService.getProductDetail(productId);
     }
 
-    @ApiOperation(value = "根据关键字及分类获取产品列表", notes = "排序字段默认按商品id升序排序，若要降序则为id desc")
+    @ApiOperation(value = "获取商品列表", notes = "根据关键字(keyword)或分类id(categoryId)获取商品列表，排序字段默认按商品id升序排序，若要降序则为id desc")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "keyword", value = "关键字", paramType = "query"),
             @ApiImplicitParam(name = "categoryId", value = "分类id", paramType = "query"),
@@ -43,12 +38,11 @@ public class ProductController {
             @ApiImplicitParam(name = "pageSize", value = "页大小", paramType = "query", defaultValue = "10"),
             @ApiImplicitParam(name = "orderBy", value = "排序字段", paramType = "query", defaultValue = "id")
     })
-    @GetMapping("/list.do")
-    public Result<PageInfo> listProducts(@RequestParam(required = false) String keyword,
-                                         @RequestParam(required = false) Long categoryId,
+    @GetMapping
+    public Result<PageInfo> listProducts(String keyword, Long categoryId,
                                          @RequestParam(defaultValue = "1") int pageNum,
                                          @RequestParam(defaultValue = "10") int pageSize,
                                          @RequestParam(defaultValue = "id") String orderBy) {
-        return productService.getProductByKeywordCategory(keyword, categoryId, pageNum, pageSize, orderBy);
+        return productService.getProductByKeywordAndCategoryId(keyword, categoryId, pageNum, pageSize, orderBy);
     }
 }
