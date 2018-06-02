@@ -28,4 +28,6 @@ public interface ProductMapper {
 
     @MapKey("id")
     Map<Long, Product> mapProductByProductIds(@Param("productIds")List<Long> productIds);
+
+    Integer selectStockByProductIdForUpdate(Long productId);
 }

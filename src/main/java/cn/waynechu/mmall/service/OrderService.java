@@ -63,4 +63,11 @@ public interface OrderService {
     Result<PageInfo> manageSearch(Long orderNo, int pageNum, int pageSize);
 
     Result<String> manageSendGoods(Long orderNo);
+
+    /**
+     * 关闭hour小时内未付款的订单
+     *
+     * @param hour 小时
+     */
+    void closeOrder(int hour);
 }

@@ -3,6 +3,7 @@ package cn.waynechu.mmall.mapper;
 import cn.waynechu.mmall.entity.Order;
 import org.apache.ibatis.annotations.Param;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface OrderMapper {
@@ -25,4 +26,8 @@ public interface OrderMapper {
     List<Order> listByUserId(Long userId);
 
     List<Order> listAll();
+
+    List<Order> listByStatusAndCreateTime(@Param("status") int status, @Param("closeDateTime") LocalDateTime closeDateTime);
+
+    int updateStatusByOrderId(@Param("orderId") Long orderId, @Param("status") int status);
 }

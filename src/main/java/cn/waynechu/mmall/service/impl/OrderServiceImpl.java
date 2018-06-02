@@ -255,11 +255,12 @@ public class OrderServiceImpl implements OrderService {
         // 从购物车中获取已勾选的购物列表
         List<Cart> cartList = cartMapper.listCheckedCartByUserId(userId);
 
-        // 计算这个订单总价(校验库存)
+        // 根据购物车勾选的商品列表生成订单详情列表
         Result<List<OrderItem>> result = this.getCartOrderItem(userId, cartList);
         if (!result.isSuccess()) {
             return result;
         }
+        // 计算这个订单总价(校验库存)
         List<OrderItem> orderItemList = result.getData();
         BigDecimal payment = this.getOrderTotalPrice(orderItemList);
 
@@ -405,6 +406,31 @@ public class OrderServiceImpl implements OrderService {
         return Result.createByErrorMessage("订单不存在");
     }
 
+    @Override
+    public void closeOrder(int hour) {
+        LocalDateTime closeDateTime = LocalDateTime.now().minusHours(hour);
+        List<Order> orderList = orderMapper.listByStatusAndCreateTime(Const.OrderStatusEnum.NO_PAY.getCode(), closeDateTime);
+        for (Order order : orderList) {
+            List<OrderItem> orderItemList = orderItemMapper.listByOrderNo(order.getOrderNo());
+            for (OrderItem orderItem : orderItemList) {
+                Integer stock = productMapper.selectStockByProductIdForUpdate(orderItem.getProductId());
+
+                // 如果stock为null表示该商品已经被删除
+                if (stock == null) {
+                    continue;
+                }
+                // 将关闭订单的商品数归还库存
+                Product product = new Product();
+                product.setId(orderItem.getProductId());
+                product.setStock(stock + orderItem.getQuantity());
+                productMapper.updateByPrimaryKeySelective(product);
+            }
+            // 更改订单状态为取消状态
+            orderMapper.updateStatusByOrderId(order.getId(), Const.OrderStatusEnum.CANCELED.getCode());
+            log.info("[关闭订单] 订单号：{}", order.getOrderNo());
+        }
+    }
+
     private List<OrderVO> assembleOrderVOList(List<Order> orderList, Long userId) {
         List<OrderVO> orderVOList = new ArrayList<>();
         for (Order order : orderList) {
@@ -537,7 +563,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * 根据购物车勾选的商品列表生成订单详情列表
+     * 根据用户购物车勾选的商品列表生成订单详情列表
      *
      * @param userId   用户id
      * @param cartList 购物车勾选的商品列表

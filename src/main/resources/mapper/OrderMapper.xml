@@ -53,6 +53,16 @@
         <include refid="Base_Column_List"/>
         from mmall_order
     </select>
+    <select id="listByStatusAndCreateTime" resultType="cn.waynechu.mmall.entity.Order">
+        select
+        <include refid="Base_Column_List"/>
+        from mmall_order
+        where status = #{status}
+        <![CDATA[
+        and create_time <= #{closeDateTime}
+        ]]>
+        order by create_time desc
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from mmall_order
         where id = #{id,jdbcType=BIGINT}
@@ -223,5 +233,10 @@
             create_time  = #{createTime,jdbcType=TIMESTAMP},
             update_time  = #{updateTime,jdbcType=TIMESTAMP}
         where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateStatusByOrderId">
+        update mmall_order
+        set status = #{status}
+        where id = #{orderId}
     </update>
 </mapper>

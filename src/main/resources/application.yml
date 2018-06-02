@@ -14,6 +14,9 @@ spring:
       flush-mode: on_save
       namespace: spring:session
 
+# close order task time (hour)
+task.close-order.time: 2
+
 # session timeout
 server:
   servlet:
