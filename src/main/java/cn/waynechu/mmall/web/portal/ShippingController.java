@@ -35,9 +35,6 @@ public class ShippingController {
     @GetMapping("/select.do")
     public Result<Shipping> select(@RequestParam Long shippingId, HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {
-            return Result.createByErrorCodeMessage(ResultEnum.NEED_LOGIN.getCode(), ResultEnum.NEED_LOGIN.getMsg());
-        }
         return shippingService.select(currentUser.getId(), shippingId);
     }
 
@@ -45,9 +42,6 @@ public class ShippingController {
     @PostMapping("/add.do")
     public Result add(Shipping shipping, HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {
-            return Result.createByErrorCodeMessage(ResultEnum.NEED_LOGIN.getCode(), ResultEnum.NEED_LOGIN.getMsg());
-        }
         return shippingService.add(currentUser.getId(), shipping);
     }
 
@@ -58,9 +52,6 @@ public class ShippingController {
     @DeleteMapping("/del.do")
     public Result del(@RequestParam Long shippingId, HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {
-            return Result.createByErrorCodeMessage(ResultEnum.NEED_LOGIN.getCode(), ResultEnum.NEED_LOGIN.getMsg());
-        }
         return shippingService.del(currentUser.getId(), shippingId);
     }
 
@@ -68,9 +59,6 @@ public class ShippingController {
     @PostMapping("/update.do")
     public Result update(Shipping shipping, HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {
-            return Result.createByErrorCodeMessage(ResultEnum.NEED_LOGIN.getCode(), ResultEnum.NEED_LOGIN.getMsg());
-        }
         return shippingService.update(currentUser.getId(), shipping);
     }
 
@@ -86,10 +74,6 @@ public class ShippingController {
                                  @RequestParam(defaultValue = "id") String orderBy,
                                  HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {
-            return Result.createByErrorCodeMessage(ResultEnum.NEED_LOGIN.getCode(), ResultEnum.NEED_LOGIN.getMsg());
-        }
         return shippingService.list(currentUser.getId(), pageNum, pageSize, orderBy);
     }
-
 }

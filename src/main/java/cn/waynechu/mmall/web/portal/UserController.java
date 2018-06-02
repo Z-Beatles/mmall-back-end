@@ -52,12 +52,12 @@ public class UserController {
     public Result<UserInfoVO> getInformation(HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
         if (currentUser == null) {
-            return Result.createByErrorCodeMessage(ResultEnum.NEED_LOGIN.getCode(), "尚未登录，需要强制登录");
+            return Result.createByErrorMessage("尚未登录");
         }
         return userService.getInformation(currentUser.getId());
     }
 
-    @ApiOperation(value = "退出登录", notes = "")
+    @ApiOperation(value = "退出登录")
     @DeleteMapping(value = "/logout.do")
     public Result<String> logout(HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
@@ -68,14 +68,10 @@ public class UserController {
         return Result.createByErrorMessage("尚未登录");
     }
 
-    @ApiOperation(value = "用户注册", notes = "")
+    @ApiOperation(value = "用户注册")
     @PostMapping(value = "/register.do")
-    public Result<String> register(@RequestParam String username,
-                                   @RequestParam String password,
-                                   @RequestParam(required = false) String email,
-                                   @RequestParam(required = false) String phone,
-                                   @RequestParam(required = false) String question,
-                                   @RequestParam(required = false) String answer) {
+    public Result<String> register(@RequestParam String username, @RequestParam String password,
+                                   String email, String phone, String question, String answer) {
         return userService.register(username, password, email, phone, question, answer);
     }
 
@@ -91,7 +87,7 @@ public class UserController {
     }
 
 
-    @ApiOperation(value = "忘记密码", notes = "")
+    @ApiOperation(value = "忘记密码")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "username", value = "用户名", paramType = "query", required = true)
     })
@@ -100,7 +96,7 @@ public class UserController {
         return userService.selectQuestion(username);
     }
 
-    @ApiOperation(value = "提交问题答案", notes = "")
+    @ApiOperation(value = "提交问题答案")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "username", value = "用户名", paramType = "query", required = true),
             @ApiImplicitParam(name = "question", value = "密保问题", paramType = "query", required = true),
@@ -113,7 +109,7 @@ public class UserController {
         return userService.checkAnswer(username, question, answer);
     }
 
-    @ApiOperation(value = "忘记密码的重设密码", notes = "")
+    @ApiOperation(value = "忘记密码的重设密码")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "username", value = "用户名", paramType = "query", required = true),
             @ApiImplicitParam(name = "passwordNew", value = "新密码", paramType = "query", required = true),
@@ -126,7 +122,7 @@ public class UserController {
         return userService.forgetResetPassword(username, passwordNew, forgetToken);
     }
 
-    @ApiOperation(value = "登录中状态重置密码", notes = "")
+    @ApiOperation(value = "登录中状态重置密码")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "passwordOld", value = "原始密码", paramType = "query", required = true),
             @ApiImplicitParam(name = "passwordNew", value = "新密码", paramType = "query", required = true)
@@ -136,13 +132,10 @@ public class UserController {
                                         @RequestParam String passwordNew,
                                         HttpSession session) {
         UserInfoVO userInfoVO = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        if (userInfoVO == null) {
-            return Result.createByErrorMessage("用户未登录");
-        }
         return userService.resetPassword(passwordOld, passwordNew, userInfoVO);
     }
 
-    @ApiOperation(value = "登录状态下更新用户信息", notes = "")
+    @ApiOperation(value = "登录状态下更新用户信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "email", value = "邮箱", paramType = "query"),
             @ApiImplicitParam(name = "phone", value = "电话", paramType = "query"),
@@ -156,25 +149,19 @@ public class UserController {
                                                 @RequestParam(required = false) String answer,
                                                 HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {
-            return Result.createByErrorMessage("用户未登录");
-        }
-
         Result<UserInfoVO> response = userService.updateInformation(currentUser, email, phone, question, answer);
         if (response.isSuccess()) {
+            // 同时更新session中信息
             response.getData().setUsername(currentUser.getUsername());
             session.setAttribute(Const.CURRENT_USER, response.getData());
         }
         return response;
     }
 
-    @ApiOperation(value = "获取当前用户信息", notes = "")
+    @ApiOperation(value = "获取当前用户信息")
     @GetMapping(value = "/get_user_info.do")
     public Result<UserInfoVO> getUserInfo(HttpSession session) {
         UserInfoVO userInfoVO = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        if (userInfoVO != null) {
-            return Result.createBySuccess(userInfoVO);
-        }
-        return Result.createByErrorMessage("尚未登录");
+        return Result.createBySuccess(userInfoVO);
     }
 }

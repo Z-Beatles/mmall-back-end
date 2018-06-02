@@ -1,12 +1,9 @@
 package cn.waynechu.mmall.web.backend;
 
-import cn.waynechu.mmall.common.Const;
-import cn.waynechu.mmall.common.ResultEnum;
 import cn.waynechu.mmall.common.Result;
 import cn.waynechu.mmall.entity.Category;
 import cn.waynechu.mmall.service.CategoryService;
 import cn.waynechu.mmall.service.UserService;
-import cn.waynechu.mmall.vo.UserInfoVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -14,7 +11,6 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -38,18 +34,8 @@ public class CategoryManagerController {
             @ApiImplicitParam(name = "categoryName", value = "分类名称", paramType = "query", required = true)
     })
     @PostMapping("/add_category.do")
-    public Result addCategory(@RequestParam(defaultValue = "0") Long parentId,
-                              @RequestParam String categoryName,
-                              HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {
-            return Result.createByErrorCodeMessage(ResultEnum.NEED_LOGIN.getCode(), "尚未登陆");
-        }
-        if (userService.checkAdminRole(currentUser).isSuccess()) {
-            return categoryService.addCategory(parentId, categoryName);
-        } else {
-            return Result.createByErrorMessage("需要管理员权限");
-        }
+    public Result addCategory(@RequestParam(defaultValue = "0") Long parentId, @RequestParam String categoryName) {
+        return categoryService.addCategory(parentId, categoryName);
     }
 
     @ApiOperation(value = "修改商品分类名称")
@@ -58,18 +44,8 @@ public class CategoryManagerController {
             @ApiImplicitParam(name = "categoryName", value = "分类名称", paramType = "query", required = true)
     })
     @PostMapping("/set_category_name.do")
-    public Result updateCategoryName(@RequestParam Long categoryId,
-                                     @RequestParam String categoryName,
-                                     HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {
-            return Result.createByErrorCodeMessage(ResultEnum.NEED_LOGIN.getCode(), "尚未登陆");
-        }
-        if (userService.checkAdminRole(currentUser).isSuccess()) {
-            return categoryService.updateCategoryName(categoryId, categoryName);
-        } else {
-            return Result.createByErrorMessage("需要管理员权限");
-        }
+    public Result updateCategoryName(@RequestParam Long categoryId, @RequestParam String categoryName) {
+        return categoryService.updateCategoryName(categoryId, categoryName);
     }
 
     @ApiOperation(value = "获取下一级子分类列表")
@@ -77,18 +53,8 @@ public class CategoryManagerController {
             @ApiImplicitParam(name = "categoryId", value = "当前分类id", paramType = "query")
     })
     @GetMapping("/get_category.do")
-    public Result<List<Category>> getChildrenParallelCategory(
-            @RequestParam(defaultValue = "0") Long categoryId,
-            HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {
-            return Result.createByErrorCodeMessage(ResultEnum.NEED_LOGIN.getCode(), "尚未登陆");
-        }
-        if (userService.checkAdminRole(currentUser).isSuccess()) {
-            return categoryService.getChildrenParallelCategory(categoryId);
-        } else {
-            return Result.createByErrorMessage("需要管理员权限");
-        }
+    public Result<List<Category>> getChildrenParallelCategory(@RequestParam(defaultValue = "0") Long categoryId) {
+        return categoryService.getChildrenParallelCategory(categoryId);
     }
 
     @ApiOperation(value = "获取当前分类id及递归子节点id")
@@ -96,18 +62,7 @@ public class CategoryManagerController {
             @ApiImplicitParam(name = "categoryId", value = "当前分类id", paramType = "query")
     })
     @GetMapping("/get_deep_category.do")
-    public Result getCategoryAndDeepChildrenCategory(
-            @RequestParam(defaultValue = "0") Long categoryId,
-            HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {
-            return Result.createByErrorCodeMessage(ResultEnum.NEED_LOGIN.getCode(), "尚未登陆");
-        }
-        if (userService.checkAdminRole(currentUser).isSuccess()) {
-            return categoryService.getCategoryAndChildrenById(categoryId);
-        } else {
-            return Result.createByErrorMessage("需要管理员权限");
-        }
+    public Result getCategoryAndDeepChildrenCategory(@RequestParam(defaultValue = "0") Long categoryId) {
+        return categoryService.getCategoryAndChildrenById(categoryId);
     }
-
 }

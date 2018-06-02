@@ -19,9 +19,4 @@ public class FileUploadController {
     public String fileUpload() {
         return "upload";
     }
-
-    @GetMapping("/upload-error")
-    public String fileUploadError(Model model) {
-        return "upload-error";
-    }
 }

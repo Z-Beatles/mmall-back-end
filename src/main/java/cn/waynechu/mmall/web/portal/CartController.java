@@ -1,7 +1,6 @@
 package cn.waynechu.mmall.web.portal;
 
 import cn.waynechu.mmall.common.Const;
-import cn.waynechu.mmall.common.ResultEnum;
 import cn.waynechu.mmall.common.Result;
 import cn.waynechu.mmall.service.CartService;
 import cn.waynechu.mmall.vo.CartVO;
@@ -33,13 +32,8 @@ public class CartController {
             @ApiImplicitParam(name = "count", value = "购买数量", paramType = "query", required = true)
     })
     @PostMapping("/add.do")
-    public Result<CartVO> add(@RequestParam Long productId,
-                              @RequestParam Integer count,
-                              HttpSession session) {
+    public Result<CartVO> add(@RequestParam Long productId, @RequestParam Integer count, HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {
-            return Result.createByErrorCodeMessage(ResultEnum.NEED_LOGIN.getCode(), ResultEnum.NEED_LOGIN.getMsg());
-        }
         return cartService.add(currentUser.getId(), productId, count);
     }
 
@@ -49,13 +43,8 @@ public class CartController {
             @ApiImplicitParam(name = "count", value = "更新后的数量", paramType = "query", required = true)
     })
     @PostMapping("/update.do")
-    public Result<CartVO> update(@RequestParam Long productId,
-                                 @RequestParam Integer count,
-                                 HttpSession session) {
+    public Result<CartVO> update(@RequestParam Long productId, @RequestParam Integer count, HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {
-            return Result.createByErrorCodeMessage(ResultEnum.NEED_LOGIN.getCode(), ResultEnum.NEED_LOGIN.getMsg());
-        }
         return cartService.update(currentUser.getId(), productId, count);
     }
 
@@ -64,12 +53,8 @@ public class CartController {
             @ApiImplicitParam(name = "productIds", value = "商品id列表，若多个则用英文逗号分割", paramType = "query", required = true)
     })
     @DeleteMapping("/delete.do")
-    public Result<CartVO> delete(@RequestParam String productIds,
-                                 HttpSession session) {
+    public Result<CartVO> delete(@RequestParam String productIds, HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {
-            return Result.createByErrorCodeMessage(ResultEnum.NEED_LOGIN.getCode(), ResultEnum.NEED_LOGIN.getMsg());
-        }
         return cartService.delete(currentUser.getId(), productIds);
     }
 
@@ -77,9 +62,6 @@ public class CartController {
     @GetMapping("/list.do")
     public Result<CartVO> list(HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {
-            return Result.createByErrorCodeMessage(ResultEnum.NEED_LOGIN.getCode(), ResultEnum.NEED_LOGIN.getMsg());
-        }
         return cartService.list(currentUser.getId());
     }
 
@@ -87,9 +69,6 @@ public class CartController {
     @GetMapping("/get_cart_product_count.do")
     public Result<Integer> getCartProductCount(HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {
-            return Result.createBySuccess(0);
-        }
         return cartService.getCartProductCount(currentUser.getId());
     }
 
@@ -97,20 +76,13 @@ public class CartController {
     @PostMapping("/select_all.do")
     public Result<CartVO> selectAll(HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {
-            return Result.createByErrorCodeMessage(ResultEnum.NEED_LOGIN.getCode(), ResultEnum.NEED_LOGIN.getMsg());
-        }
         return cartService.selectOrUnSelect(currentUser.getId(), null, Const.CartStatus.CHECKED);
     }
-
 
     @ApiOperation(value = "购物车全不选")
     @PostMapping("/un_select_all.do")
     public Result<CartVO> unSelectAll(HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {
-            return Result.createByErrorCodeMessage(ResultEnum.NEED_LOGIN.getCode(), ResultEnum.NEED_LOGIN.getMsg());
-        }
         return cartService.selectOrUnSelect(currentUser.getId(), null, Const.CartStatus.UN_CHECKED);
     }
 
@@ -121,9 +93,6 @@ public class CartController {
     @PostMapping("/select.do")
     public Result<CartVO> select(@RequestParam Long productId, HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {
-            return Result.createByErrorCodeMessage(ResultEnum.NEED_LOGIN.getCode(), ResultEnum.NEED_LOGIN.getMsg());
-        }
         return cartService.selectOrUnSelect(currentUser.getId(), productId, Const.CartStatus.CHECKED);
     }
 
@@ -134,10 +103,6 @@ public class CartController {
     @PostMapping("/un_select.do")
     public Result<CartVO> unSelect(@RequestParam Long productId, HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {
-            return Result.createByErrorCodeMessage(ResultEnum.NEED_LOGIN.getCode(), ResultEnum.NEED_LOGIN.getMsg());
-        }
         return cartService.selectOrUnSelect(currentUser.getId(), productId, Const.CartStatus.UN_CHECKED);
     }
-
 }

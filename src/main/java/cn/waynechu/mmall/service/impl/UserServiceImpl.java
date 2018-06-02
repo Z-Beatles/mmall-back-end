@@ -50,15 +50,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Result<String> register(String username, String password, String email, String phone, String question, String answer) {
+        // 校验用户名
         int validateCount = userMapper.checkUsername(username);
         if (validateCount > 0) {
             return Result.createByErrorMessage("用户名已存在");
         }
-
-        validateCount = userMapper.checkEmail(email);
-        if (validateCount > 0) {
-            return Result.createByErrorMessage("邮箱已存在");
+        // 校验邮箱
+        if (email != null) {
+            validateCount = userMapper.checkEmail(email);
+            if (validateCount > 0) {
+                return Result.createByErrorMessage("邮箱已存在");
+            }
         }
+
         User user = new User();
         user.setUsername(username);
         // MD5算法生成密码摘要
@@ -145,7 +149,7 @@ public class UserServiceImpl implements UserService {
             int resultCount = userMapper.updatePasswordByUsername(username, md5Password);
 
             if (resultCount > 0) {
-                // 删除缓存的token
+                // 更新密码成功删除缓存的token
                 stringRedisTemplate.delete(Const.RESET_PASSWORD_TOKEN_PREFIX + username);
                 return Result.createBySuccessMessage("修改密码成功");
             }

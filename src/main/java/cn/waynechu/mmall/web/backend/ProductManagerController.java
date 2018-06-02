@@ -1,8 +1,8 @@
 package cn.waynechu.mmall.web.backend;
 
 import cn.waynechu.mmall.common.Const;
-import cn.waynechu.mmall.common.ResultEnum;
 import cn.waynechu.mmall.common.Result;
+import cn.waynechu.mmall.common.ResultEnum;
 import cn.waynechu.mmall.entity.Product;
 import cn.waynechu.mmall.properties.FtpServerProperties;
 import cn.waynechu.mmall.service.FileService;
@@ -48,75 +48,40 @@ public class ProductManagerController {
 
     @ApiOperation(value = "新增/更新产品信息")
     @PostMapping("/save.do")
-    public Result productSave(Product product, HttpSession session) {
-        UserInfoVO user = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        if (user == null) {
-            return Result.createByErrorCodeMessage(ResultEnum.NEED_LOGIN.getCode(), "用户未登录，请登录管理员");
-        }
-        if (userService.checkAdminRole(user).isSuccess()) {
-            return productService.saveOrUpdateProduct(product);
-        } else {
-            return Result.createByErrorMessage("无权限操作");
-        }
+    public Result productSave(Product product) {
+        return productService.saveOrUpdateProduct(product);
     }
 
-    @ApiOperation(value = "产品上下架")
+    @ApiOperation(value = "商品上下架")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "productId", value = "产品id", paramType = "query", required = true),
-            @ApiImplicitParam(name = "status", value = "产品状态：0下架，1在售，2删除", paramType = "query", required = true)
+            @ApiImplicitParam(name = "productId", value = "商品id", paramType = "query", required = true),
+            @ApiImplicitParam(name = "status", value = "商品状态：0下架，1在售，2删除", paramType = "query", required = true)
     })
     @PostMapping("/set_sale_status.do")
-    public Result setSaleStatus(@RequestParam Long productId,
-                                @RequestParam Integer status,
-                                HttpSession session) {
-        UserInfoVO user = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        if (user == null) {
-            return Result.createByErrorCodeMessage(ResultEnum.NEED_LOGIN.getCode(), "用户未登录,请登录管理员");
-        }
-        if (userService.checkAdminRole(user).isSuccess()) {
-            return productService.setSaleStatus(productId, status);
-        } else {
-            return Result.createByErrorMessage("无权限操作");
-        }
+    public Result setSaleStatus(@RequestParam Long productId, @RequestParam Integer status) {
+        return productService.setSaleStatus(productId, status);
     }
 
-    @ApiOperation(value = "获取产品详情")
+    @ApiOperation(value = "获取商品详情")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "productId", value = "产品id", paramType = "query", required = true)
     })
     @GetMapping("/detail.do")
-    public Result<ProductDetialVO> getProductDetail(@RequestParam Long productId, HttpSession session) {
-        UserInfoVO user = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        if (user == null) {
-            return Result.createByErrorCodeMessage(ResultEnum.NEED_LOGIN.getCode(), "用户未登录,请登录管理员");
-        }
-        if (userService.checkAdminRole(user).isSuccess()) {
-            return productService.managerProductDetail(productId);
-        } else {
-            return Result.createByErrorMessage("无权限操作");
-        }
+    public Result<ProductDetialVO> getProductDetail(@RequestParam Long productId) {
+        return productService.managerProductDetail(productId);
     }
 
-    @ApiOperation(value = "获取产品列表", notes = "排序字段默认按id升序排序，若要降序则为id desc")
+    @ApiOperation(value = "获取商品列表", notes = "排序字段默认按id升序排序，若要降序则为id desc")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "pageNum", value = "页数", paramType = "query", defaultValue = "1"),
             @ApiImplicitParam(name = "pageSize", value = "页大小", paramType = "query", defaultValue = "10"),
             @ApiImplicitParam(name = "orderBy", value = "排序字段", paramType = "query", defaultValue = "id")
     })
     @GetMapping("/list.do")
-    public Result<PageInfo> getList(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                                    @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                                    @RequestParam(value = "orderBy", defaultValue = "id") String orderBy,
-                                    HttpSession session) {
-        UserInfoVO user = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        if (user == null) {
-            return Result.createByErrorCodeMessage(ResultEnum.NEED_LOGIN.getCode(), "用户未登录,请登录管理员");
-        }
-        if (userService.checkAdminRole(user).isSuccess()) {
-            return productService.getProductList(pageNum, pageSize, orderBy);
-        } else {
-            return Result.createByErrorMessage("无权限操作");
-        }
+    public Result<PageInfo> getList(@RequestParam(defaultValue = "1") int pageNum,
+                                    @RequestParam(defaultValue = "10") int pageSize,
+                                    @RequestParam(defaultValue = "id") String orderBy) {
+        return productService.getProductList(pageNum, pageSize, orderBy);
     }
 
     @ApiOperation(value = "商品名称模糊查询", notes = "排序字段默认按id升序排序，若要降序则为id desc")
@@ -128,52 +93,31 @@ public class ProductManagerController {
     })
     @GetMapping("/search.do")
     public Result<PageInfo> productSearch(@RequestParam String keywords,
-                                          @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
-                                          @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
-                                          @RequestParam(value = "orderBy", defaultValue = "id") String orderBy,
-                                          HttpSession session) {
-        UserInfoVO user = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        if (user == null) {
-            return Result.createByErrorCodeMessage(ResultEnum.NEED_LOGIN.getCode(), "用户未登录,请登录管理员");
-        }
-        if (userService.checkAdminRole(user).isSuccess()) {
-            return productService.searchProduct(keywords, pageNum, pageSize, orderBy);
-        } else {
-            return Result.createByErrorMessage("无权限操作");
-        }
+                                          @RequestParam(defaultValue = "1") int pageNum,
+                                          @RequestParam(defaultValue = "10") int pageSize,
+                                          @RequestParam(defaultValue = "id") String orderBy) {
+        return productService.searchProduct(keywords, pageNum, pageSize, orderBy);
     }
 
     @ApiOperation(value = "文件上传")
     @PostMapping(value = "/upload.do")
-    public Result upload(@RequestParam(value = "upload_file") MultipartFile file,
-                         HttpServletRequest request,
-                         HttpSession session) {
-        UserInfoVO user = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        if (user == null) {
-            return Result.createByErrorCodeMessage(ResultEnum.NEED_LOGIN.getCode(), "用户未登录,请登录管理员");
-        }
-        if (userService.checkAdminRole(user).isSuccess()) {
-            String path = request.getSession().getServletContext().getRealPath("upload");
-            // 上传后生成的文件名
-            String targetFileName = fileService.upload(file, path);
-            // FTP文件路径
-            String url = ftpServerProperties.getUrlPrefix() + targetFileName;
+    public Result upload(@RequestParam(value = "upload_file") MultipartFile file, HttpServletRequest request) {
+        String path = request.getSession().getServletContext().getRealPath("upload");
+        // 上传后生成的文件名
+        String targetFileName = fileService.upload(file, path);
+        // FTP文件路径
+        String url = ftpServerProperties.getUrlPrefix() + targetFileName;
 
-            HashMap<String, String> fileMap = new HashMap<>();
-            fileMap.put("uri", targetFileName);
-            fileMap.put("url", url);
-            return Result.createBySuccess(fileMap);
-        } else {
-            return Result.createByErrorMessage("无权限操作");
-        }
+        HashMap<String, String> fileMap = new HashMap<>();
+        fileMap.put("uri", targetFileName);
+        fileMap.put("url", url);
+        return Result.createBySuccess(fileMap);
     }
 
     @ApiOperation(value = "富文本文件上传")
     @PostMapping(value = "/richtext_img_upload.do")
     public Map richTextImgUpload(@RequestParam(value = "upload_file") MultipartFile file,
-                                 HttpServletRequest request,
-                                 HttpServletResponse response,
-                                 HttpSession session) {
+                                 HttpServletRequest request, HttpServletResponse response, HttpSession session) {
         UserInfoVO user = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
         HashMap<String, Object> resultMap = new HashMap<>();
         if (user == null) {
