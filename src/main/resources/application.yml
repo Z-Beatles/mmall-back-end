@@ -15,7 +15,11 @@ spring:
       namespace: spring:session
 
 # close order task time (hour)
-task.close-order.time: 2
+task:
+  close-order:
+    time: 2
+lock:
+  timeout: 5000
 
 # session timeout
 server:

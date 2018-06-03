@@ -184,4 +184,11 @@ public class Const {
             throw new RuntimeException("未找到该枚举类型");
         }
     }
+
+    public interface REDIS_LOCK {
+        /**
+         * 关闭订单的分布式锁
+         **/
+        String CLOSE_ORDER_TASK_LOCK = "lock:close-order";
+    }
 }
