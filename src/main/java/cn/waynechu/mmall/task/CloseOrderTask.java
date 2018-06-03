@@ -32,13 +32,14 @@ public class CloseOrderTask {
     /**
      * 每分钟执行定时关单：关闭在closeOrderDelay时间之前未支付的订单
      */
-    @Scheduled(cron = "0/30 * * * * ?")
+    @Scheduled(cron = "0/20 * * * * ?")
     public void closeOrderTaskByRedisLock() {
-        log.info("[定时关单] ---------- start ------------");
-        Boolean getLock = stringRedisTemplate.opsForValue().setIfAbsent(Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK, String.valueOf((System.currentTimeMillis() + lockTimeout + 1)));
+        log.info("[定时关单] -------------------- start ----------------------");
+        long expireTime = System.currentTimeMillis() + lockTimeout + 1;
+        Boolean getLock = stringRedisTemplate.opsForValue().setIfAbsent(Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK, String.valueOf(expireTime));
         if (getLock) {
             // 获取锁成功。执行业务逻辑并释放锁
-            closeOrderTack();
+            closeOrderTask(expireTime);
         } else {
             log.info("not get lock, then judge whether the lock is expire.");
             // 未获取到锁。继续获取锁的过期时间
@@ -46,29 +47,33 @@ public class CloseOrderTask {
             if (lockValue != null && System.currentTimeMillis() > Long.parseLong(lockValue)) {
                 // 该锁已超时，设置新值并返回旧值
                 log.info("lock is expire, try to get new lock.");
-                String getSetValue = stringRedisTemplate.opsForValue().getAndSet(Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK, String.valueOf((System.currentTimeMillis() + lockTimeout + 1)));
+                long newExpireTime = System.currentTimeMillis() + lockTimeout + 1;
+                String getSetValue = stringRedisTemplate.opsForValue().getAndSet(Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK, String.valueOf(newExpireTime));
                 if (getSetValue == null || (getSetValue != null && lockValue.equals(getSetValue))) {
                     // 已过期的旧值仍然存在。只有最先执行getAndSet()的应用进程才能获取到锁
-                    closeOrderTack();
+                    closeOrderTask(newExpireTime);
                 } else {
-                    log.info("not get lock.");
+                    log.info("not get lock, lock is holding by other threads.");
                 }
             } else {
-                log.info("not get lock.");
+                log.info("not get lock, lock is not expire.");
             }
-
         }
-        log.info("[定时关单] ----------- end -------------");
+        log.info("[定时关单] --------------------- end -----------------------");
     }
 
     /**
-     * 关单业务逻辑
+     * 关单业务逻辑，并释放锁
      */
-    private void closeOrderTack() {
-        log.info("获取 {}, ThreadName:{}", Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK, Thread.currentThread().getName());
+    private void closeOrderTask(long expireTime) {
+        log.info("get lock: {}, ThreadName:{}", Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK, Thread.currentThread().getName());
         orderService.closeOrder(closeOrderDelay);
-        stringRedisTemplate.delete(Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK);
-        log.info("释放 {}, ThreadName:{}", Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK, Thread.currentThread().getName());
-        log.info("=============================");
+        if (System.currentTimeMillis() < expireTime) {
+            // 保证使用DEL释放锁之前不会过期
+            stringRedisTemplate.delete(Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK);
+            log.info("del lock: {}, ThreadName:{}", Const.REDIS_LOCK.CLOSE_ORDER_TASK_LOCK, Thread.currentThread().getName());
+        } else {
+            log.info("holding lock has expired, the delete operation will not be performed.");
+        }
     }
 }
