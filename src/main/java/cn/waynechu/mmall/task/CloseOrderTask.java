@@ -32,7 +32,7 @@ public class CloseOrderTask {
     /**
      * 每分钟执行定时关单：关闭在closeOrderDelay时间之前未支付的订单
      */
-    @Scheduled(cron = "0/20 * * * * ?")
+    @Scheduled(cron = "0 */1 * * * ?")
     public void closeOrderTaskByRedisLock() {
         log.info("[定时关单] -------------------- start ----------------------");
         long expireTime = System.currentTimeMillis() + lockTimeout + 1;

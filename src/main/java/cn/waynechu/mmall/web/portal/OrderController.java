@@ -85,10 +85,10 @@ public class OrderController {
 
     @ApiOperation(value = "支付订单", notes = "获取支付二维码")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "orderNo", value = "订单id", paramType = "query", required = true)
+            @ApiImplicitParam(name = "orderNo", value = "订单号", paramType = "query", required = true)
     })
     @GetMapping("/pay.do")
-    public Result pay(Long orderNo, HttpServletRequest request, HttpSession session) {
+    public Result pay(@RequestParam Long orderNo, HttpServletRequest request, HttpSession session) {
         UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
 
         String path = request.getSession().getServletContext().getRealPath("upload");
