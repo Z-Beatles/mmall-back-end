@@ -2,8 +2,8 @@ package cn.waynechu.mmall.web.backend;
 
 import cn.waynechu.mmall.common.Const;
 import cn.waynechu.mmall.common.Result;
+import cn.waynechu.mmall.entity.User;
 import cn.waynechu.mmall.service.UserService;
-import cn.waynechu.mmall.vo.UserInfoVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -35,15 +35,15 @@ public class UserManagerController {
             @ApiImplicitParam(name = "password", value = "密码", paramType = "query", required = true)
     })
     @PostMapping(value = "/login.do")
-    public Result<UserInfoVO> login(@RequestParam String username, String password, HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+    public Result<User> login(@RequestParam String username, String password, HttpSession session) {
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         if (currentUser != null) {
             return Result.createBySuccessMessage("已登录，勿重复登录");
         }
 
-        Result<UserInfoVO> response = userService.login(username, password);
+        Result<User> response = userService.login(username, password);
         if (response.isSuccess()) {
-            UserInfoVO user = response.getData();
+            User user = response.getData();
             if (user.getRole() == Const.Role.ROLE_ADMIN) {
                 // 说明登录的是管理员
                 session.setAttribute(Const.CURRENT_USER, user);

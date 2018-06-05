@@ -1,8 +1,8 @@
 package cn.waynechu.mmall.web.portal;
 
 import cn.waynechu.mmall.common.Const;
-import cn.waynechu.mmall.common.ResultEnum;
 import cn.waynechu.mmall.common.Result;
+import cn.waynechu.mmall.entity.User;
 import cn.waynechu.mmall.service.UserService;
 import cn.waynechu.mmall.vo.UserInfoVO;
 import io.swagger.annotations.Api;
@@ -35,32 +35,46 @@ public class UserController {
     public Result<UserInfoVO> login(@RequestParam String username,
                                     @RequestParam String password,
                                     HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser != null) {
+        User userInfo = (User) session.getAttribute(Const.CURRENT_USER);
+        if (userInfo != null) {
             return Result.createBySuccessMessage("已登录，勿重复登录");
         }
 
-        Result<UserInfoVO> response = userService.login(username, password);
+        Result<User> response = userService.login(username, password);
+        // 将用户信息保存到session中
         if (response.isSuccess()) {
             session.setAttribute(Const.CURRENT_USER, response.getData());
         }
-        return response;
+
+        // 组装用户VO
+        UserInfoVO currentUser = userService.assembleUserInfoVO(response.getData());
+        return Result.createBySuccess("登录成功", currentUser);
     }
 
-    @ApiOperation(value = "获取当前用户信息，并强制登录")
-    @GetMapping(value = "/get_information.do")
-    public Result<UserInfoVO> getInformation(HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        if (currentUser == null) {
-            return Result.createByErrorMessage("尚未登录");
+    @ApiOperation(value = "获取用户信息", notes = "若用户未登录，返回错误(code:1)")
+    @GetMapping(value = "/get_user_info.do")
+    public Result<UserInfoVO> getUserInfo(HttpSession session) {
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+        if (currentUser != null) {
+            UserInfoVO userInfoVO = userService.assembleUserInfoVO(currentUser);
+            return Result.createBySuccess(userInfoVO);
         }
-        return userService.getInformation(currentUser.getId());
+        return Result.createByErrorMessage("用户未登录");
+    }
+
+    @ApiOperation(value = "获取当前用户信息，并强制登录", notes = "若用户未登录，会返回强制登录(code:1000)")
+    @GetMapping(value = "/get_curr_user_info.do")
+    public Result<UserInfoVO> getCurrentUserInfo(HttpSession session) {
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+        User currentUserInfo = userService.getCurrentUserInfo(currentUser.getId());
+        UserInfoVO userInfoVO = userService.assembleUserInfoVO(currentUserInfo);
+        return Result.createBySuccess(userInfoVO);
     }
 
     @ApiOperation(value = "退出登录")
     @DeleteMapping(value = "/logout.do")
     public Result<String> logout(HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         if (currentUser != null) {
             session.removeAttribute(Const.CURRENT_USER);
             return Result.createBySuccessMessage("退出成功");
@@ -130,8 +144,8 @@ public class UserController {
     public Result<String> resetPassword(@RequestParam String passwordOld,
                                         @RequestParam String passwordNew,
                                         HttpSession session) {
-        UserInfoVO userInfoVO = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        return userService.resetPassword(passwordOld, passwordNew, userInfoVO);
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+        return userService.resetPassword(passwordOld, passwordNew, currentUser);
     }
 
     @ApiOperation(value = "登录状态下更新用户信息")
@@ -142,25 +156,18 @@ public class UserController {
             @ApiImplicitParam(name = "answer", value = "密保答案", paramType = "query"),
     })
     @PostMapping(value = "/update_information.do")
-    public Result<UserInfoVO> updateInformation(@RequestParam(required = false) String email,
-                                                @RequestParam(required = false) String phone,
-                                                @RequestParam(required = false) String question,
-                                                @RequestParam(required = false) String answer,
-                                                HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        Result<UserInfoVO> response = userService.updateInformation(currentUser, email, phone, question, answer);
+    public Result<User> updateInformation(@RequestParam(required = false) String email,
+                                          @RequestParam(required = false) String phone,
+                                          @RequestParam(required = false) String question,
+                                          @RequestParam(required = false) String answer,
+                                          HttpSession session) {
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
+        Result<User> response = userService.updateInformation(currentUser, email, phone, question, answer);
         if (response.isSuccess()) {
             // 同时更新session中信息
             response.getData().setUsername(currentUser.getUsername());
             session.setAttribute(Const.CURRENT_USER, response.getData());
         }
         return response;
-    }
-
-    @ApiOperation(value = "获取当前用户信息")
-    @GetMapping(value = "/get_user_info.do")
-    public Result<UserInfoVO> getUserInfo(HttpSession session) {
-        UserInfoVO userInfoVO = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
-        return Result.createBySuccess(userInfoVO);
     }
 }

@@ -2,9 +2,6 @@ package cn.waynechu.mmall.vo;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
-import java.util.Date;
-
 /**
  * @author waynechu
  * Created 2018-05-22 14:21
@@ -22,9 +19,7 @@ public class UserInfoVO {
 
     private String question;
 
+    private String answer;
+
     private Integer role;
-
-    private String createTime;
-
-    private String updateTime;
 }

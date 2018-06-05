@@ -2,14 +2,13 @@ package cn.waynechu.mmall.web.backend;
 
 import cn.waynechu.mmall.common.Const;
 import cn.waynechu.mmall.common.Result;
-import cn.waynechu.mmall.common.ResultEnum;
 import cn.waynechu.mmall.entity.Product;
+import cn.waynechu.mmall.entity.User;
 import cn.waynechu.mmall.properties.FtpServerProperties;
 import cn.waynechu.mmall.service.FileService;
 import cn.waynechu.mmall.service.ProductService;
 import cn.waynechu.mmall.service.UserService;
 import cn.waynechu.mmall.vo.ProductDetialVO;
-import cn.waynechu.mmall.vo.UserInfoVO;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -118,14 +117,14 @@ public class ProductManagerController {
     @PostMapping(value = "/richtext_img_upload.do")
     public Map richTextImgUpload(@RequestParam(value = "upload_file") MultipartFile file,
                                  HttpServletRequest request, HttpServletResponse response, HttpSession session) {
-        UserInfoVO user = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         HashMap<String, Object> resultMap = new HashMap<>();
-        if (user == null) {
+        if (currentUser == null) {
             resultMap.put("success", false);
             resultMap.put("msg", "请登录管理员");
             return resultMap;
         }
-        if (userService.checkAdminRole(user).isSuccess()) {
+        if (userService.checkAdminRole(currentUser).isSuccess()) {
             String path = request.getSession().getServletContext().getRealPath("upload");
             // 上传后生成的文件名
             String targetFileName = fileService.upload(file, path);

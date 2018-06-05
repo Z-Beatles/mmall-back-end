@@ -2,9 +2,9 @@ package cn.waynechu.mmall.web.portal;
 
 import cn.waynechu.mmall.common.Const;
 import cn.waynechu.mmall.common.Result;
+import cn.waynechu.mmall.entity.User;
 import cn.waynechu.mmall.service.AlipayService;
 import cn.waynechu.mmall.service.OrderService;
-import cn.waynechu.mmall.vo.UserInfoVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -38,7 +38,7 @@ public class OrderController {
     })
     @PostMapping("/create.do")
     public Result create(Long shippingId, HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         return orderService.createOrder(currentUser.getId(), shippingId);
     }
 
@@ -48,14 +48,14 @@ public class OrderController {
     })
     @DeleteMapping("/cancel.do")
     public Result cancel(Long orderNo, HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         return orderService.cancel(currentUser.getId(), orderNo);
     }
 
     @ApiOperation(value = "获取订单的商品信息（预下单）")
     @GetMapping("/get_order_cart_product.do")
     public Result getOrderCartProduct(HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         return orderService.getOrderCartProduct(currentUser.getId());
     }
 
@@ -65,7 +65,7 @@ public class OrderController {
     })
     @GetMapping("/detail.do")
     public Result detail(Long orderNo, HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         return orderService.getOrderDetail(currentUser.getId(), orderNo);
     }
 
@@ -78,7 +78,7 @@ public class OrderController {
     public Result list(@RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
                        @RequestParam(value = "pageSize", defaultValue = "10") int pageSize,
                        HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         return orderService.getOrderList(currentUser.getId(), pageNum, pageSize);
     }
 
@@ -88,7 +88,7 @@ public class OrderController {
     })
     @GetMapping("/pay.do")
     public Result pay(@RequestParam Long orderNo, HttpServletRequest request, HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
 
         String path = request.getSession().getServletContext().getRealPath("upload");
         return alipayService.pay(orderNo, currentUser.getId(), path);
@@ -100,7 +100,7 @@ public class OrderController {
     })
     @GetMapping("/query_order_pay_status.do")
     public Result<Boolean> queryOrderPayStatus(Long orderNo, HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         Result result = orderService.queryOrderPayStatus(orderNo, currentUser.getId());
         if (result.isSuccess()) {
             return Result.createBySuccess(true);

@@ -5,7 +5,6 @@ import cn.waynechu.mmall.common.Result;
 import cn.waynechu.mmall.entity.User;
 import cn.waynechu.mmall.mapper.UserMapper;
 import cn.waynechu.mmall.service.UserService;
-import cn.waynechu.mmall.util.DateTimeUtil;
 import cn.waynechu.mmall.util.MD5Util;
 import cn.waynechu.mmall.util.RegexUtil;
 import cn.waynechu.mmall.vo.UserInfoVO;
@@ -31,7 +30,7 @@ public class UserServiceImpl implements UserService {
     private StringRedisTemplate stringRedisTemplate;
 
     @Override
-    public Result<UserInfoVO> login(String username, String password) {
+    public Result<User> login(String username, String password) {
         int count = userMapper.checkUsername(username);
         if (count == 0) {
             return Result.createByErrorMessage("用户名不存在");
@@ -42,11 +41,7 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             return Result.createByErrorMessage("密码错误");
         }
-        UserInfoVO userInfoVO = new UserInfoVO();
-        BeanUtils.copyProperties(user, userInfoVO);
-        userInfoVO.setCreateTime(DateTimeUtil.toStringFromLocalDateTime(user.getCreateTime()));
-        userInfoVO.setUpdateTime(DateTimeUtil.toStringFromLocalDateTime(user.getUpdateTime()));
-        return Result.createBySuccess("登录成功", userInfoVO);
+        return Result.createBySuccess("登录成功", user);
     }
 
     @Override
@@ -166,13 +161,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Result<String> resetPassword(String passwordOld, String passwordNew, UserInfoVO userInfoVO) {
-        int resultCount = userMapper.checkPassword(MD5Util.MD5EncodeUtf8(passwordOld), userInfoVO.getId());
+    public Result<String> resetPassword(String passwordOld, String passwordNew, User user) {
+        int resultCount = userMapper.checkPassword(MD5Util.MD5EncodeUtf8(passwordOld), user.getId());
         if (resultCount == 0) {
             return Result.createByErrorMessage("旧密码错误");
         }
 
-        int updateCount = userMapper.updatePasswordByUsername(userInfoVO.getUsername(), MD5Util.MD5EncodeUtf8(passwordNew));
+        int updateCount = userMapper.updatePasswordByUsername(user.getUsername(), MD5Util.MD5EncodeUtf8(passwordNew));
         if (updateCount > 0) {
             return Result.createBySuccessMessage("密码更新成功");
         }
@@ -180,18 +175,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Result<UserInfoVO> updateInformation(UserInfoVO currentUser, String email, String phone, String question, String answer) {
+    public Result<User> updateInformation(User user, String email, String phone, String question, String answer) {
         if (email == null && phone == null && question == null && answer == null) {
             return Result.createByErrorMessage("未填写更新内容");
         }
 
-        int resultCount = userMapper.checkEmailByUserId(email, currentUser.getId());
+        int resultCount = userMapper.checkEmailByUserId(email, user.getId());
         if (resultCount > 0) {
             return Result.createByErrorMessage("email已存在，请更换email再尝试更新");
         }
 
         User updateUser = new User();
-        updateUser.setId(currentUser.getId());
+        updateUser.setId(user.getId());
         updateUser.setEmail(email);
         updateUser.setPhone(phone);
         updateUser.setQuestion(question);
@@ -199,38 +194,36 @@ public class UserServiceImpl implements UserService {
         int updateCount = userMapper.updateByPrimaryKeySelective(updateUser);
         if (updateCount > 0) {
             if (email != null) {
-                currentUser.setEmail(email);
+                user.setEmail(email);
             }
             if (phone != null) {
-                currentUser.setPhone(phone);
+                user.setPhone(phone);
             }
             if (question != null) {
-                currentUser.setQuestion(question);
+                user.setQuestion(question);
             }
-            return Result.createBySuccess("更新个人信息成功", currentUser);
+            return Result.createBySuccess("更新个人信息成功", user);
         }
         return Result.createByErrorMessage("更新个人信息失败");
     }
 
     @Override
-    public Result<UserInfoVO> getInformation(Long userId) {
-        User user = userMapper.selectByPrimaryKey(userId);
-        if (user == null) {
-            return Result.createByErrorMessage("找不到当前用户");
-        }
-        UserInfoVO userInfoVO = new UserInfoVO();
-        BeanUtils.copyProperties(user, userInfoVO);
-        userInfoVO.setCreateTime(DateTimeUtil.toStringFromLocalDateTime(user.getCreateTime()));
-        userInfoVO.setUpdateTime(DateTimeUtil.toStringFromLocalDateTime(user.getUpdateTime()));
-        return Result.createBySuccess(userInfoVO);
+    public User getCurrentUserInfo(Long userId) {
+        return userMapper.selectByPrimaryKey(userId);
     }
 
     @Override
-    public Result checkAdminRole(UserInfoVO userInfoVO) {
-        if (userInfoVO != null && userInfoVO.getRole() == Const.Role.ROLE_ADMIN) {
+    public Result checkAdminRole(User user) {
+        if (user != null && user.getRole() == Const.Role.ROLE_ADMIN) {
             return Result.createBySuccess();
         }
         return Result.createByError();
     }
 
+    @Override
+    public UserInfoVO assembleUserInfoVO(User user) {
+        UserInfoVO userInfoVO = new UserInfoVO();
+        BeanUtils.copyProperties(user, userInfoVO);
+        return userInfoVO;
+    }
 }

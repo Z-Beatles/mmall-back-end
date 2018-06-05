@@ -2,7 +2,8 @@ package cn.waynechu.mmall.web.common;
 
 import cn.waynechu.mmall.common.Const;
 import cn.waynechu.mmall.common.Result;
-import cn.waynechu.mmall.vo.UserInfoVO;
+import cn.waynechu.mmall.common.ResultEnum;
+import cn.waynechu.mmall.entity.User;
 import com.alibaba.fastjson.JSON;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,7 +23,7 @@ public class AuthorityInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String requestURI = request.getRequestURI();
         HttpSession session = request.getSession();
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
 
         if (currentUser == null) {
             response.reset();
@@ -34,7 +35,7 @@ public class AuthorityInterceptor implements HandlerInterceptor {
             if (requestURI.startsWith("/v1/manager")) {
                 result = JSON.toJSONString(Result.createByErrorMessage("尚未登录，请以管理员身份登录"));
             } else {
-                result = JSON.toJSONString(Result.createByErrorMessage("用户未登录"));
+                result = JSON.toJSONString(Result.createByErrorCodeMessage(ResultEnum.NEED_LOGIN.getCode(), "用户未登录"));
             }
             printWriter.print(result);
             printWriter.flush();

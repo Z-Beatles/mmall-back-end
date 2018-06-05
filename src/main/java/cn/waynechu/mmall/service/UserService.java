@@ -1,6 +1,7 @@
 package cn.waynechu.mmall.service;
 
 import cn.waynechu.mmall.common.Result;
+import cn.waynechu.mmall.entity.User;
 import cn.waynechu.mmall.vo.UserInfoVO;
 
 /**
@@ -9,7 +10,7 @@ import cn.waynechu.mmall.vo.UserInfoVO;
  */
 public interface UserService {
 
-    Result<UserInfoVO> login(String username, String password);
+    Result<User> login(String username, String password);
 
     Result<String> register(String username, String password, String email, String phone, String question, String answer);
 
@@ -21,11 +22,13 @@ public interface UserService {
 
     Result<String> forgetResetPassword(String username, String passwordNew, String forgetToken);
 
-    Result<String> resetPassword(String passwordOld, String passwordNew, UserInfoVO userInfoVO);
+    Result<String> resetPassword(String passwordOld, String passwordNew, User user);
 
-    Result<UserInfoVO> updateInformation(UserInfoVO currentUser, String email, String phone, String question, String answer);
+    Result<User> updateInformation(User user, String email, String phone, String question, String answer);
 
-    Result<UserInfoVO> getInformation(Long userId);
+    User getCurrentUserInfo(Long userId);
 
-    Result checkAdminRole(UserInfoVO userInfoVO);
+    Result checkAdminRole(User userInfoVO);
+
+    UserInfoVO assembleUserInfoVO(User user);
 }

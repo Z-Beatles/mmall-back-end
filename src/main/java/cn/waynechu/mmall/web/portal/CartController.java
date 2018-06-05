@@ -2,9 +2,9 @@ package cn.waynechu.mmall.web.portal;
 
 import cn.waynechu.mmall.common.Const;
 import cn.waynechu.mmall.common.Result;
+import cn.waynechu.mmall.entity.User;
 import cn.waynechu.mmall.service.CartService;
 import cn.waynechu.mmall.vo.CartVO;
-import cn.waynechu.mmall.vo.UserInfoVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -33,7 +33,7 @@ public class CartController {
     })
     @PostMapping("/add.do")
     public Result<CartVO> add(@RequestParam Long productId, @RequestParam Integer count, HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         return cartService.add(currentUser.getId(), productId, count);
     }
 
@@ -44,7 +44,7 @@ public class CartController {
     })
     @PostMapping("/update.do")
     public Result<CartVO> update(@RequestParam Long productId, @RequestParam Integer count, HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         return cartService.update(currentUser.getId(), productId, count);
     }
 
@@ -54,35 +54,35 @@ public class CartController {
     })
     @DeleteMapping("/delete.do")
     public Result<CartVO> delete(@RequestParam String productIds, HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         return cartService.delete(currentUser.getId(), productIds);
     }
 
     @ApiOperation(value = "获取购物车列表")
     @GetMapping("/list.do")
     public Result<CartVO> list(HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         return cartService.list(currentUser.getId());
     }
 
     @ApiOperation(value = "获取购物车中的商品数量", notes = "返回的是购物车中的总商品数量，注意不是分类数量")
     @GetMapping("/get_cart_product_count.do")
     public Result<Integer> getCartProductCount(HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         return cartService.getCartProductCount(currentUser.getId());
     }
 
     @ApiOperation(value = "购物车全选")
     @PostMapping("/select_all.do")
     public Result<CartVO> selectAll(HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         return cartService.selectOrUnSelect(currentUser.getId(), null, Const.CartStatus.CHECKED);
     }
 
     @ApiOperation(value = "购物车全不选")
     @PostMapping("/un_select_all.do")
     public Result<CartVO> unSelectAll(HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         return cartService.selectOrUnSelect(currentUser.getId(), null, Const.CartStatus.UN_CHECKED);
     }
 
@@ -92,7 +92,7 @@ public class CartController {
     })
     @PostMapping("/select.do")
     public Result<CartVO> select(@RequestParam Long productId, HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         return cartService.selectOrUnSelect(currentUser.getId(), productId, Const.CartStatus.CHECKED);
     }
 
@@ -102,7 +102,7 @@ public class CartController {
     })
     @PostMapping("/un_select.do")
     public Result<CartVO> unSelect(@RequestParam Long productId, HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         return cartService.selectOrUnSelect(currentUser.getId(), productId, Const.CartStatus.UN_CHECKED);
     }
 }

@@ -3,8 +3,8 @@ package cn.waynechu.mmall.web.portal;
 import cn.waynechu.mmall.common.Const;
 import cn.waynechu.mmall.common.Result;
 import cn.waynechu.mmall.entity.Shipping;
+import cn.waynechu.mmall.entity.User;
 import cn.waynechu.mmall.service.ShippingService;
-import cn.waynechu.mmall.vo.UserInfoVO;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -38,7 +38,7 @@ public class ShippingController {
                                  @RequestParam(defaultValue = "10") int pageSize,
                                  @RequestParam(defaultValue = "id") String orderBy,
                                  HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         return shippingService.list(currentUser.getId(), pageNum, pageSize, orderBy);
     }
 
@@ -46,7 +46,7 @@ public class ShippingController {
     @ApiImplicitParam(name = "shippingId", value = "收货地址id", paramType = "path")
     @GetMapping("/{shippingId}")
     public Result<Shipping> select(@PathVariable Long shippingId, HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         return shippingService.select(currentUser.getId(), shippingId);
     }
 
@@ -54,7 +54,7 @@ public class ShippingController {
     @ApiImplicitParam(name = "shipping", value = "收货地址信息", paramType = "body")
     @PostMapping
     public Result add(@RequestBody Shipping shipping, HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         return shippingService.add(currentUser.getId(), shipping);
     }
 
@@ -62,7 +62,7 @@ public class ShippingController {
     @ApiImplicitParam(name = "shippingId", value = "收货地址id", paramType = "path")
     @DeleteMapping("/{shippingId}")
     public Result del(@PathVariable Long shippingId, HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         return shippingService.del(currentUser.getId(), shippingId);
     }
 
@@ -70,7 +70,7 @@ public class ShippingController {
     @ApiImplicitParam(name = "shipping", value = "收货地址信息", paramType = "body")
     @PutMapping
     public Result update(@RequestBody Shipping shipping, HttpSession session) {
-        UserInfoVO currentUser = (UserInfoVO) session.getAttribute(Const.CURRENT_USER);
+        User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
         return shippingService.update(currentUser.getId(), shipping);
     }
 }
