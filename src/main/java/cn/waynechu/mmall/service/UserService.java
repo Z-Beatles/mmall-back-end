@@ -13,7 +13,7 @@ public interface UserService {
 
     Result<String> register(String username, String password, String email, String phone, String question, String answer);
 
-    Result<String> checkValid(String value, String type);
+    Result<String> checkValid(String param, String type);
 
     Result<String> selectQuestion(String username);
 

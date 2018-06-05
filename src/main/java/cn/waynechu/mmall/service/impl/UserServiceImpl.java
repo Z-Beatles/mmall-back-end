@@ -7,6 +7,7 @@ import cn.waynechu.mmall.mapper.UserMapper;
 import cn.waynechu.mmall.service.UserService;
 import cn.waynechu.mmall.util.DateTimeUtil;
 import cn.waynechu.mmall.util.MD5Util;
+import cn.waynechu.mmall.util.RegexUtil;
 import cn.waynechu.mmall.vo.UserInfoVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +56,10 @@ public class UserServiceImpl implements UserService {
         if (validateCount > 0) {
             return Result.createByErrorMessage("用户名已存在");
         }
+        // 校验密码
+        if (!RegexUtil.matchPassword(password)) {
+            return Result.createByErrorMessage("密码格式不正确，需以字母开头，长度在6~18之间的非空字符");
+        }
         // 校验邮箱
         if (email != null) {
             validateCount = userMapper.checkEmail(email);
@@ -82,16 +87,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Result<String> checkValid(String value, String type) {
+    public Result<String> checkValid(String param, String type) {
         if (Const.USERNAME.equals(type)) {
             // 校验用户名是否存在
-            int resultCount = userMapper.checkUsername(value);
+            int resultCount = userMapper.checkUsername(param);
             if (resultCount > 0) {
                 return Result.createByErrorMessage("用户名已存在");
             }
         } else if (Const.EMAIL.equals(type)) {
             // 校验邮箱是否存在
-            int resultCount = userMapper.checkEmail(value);
+            int resultCount = userMapper.checkEmail(param);
             if (resultCount > 0) {
                 return Result.createByErrorMessage("邮箱已存在");
             }
@@ -129,12 +134,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Result<String> forgetResetPassword(String username, String passwordNew, String forgetToken) {
-        if (forgetToken == null) {
-            return Result.createByErrorMessage("参数错误,token需要传递");
+        // 校验密码
+        if (!RegexUtil.matchPassword(passwordNew)) {
+            return Result.createByErrorMessage("密码格式不正确，需以字母开头，长度在6~18的非空字符");
         }
+        // 校验用户名
         Result validResponse = this.checkValid(username, Const.USERNAME);
         if (validResponse.isSuccess()) {
-            // 用户不存在
             return Result.createByErrorMessage("用户不存在");
         }
 
@@ -154,7 +160,7 @@ public class UserServiceImpl implements UserService {
                 return Result.createBySuccessMessage("修改密码成功");
             }
         } else {
-            return Result.createByErrorMessage("token错误,请重新获取重置密码的token");
+            return Result.createByErrorMessage("token错误，请重新获取重置密码的token");
         }
         return Result.createByErrorMessage("修改密码失败");
     }
@@ -181,7 +187,7 @@ public class UserServiceImpl implements UserService {
 
         int resultCount = userMapper.checkEmailByUserId(email, currentUser.getId());
         if (resultCount > 0) {
-            return Result.createByErrorMessage("email已存在,请更换email再尝试更新");
+            return Result.createByErrorMessage("email已存在，请更换email再尝试更新");
         }
 
         User updateUser = new User();

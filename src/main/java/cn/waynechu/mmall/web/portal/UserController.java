@@ -77,21 +77,20 @@ public class UserController {
 
     @ApiOperation(value = "检查注册参数", notes = "用于检查用户名、邮箱等是否已经被注册，其中参数类型可以是：username, email，默认username")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "value", value = "参数值", paramType = "query", required = true),
+            @ApiImplicitParam(name = "param", value = "参数值", paramType = "query", required = true),
             @ApiImplicitParam(name = "type", value = "参数类型", defaultValue = "username", paramType = "query")
     })
-    @PostMapping(value = "/check_valid.do")
-    public Result<String> checkValid(@RequestParam String value,
+    @GetMapping(value = "/check_valid.do")
+    public Result<String> checkValid(@RequestParam String param,
                                      @RequestParam(required = false, defaultValue = "username") String type) {
-        return userService.checkValid(value, type);
+        return userService.checkValid(param, type);
     }
-
 
     @ApiOperation(value = "忘记密码")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "username", value = "用户名", paramType = "query", required = true)
     })
-    @PostMapping(value = "/forget_get_question.do")
+    @GetMapping(value = "/forget_get_question.do")
     public Result<String> forgetGetQuestion(@RequestParam String username) {
         return userService.selectQuestion(username);
     }
@@ -102,7 +101,7 @@ public class UserController {
             @ApiImplicitParam(name = "question", value = "密保问题", paramType = "query", required = true),
             @ApiImplicitParam(name = "answer", value = "密保答案", paramType = "query", required = true)
     })
-    @PostMapping(value = "/forget_check_answer.do")
+    @GetMapping(value = "/forget_check_answer.do")
     public Result<String> forgetCheckAnswer(@RequestParam String username,
                                             @RequestParam String question,
                                             @RequestParam String answer) {

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  * Created 2018-06-02 19:51
  */
 @Slf4j
-@Component
+//@Component
 public class CloseOrderTask {
 
     @Autowired

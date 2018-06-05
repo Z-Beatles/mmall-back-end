@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
  * @author waynechu
  * Created 2018-05-30 17:53
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
+//@RunWith(SpringRunner.class)
+//@SpringBootTest
 public class SpringDataRedisTest {
 
     @Autowired

@@ -11,9 +11,6 @@ import java.util.Map;
  * Created 2018-05-28 13:23
  */
 public interface OrderService {
-    Result pay(Long orderNo, Long userId, String path);
-
-    Result aliCallback(Map<String, String> params);
 
     Result queryOrderPayStatus(Long orderNo, Long userId);
 

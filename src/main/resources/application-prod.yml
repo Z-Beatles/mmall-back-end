@@ -2,15 +2,15 @@ server:
   port: 80
 
 # public key for datasource password
-public-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJ8GS6CxvZuqrocKE+84hO0dia8rvOOBVGvQgzFLeexcocfzUFSgiT7qFZQashlto/QDQLV3p94B0Nti9MUtV98CAwEAAQ==
+public-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAK3/Tq6zX0MjlMGkWFkdL3tZaZTY+5sAJO/BOYDSO/kVYeUSIRBADN0RIOjn2Nldfj8/ThjhPPVZoBQ3jC8+BtcCAwEAAQ==
 
 spring:
   # datasource
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://topblog.top:3306/mmall?characterEncoding=utf-8&useSSL=false
+    url: jdbc:mysql://206.81.7.89:3306/mmall?characterEncoding=utf-8&useSSL=false
     username: root
-    password: hMwrf1tcv5vRpcmiBwXx1T70OLE4oAEHPWQA9DQeO+UQSmNNmJl4rPua2eVVOH7AR8286xvC/A4RVZi9FVITTQ==
+    password: PQU7xpcGph9BAJ7vhCIOJMbT5K1a3X6aUEpjUtQcJetAOlwh7JEX2fXyaIxEwCe8O4t57JtbbqG81gR4xS8Tew==
     druid:
       initial-size: 5
       max-active: 10
