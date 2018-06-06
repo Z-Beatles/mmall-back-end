@@ -24,24 +24,19 @@
         from mmall_user
         where id = #{id,jdbcType=BIGINT}
     </select>
-    <select id="checkUsername" resultType="java.lang.Integer">
+    <select id="countByUsername" resultType="java.lang.Integer">
         select count(1)
         from mmall_user
         where username = #{username}
     </select>
-    <select id="checkEmail" resultType="java.lang.Integer">
-        select count(1)
-        from mmall_user
-        where email = #{email}
-    </select>
-    <select id="selectLogin" resultType="cn.waynechu.mmall.entity.User">
+    <select id="selectByUsernameAndPassword" resultType="cn.waynechu.mmall.entity.User">
         select
         <include refid="Base_Column_List"/>
         from mmall_user
         where username = #{username}
         and password = #{password}
     </select>
-    <select id="getQuestionByUsername" resultType="java.lang.String">
+    <select id="selectQuestionByUsername" resultType="java.lang.String">
         select question
         from mmall_user
         where username = #{username}
@@ -53,16 +48,21 @@
               and question = #{question}
               and answer = #{answer}
     </select>
-    <select id="checkPassword" resultType="java.lang.Integer">
+    <select id="countByUserIdAndPassword" resultType="java.lang.Integer">
         select count(1)
         from mmall_user
         where id = #{userId}
               and password = #{md5Password}
     </select>
-    <select id="checkEmailByUserId" resultType="java.lang.Integer">
+    <select id="countByEmail" resultType="java.lang.Integer">
         select count(1)
         from mmall_user
-        where email = #{email} and id != #{userId}
+        where email = #{email}
+    </select>
+    <select id="countByPhone" resultType="java.lang.Integer">
+        select count(1)
+        from mmall_user
+        where phone = #{phone}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         delete from mmall_user
@@ -187,8 +187,7 @@
             question    = #{question,jdbcType=VARCHAR},
             answer      = #{answer,jdbcType=VARCHAR},
             role        = #{role,jdbcType=INTEGER},
-            create_time = #{createTime,jdbcType=TIMESTAMP},
-            update_time = #{updateTime,jdbcType=TIMESTAMP}
+            update_time = now()
         where id = #{id,jdbcType=INTEGER}
     </update>
     <update id="updatePasswordByUsername">

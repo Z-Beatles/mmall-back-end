@@ -22,15 +22,7 @@ public interface UserMapper {
      * @param username 用户名
      * @return 存在：1
      */
-    int checkUsername(String username);
-
-    /**
-     * 检查邮箱是否存在
-     *
-     * @param email 邮箱
-     * @return 存在：1
-     */
-    int checkEmail(String email);
+    int countByUsername(String username);
 
     /**
      * 根据用户名和密码查找用户
@@ -39,7 +31,7 @@ public interface UserMapper {
      * @param password 密码
      * @return 用户
      */
-    User selectLogin(@Param("username") String username, @Param("password") String password);
+    User selectByUsernameAndPassword(@Param("username") String username, @Param("password") String password);
 
     /**
      * 根据用户名获取用户密保问题
@@ -47,7 +39,7 @@ public interface UserMapper {
      * @param username 用户名
      * @return 密保问题
      */
-    String getQuestionByUsername(String username);
+    String selectQuestionByUsername(String username);
 
     /**
      * 检查密码问题是否正确
@@ -75,14 +67,21 @@ public interface UserMapper {
      * @param userId      用户Id
      * @return 正确：1
      */
-    int checkPassword(@Param("md5Password") String md5Password, @Param("userId") Long userId);
+    int countByUserIdAndPassword(@Param("md5Password") String md5Password, @Param("userId") Long userId);
 
     /**
-     * 根据用户id检查邮箱是否正确
+     * 判断邮箱是否已被注册
      *
      * @param email 邮箱
-     * @param userId 用户id
-     * @return 正确：1
+     * @return 已注册：1
      */
-    int checkEmailByUserId(@Param("email") String email, @Param("userId")Long userId);
+    int countByEmail(String email);
+
+    /**
+     * 判断电话是否已被注册
+     *
+     * @param phone 电话
+     * @return  已注册：1
+     */
+    int countByPhone(String phone);
 }

@@ -9,6 +9,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -89,7 +90,7 @@ public class UserController {
         return userService.register(username, password, email, phone, question, answer);
     }
 
-    @ApiOperation(value = "检查注册参数", notes = "用于检查用户名、邮箱等是否已经被注册，其中参数类型可以是：username, email，默认username")
+    @ApiOperation(value = "检查注册参数", notes = "用于异步检查用户名username、密码password、邮箱email、电话phone等注册参数，默认username")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "param", value = "参数值", paramType = "query", required = true),
             @ApiImplicitParam(name = "type", value = "参数类型", defaultValue = "username", paramType = "query")
@@ -97,7 +98,7 @@ public class UserController {
     @GetMapping(value = "/check_valid.do")
     public Result<String> checkValid(@RequestParam String param,
                                      @RequestParam(required = false, defaultValue = "username") String type) {
-        return userService.checkValid(param, type);
+        return userService.checkRegisterParam(param, type);
     }
 
     @ApiOperation(value = "忘记密码")
@@ -106,7 +107,7 @@ public class UserController {
     })
     @GetMapping(value = "/forget_get_question.do")
     public Result<String> forgetGetQuestion(@RequestParam String username) {
-        return userService.selectQuestion(username);
+        return userService.getQuestionByUsername(username);
     }
 
     @ApiOperation(value = "提交问题答案")
@@ -155,18 +156,18 @@ public class UserController {
             @ApiImplicitParam(name = "question", value = "密保问题", paramType = "query"),
             @ApiImplicitParam(name = "answer", value = "密保答案", paramType = "query"),
     })
-    @PostMapping(value = "/update_information.do")
-    public Result<User> updateInformation(@RequestParam(required = false) String email,
-                                          @RequestParam(required = false) String phone,
-                                          @RequestParam(required = false) String question,
-                                          @RequestParam(required = false) String answer,
-                                          HttpSession session) {
+    @PostMapping(value = "/update_user_info.do")
+    public Result updateUserInfo(String email, String phone, String question, String answer, HttpSession session) {
         User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
-        Result<User> response = userService.updateInformation(currentUser, email, phone, question, answer);
+        Result<User> response = userService.updateUserInfo(currentUser, email, phone, question, answer);
         if (response.isSuccess()) {
             // 同时更新session中信息
             response.getData().setUsername(currentUser.getUsername());
             session.setAttribute(Const.CURRENT_USER, response.getData());
+
+            UserInfoVO userInfoVO = new UserInfoVO();
+            BeanUtils.copyProperties(response.getData(), userInfoVO);
+            return Result.createBySuccess("更新个人信息成功", userInfoVO);
         }
         return response;
     }

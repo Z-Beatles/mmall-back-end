@@ -7,9 +7,6 @@ package cn.waynechu.mmall.common;
 public class Const {
 
     public static final String CURRENT_USER = "currentUser";
-
-    public static final String EMAIL = "email";
-    public static final String USERNAME = "username";
     public static final String RESET_PASSWORD_TOKEN_PREFIX = "token:reset_password:";
 
     public interface Role {
@@ -21,6 +18,13 @@ public class Const {
          * 管理员
          **/
         int ROLE_ADMIN = 1;
+    }
+
+    public interface ValidType {
+        String EMAIL = "email";
+        String USERNAME = "username";
+        String PHONE = "phone";
+        String PASSWORD = "password";
     }
 
     public interface CategoryStatus {
@@ -55,17 +59,8 @@ public class Const {
     }
 
     public enum ProductStatusEnum {
-        /**
-         * 下架状态
-         **/
         NOT_SALE(0, "下架"),
-        /**
-         * 在售状态
-         **/
         ON_SALE(1, "在售"),
-        /**
-         * 伪删除
-         **/
         DELETE(2, "删除");
 
         private int code;
@@ -185,7 +180,7 @@ public class Const {
         }
     }
 
-    public interface REDIS_LOCK {
+    public interface RedisLock {
         /**
          * 关闭订单的分布式锁
          **/

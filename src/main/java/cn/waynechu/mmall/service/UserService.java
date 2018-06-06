@@ -14,9 +14,7 @@ public interface UserService {
 
     Result<String> register(String username, String password, String email, String phone, String question, String answer);
 
-    Result<String> checkValid(String param, String type);
-
-    Result<String> selectQuestion(String username);
+    Result<String> getQuestionByUsername(String username);
 
     Result<String> checkAnswer(String username, String question, String answer);
 
@@ -24,11 +22,13 @@ public interface UserService {
 
     Result<String> resetPassword(String passwordOld, String passwordNew, User user);
 
-    Result<User> updateInformation(User user, String email, String phone, String question, String answer);
+    Result<User> updateUserInfo(User user, String email, String phone, String question, String answer);
 
     User getCurrentUserInfo(Long userId);
 
     Result checkAdminRole(User userInfoVO);
 
     UserInfoVO assembleUserInfoVO(User user);
+
+    Result<String> checkRegisterParam(String param, String type);
 }
