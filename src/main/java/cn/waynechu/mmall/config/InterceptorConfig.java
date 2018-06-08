@@ -28,6 +28,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/v1/products/**")
                 .excludePathPatterns("/v1/order/alipay_callback.do")
                 // 后台
+                .excludePathPatterns("/v1/upload")
                 .excludePathPatterns("/v1/manager/user/login.do")
                 .excludePathPatterns("/v1/manager/product/richtext_img_upload.do");
     }
