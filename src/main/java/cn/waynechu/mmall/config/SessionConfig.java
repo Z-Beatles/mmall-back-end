@@ -36,7 +36,7 @@ public class SessionConfig {
     public DefaultCookieSerializer defaultCookieSerializer() {
         DefaultCookieSerializer defaultCookieSerializer = new DefaultCookieSerializer();
         defaultCookieSerializer.setCookieName("sid");
-        defaultCookieSerializer.setDomainName("topblog.top");
+        //defaultCookieSerializer.setDomainName(domainName);
         defaultCookieSerializer.setCookiePath("/");
         defaultCookieSerializer.setCookieMaxAge(60 * 60 * 24 * 7);
         defaultCookieSerializer.setUseHttpOnlyCookie(true);
