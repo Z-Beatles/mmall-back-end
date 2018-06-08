@@ -169,7 +169,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Result<String> resetPassword(String passwordOld, String passwordNew, User user) {
+    public Result<String> updatePassword(String passwordOld, String passwordNew, User user) {
         // 校验密码格式
         if (!RegexUtil.matchPassword(passwordNew)) {
             return Result.createByErrorMessage("密码格式不正确，需以字母开头，长度在6~18的非空字符");
@@ -177,7 +177,7 @@ public class UserServiceImpl implements UserService {
 
         int resultCount = userMapper.countByUserIdAndPassword(MD5Util.MD5EncodeUtf8(passwordOld), user.getId());
         if (resultCount == 0) {
-            return Result.createByErrorMessage("旧密码错误");
+            return Result.createByErrorMessage("密码更新失败，旧密码错误");
         }
 
         int updateCount = userMapper.updatePasswordByUsername(user.getUsername(), MD5Util.MD5EncodeUtf8(passwordNew));

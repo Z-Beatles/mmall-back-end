@@ -20,7 +20,7 @@ public interface UserService {
 
     Result<String> forgetResetPassword(String username, String passwordNew, String forgetToken);
 
-    Result<String> resetPassword(String passwordOld, String passwordNew, User user);
+    Result<String> updatePassword(String passwordOld, String passwordNew, User user);
 
     Result<User> updateUserInfo(User user, String email, String phone, String question, String answer);
 

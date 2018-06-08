@@ -1,8 +1,8 @@
 package cn.waynechu.mmall.service.impl;
 
 import cn.waynechu.mmall.common.Const;
-import cn.waynechu.mmall.common.ResultEnum;
 import cn.waynechu.mmall.common.Result;
+import cn.waynechu.mmall.common.ResultEnum;
 import cn.waynechu.mmall.entity.Category;
 import cn.waynechu.mmall.entity.Product;
 import cn.waynechu.mmall.mapper.CategoryMapper;
@@ -15,6 +15,7 @@ import cn.waynechu.mmall.vo.ProductDetialVO;
 import cn.waynechu.mmall.vo.ProductListVO;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,7 +45,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Result saveOrUpdateProduct(Product product) {
         if (product != null) {
-            if (!product.getSubImages().isEmpty()) {
+            if (StringUtils.isNotBlank(product.getSubImages())) {
                 String[] subImageArray = product.getSubImages().split(",");
                 if (subImageArray.length > 0) {
                     product.setMainImage(subImageArray[0]);
@@ -127,7 +128,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Result<PageInfo> getProductByKeywordAndCategoryId(String keyword, Long categoryId, int pageNum, int pageSize, String orderBy) {
         // keyword和categoryId必须传一个
-        if (keyword == null && categoryId == null) {
+        if (StringUtils.isBlank(keyword) && categoryId == null) {
             return Result.createByErrorCodeMessage(ResultEnum.MISSING_REQUEST_PARAMETER.getCode(), ResultEnum.MISSING_REQUEST_PARAMETER.getMsg());
         }
 
@@ -135,7 +136,7 @@ public class ProductServiceImpl implements ProductService {
         List<Long> categoryIdList = new ArrayList<>();
         if (categoryId != null) {
             Category category = categoryMapper.selectByPrimaryKey(categoryId);
-            if (category == null && keyword == null) {
+            if (category == null && StringUtils.isBlank(keyword)) {
                 // 没有该分类，并且还没有关键字，这个时候返回一个空的结果集，不报错
                 PageHelper.startPage(pageNum, pageSize);
                 List<ProductListVO> productListVoList = new ArrayList<>();
@@ -146,11 +147,12 @@ public class ProductServiceImpl implements ProductService {
         }
 
         // 拼接关键字
-        if (keyword != null) {
+        if (StringUtils.isNotBlank(keyword)) {
             keyword = "%" + keyword + "%";
         }
         PageHelper.startPage(pageNum, pageSize, orderBy);
-        List<Product> productList = productMapper.selectByNameAndCategoryIds(keyword, categoryIdList.size() == 0 ? null : categoryIdList);
+        List<Product> productList = productMapper.selectByNameAndCategoryIds(
+                StringUtils.isBlank(keyword) ? null : keyword, categoryIdList.size() == 0 ? null : categoryIdList);
 
         List<ProductListVO> productListVoList = assembleProductListVO(productList);
         PageInfo pageInfo = new PageInfo<>(productList);

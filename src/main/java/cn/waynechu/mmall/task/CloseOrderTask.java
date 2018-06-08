@@ -7,13 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 /**
  * @author waynechu
  * Created 2018-06-02 19:51
  */
 @Slf4j
-//@Component
+@Component
 public class CloseOrderTask {
 
     @Autowired

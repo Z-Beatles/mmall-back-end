@@ -136,17 +136,17 @@ public class UserController {
         return userService.forgetResetPassword(username, passwordNew, forgetToken);
     }
 
-    @ApiOperation(value = "登录中状态重置密码")
+    @ApiOperation(value = "登录中状态更新密码")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "passwordOld", value = "原始密码", paramType = "query", required = true),
+            @ApiImplicitParam(name = "passwordOld", value = "旧密码", paramType = "query", required = true),
             @ApiImplicitParam(name = "passwordNew", value = "新密码", paramType = "query", required = true)
     })
-    @PostMapping(value = "/reset_password.do")
+    @PostMapping(value = "/update_password.do")
     public Result<String> resetPassword(@RequestParam String passwordOld,
                                         @RequestParam String passwordNew,
                                         HttpSession session) {
         User currentUser = (User) session.getAttribute(Const.CURRENT_USER);
-        return userService.resetPassword(passwordOld, passwordNew, currentUser);
+        return userService.updatePassword(passwordOld, passwordNew, currentUser);
     }
 
     @ApiOperation(value = "登录状态下更新用户信息")

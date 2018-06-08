@@ -1,14 +1,15 @@
 server:
-  port: 80
+  port: 8080
+  cookie:
+    domain-name: waynechu.cn
 
 # public key for datasource password
 public-key: MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAK3/Tq6zX0MjlMGkWFkdL3tZaZTY+5sAJO/BOYDSO/kVYeUSIRBADN0RIOjn2Nldfj8/ThjhPPVZoBQ3jC8+BtcCAwEAAQ==
-
 spring:
   # datasource
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://206.81.7.89:3306/mmall?characterEncoding=utf-8&useSSL=false
+    url: jdbc:mysql://188.166.248.167:3306/mmall?characterEncoding=utf-8&useSSL=false
     username: root
     password: PQU7xpcGph9BAJ7vhCIOJMbT5K1a3X6aUEpjUtQcJetAOlwh7JEX2fXyaIxEwCe8O4t57JtbbqG81gR4xS8Tew==
     druid:
@@ -17,7 +18,7 @@ spring:
       filters: stat,wall
       stat-view-servlet:
         login-username: admin
-        login-password: pa4word
+        login-password: zhmmsxg!!!
         reset-enable: false
       aop-patterns: cn.waynechu.mmall.service.*
       connection-properties: config.decrypt=true;config.decrypt.key=${public-key}
@@ -26,12 +27,12 @@ spring:
           enabled: true
   # redis sentinel
   redis:
-      host: 127.0.0.1
+      host: 188.166.248.167
       port: 6379
-      password:
+      password: zhmmsxg!!!
       sentinel:
         master: mymaster
-        nodes: 127.0.0.1:26379,127.0.0.1:26380,127.0.0.1:26381
+        nodes: 188.166.248.167:26379,188.166.248.167:26380,188.166.248.167:26381
   # multipart
   servlet:
     multipart:
@@ -57,6 +58,6 @@ pagehelper:
 ftp:
   server:
     ip: 206.189.41.1
-    url-prefix: http://img.topblog.top/
+    url-prefix: http://img.waynechu.cn/
     user: ftpuser
-    password: lookatmenow
+    password: zhmmsxg!!!

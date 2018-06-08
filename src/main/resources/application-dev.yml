@@ -1,7 +1,7 @@
 server:
   port: 8080
   cookie:
-    domain-name: eb5pwi.natappfree.cc
+    domain-name:
 
 spring:
   # datasource
@@ -52,7 +52,7 @@ pagehelper:
 # ftp
 ftp:
   server:
-    ip: 206.189.41.1
-    url-prefix: http://img.topblog.top/
+    ip: 128.199.118.80
+    url-prefix: http://img.waynechu.cn/
     user: ftpuser
-    password: lookatmenow
+    password: zhmmsxg!!!
