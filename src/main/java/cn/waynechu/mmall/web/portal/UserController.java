@@ -45,6 +45,8 @@ public class UserController {
         // 将用户信息保存到session中
         if (response.isSuccess()) {
             session.setAttribute(Const.CURRENT_USER, response.getData());
+        } else {
+            return Result.createByErrorMessage(response.getMsg());
         }
 
         // 组装用户VO
